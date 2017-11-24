@@ -1,0 +1,48 @@
+{
+  "name": "dhhealthplatform",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon ./bin/www",
+    "grunt": "grunt",
+    "test": "mocha dist/test",
+    "start": "node ./bin/www"
+  },
+  "mongodb": "mongodb://localhost:27017/DHDataBase",
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "errorhandler": "^1.4.3",
+    "express": "4.16.2",
+    "i18n": "^0.8.3",
+    "method-override": "^2.3.6",
+    "mongodb": "^2.2.33",
+    "mongoose": "^4.12.5",
+    "morgan": "~1.9.0",
+    "pug": "^2.0.0-rc.4",
+    "q": "^1.5.1",
+    "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.7",
+    "@types/chai": "^4.0.4",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/errorhandler": "0.0.30",
+    "@types/method-override": "0.0.31",
+    "@types/mocha": "^2.2.44",
+    "@types/mongodb": "^2.2.15",
+    "@types/mongoose": "^4.7.24",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^8.0.47",
+    "chai": "^4.1.2",
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-ts": "^6.0.0-beta.17",
+    "mocha": "^4.0.1",
+    "mocha-typescript": "^1.1.12",
+    "nodemon": "^1.12.1",
+    "typescript": "^2.6.1"
+  }
+}
