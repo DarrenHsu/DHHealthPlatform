@@ -33,6 +33,16 @@ export class RecordHelper implements BaseHelper {
 
             if (res) {
                 console.log("update:" + res._id);
+                res.name = data.name;
+                res.distance = data.distance;
+                res.startTime = data.startTime;
+                res.endTime = data.endTime;
+                res.avgSpeed = data.avgSpeed;
+                res.maxSpeed = data.maxSpeed;
+                res.locations = data.locations;
+                res.imglocations = data.imglocations;
+                res.save();
+
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }else {
                 console.log("not update");

@@ -24,6 +24,13 @@ class UserHelper {
             }
             if (res) {
                 console.log("find");
+                res.name = data.name;
+                res.age = data.age;
+                res.height = data.height;
+                res.weight = data.weight;
+                res.gmail = data.gmail;
+                res.gAccessToken = data.gAccessToken;
+                res.save();
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
             }

@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BaseRoute_1 = require("../BaseRoute");
 const ResultCode_1 = require("../ResultCode");
 class BaseAPI extends BaseRoute_1.BaseRoute {
-    static create(router) {
-    }
+    static create(router) { }
     get(router) {
         router.get(this.uri + "/:userId", (req, res, next) => {
             res.setHeader("Content-type", "application/json");

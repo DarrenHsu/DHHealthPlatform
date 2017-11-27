@@ -33,6 +33,13 @@ export class UserHelper implements BaseHelper {
 
             if (res) {
                 console.log("find");
+                res.name = data.name;
+                res.age = data.age;
+                res.height = data.height;
+                res.weight = data.weight;
+                res.gmail = data.gmail;
+                res.gAccessToken = data.gAccessToken;
+                res.save();
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }else {
                 console.log("not find");

@@ -12,11 +12,9 @@ export class BaseAPI extends BaseRoute {
     protected helper: BaseHelper;
     protected uri: string;
 
-    public static create(router: Router) {
-        
-    }
+    public static create(router: Router) {}
 
-    public get(router: Router) {
+    protected get(router: Router) {
         router.get(this.uri + "/:userId", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             
@@ -31,7 +29,7 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
-    public put(router: Router) {
+    protected put(router: Router) {
         router.put(this.uri + "/:id", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             
@@ -51,7 +49,7 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
-    public post(router: Router) {
+    protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             
@@ -66,7 +64,7 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
-    public delete(router: Router) {
+    protected delete(router: Router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             

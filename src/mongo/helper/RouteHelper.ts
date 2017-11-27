@@ -33,6 +33,11 @@ export class RouteHelper implements BaseHelper {
 
             if (res) {
                 console.log("find");
+                res.name = data.name;
+                res.startTime = data.startTime;
+                res.endTime = data.endTime;
+                res.save();
+
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }else {
                 console.log("not find");
