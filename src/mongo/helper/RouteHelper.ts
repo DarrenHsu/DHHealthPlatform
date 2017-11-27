@@ -10,14 +10,13 @@ export class RouteHelper implements BaseHelper {
     private static model: mongoose.Model<IRouteModel>;
 
     constructor(connection: mongoose.Connection) {
-        super();
         if (!RouteHelper.model)  {
             RouteHelper.model = connection.model<IRouteModel>("route", RouteSchema);
         }
     }
 
     public save(id: string, data: IRoute);
-    public save(id: string, data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void)
+    public save(id: string, data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void);
     public save(id: string, data: IRoute, callback?: (code: MONGODB_CODE, result: IRoute) => void) {
         if (!id) {
             console.log("id error：" + id);

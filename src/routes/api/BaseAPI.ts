@@ -3,27 +3,17 @@ import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "../BaseRoute";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
 import { DBHelper } from "../../mongo/helper/DBHelper";
-import { RouteHelper } from "../../mongo/helper/RouteHelper";
-import { IRoute } from "../../mongo/interface/IRoute";
-import { DHAPI } from "../../const/Path";
 import { BaseHelper } from "../../mongo/helper/BaseHelper";
+import { IBase } from "../../mongo/interface/IBase";
+import { DHAPI } from "../../const/Path";
 
 export class BaseAPI extends BaseRoute {
-    private helper: BaseHelper;
-    private uri: string;
+
+    protected helper: BaseHelper;
+    protected uri: string;
 
     public static create(router: Router) {
-        let api = new RouteAPI(DBHelper.connection);
-        console.log("[RecordAPI::create] Creating RecordAPI route " + api.uri);
-        api.get(router);
-        api.post(router);
-        api.put(router);
-        api.delete(router);
-    }
-
-    constructor(connection: mongoose.Connection) {
-        super();
-        this.helper = new RouteHelper(connection);
+        
     }
 
     public get(router: Router) {

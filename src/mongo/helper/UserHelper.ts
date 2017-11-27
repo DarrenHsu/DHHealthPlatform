@@ -10,14 +10,13 @@ export class UserHelper implements BaseHelper {
     private static model: mongoose.Model<IUserModel>;
     
     constructor(connection: mongoose.Connection) {
-        super();
         if (!UserHelper.model)  {
             UserHelper.model = connection.model<IUserModel>("user", UserSchema);
         }
     }
 
     public save(id: string, data: IUser);
-    public save(id: string, data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void)
+    public save(id: string, data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void);
     public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUser) => void) {
         if (!id) {
             console.log("id error：" + id);

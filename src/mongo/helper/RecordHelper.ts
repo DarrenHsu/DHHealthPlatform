@@ -10,15 +10,13 @@ export class RecordHelper implements BaseHelper {
     private static model: mongoose.Model<IRecordModel>;
 
     constructor(connection: mongoose.Connection) {
-        super();
-
         if (!RecordHelper.model)  {
             RecordHelper.model = connection.model<IRecordModel>("record", RecordSchema);
         }
     }
 
     public save(id: string, data: IRecord);
-    public save(id: string, data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void)
+    public save(id: string, data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void);
     public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
         if (!data || !id) {
             console.log("data error：" + data);

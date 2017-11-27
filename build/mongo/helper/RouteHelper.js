@@ -1,11 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const RouteSchema_1 = require("../schemas/RouteSchema");
-const BaseHelper_1 = require("./BaseHelper");
 const ResultCode_1 = require("../../routes/ResultCode");
-class RouteHelper extends BaseHelper_1.BaseHelper {
+class RouteHelper {
     constructor(connection) {
-        super();
         if (!RouteHelper.model) {
             RouteHelper.model = connection.model("route", RouteSchema_1.RouteSchema);
         }
