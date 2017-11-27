@@ -2,12 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 exports.RecordSchema = new mongoose_1.Schema({
-    createdAt: {
-        type: Date,
-        required: true,
-        default: new Date()
-    },
-    gmail: {
+    userId: {
         type: String,
         required: true
     },
@@ -24,5 +19,10 @@ exports.RecordSchema = new mongoose_1.Schema({
     imglocations: [{
             longitude: Number,
             latitude: Number
-        }]
+        }],
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
+    }
 });

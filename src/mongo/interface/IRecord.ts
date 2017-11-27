@@ -1,4 +1,6 @@
-export interface IRecord {
+import { IBase } from "./IBase";
+
+export interface IRecord extends IBase {
     userId?: string;
     name?: string;
     distance?: number;

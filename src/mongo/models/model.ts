@@ -3,8 +3,10 @@ import { IUser } from "../interface/IUser";
 import { IRoute } from "../interface/IRoute";
 import { IRecord } from "../interface/IRecord";
 
-export interface IUserModel extends IUser, Document {}
+export interface IBaseModel extends Document {}
 
-export interface IRecordModel extends IRecord, Document {}
+export interface IUserModel extends IUser, IBaseModel {}
 
-export interface IRoute extends IRoute, Document {}
+export interface IRecordModel extends IRecord, IBaseModel {}
+
+export interface IRouteModel extends IRoute, IBaseModel {}

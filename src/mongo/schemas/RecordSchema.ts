@@ -1,12 +1,7 @@
 import { Schema } from "mongoose";
 
 export var RecordSchema: Schema = new Schema({
-    createdAt: {
-        type: Date,
-        required: true,
-        default: new Date()
-    },
-    gmail: {
+    userId: {
         type: String,
         required: true        
     },
@@ -23,5 +18,10 @@ export var RecordSchema: Schema = new Schema({
     imglocations: [{
         longitude: Number,
         latitude: Number
-    }]
+    }],
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
+    }
 });

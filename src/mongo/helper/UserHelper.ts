@@ -1,12 +1,11 @@
 import mongoose = require("mongoose");
 import { IUser } from "../interface/IUser";
 import { UserSchema } from "../schemas/UserSchema";
-import { IUserModel, IRoute, IRecordModel } from "../models/model";
+import { IUserModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
-import { IRecord } from "../interface/IRecord";
 import { MONGODB_CODE } from "../../routes/ResultCode";
 
-export class UserHelper extends BaseHelper {
+export class UserHelper implements BaseHelper {
     
     private static model: mongoose.Model<IUserModel>;
     

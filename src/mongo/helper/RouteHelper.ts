@@ -1,32 +1,31 @@
 import mongoose = require("mongoose");
-import { IRecord } from "../interface/IRecord";
-import { RecordSchema } from "../schemas/RecordSchema";
-import { IRecordModel } from "../models/model";
+import { IRoute } from "../interface/IRoute";
+import { RouteSchema } from "../schemas/RouteSchema";
+import { IUserModel, IRouteModel, IRecordModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
 import { MONGODB_CODE } from "../../routes/ResultCode";
 
-export class RecordHelper implements BaseHelper {
+export class RouteHelper implements BaseHelper {
     
-    private static model: mongoose.Model<IRecordModel>;
+    private static model: mongoose.Model<IRouteModel>;
 
     constructor(connection: mongoose.Connection) {
         super();
-
-        if (!RecordHelper.model)  {
-            RecordHelper.model = connection.model<IRecordModel>("record", RecordSchema);
+        if (!RouteHelper.model)  {
+            RouteHelper.model = connection.model<IRouteModel>("route", RouteSchema);
         }
     }
 
-    public save(id: string, data: IRecord);
-    public save(id: string, data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void)
-    public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
-        if (!data || !id) {
-            console.log("data error：" + data);
-            if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
+    public save(id: string, data: IRoute);
+    public save(id: string, data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void)
+    public save(id: string, data: IRoute, callback?: (code: MONGODB_CODE, result: IRoute) => void) {
+        if (!id) {
+            console.log("id error：" + id);
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
         
-        RecordHelper.model.findByIdAndUpdate(id, data, (err, res) => {
+        RouteHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
                 console.log("find by id and update error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -34,23 +33,23 @@ export class RecordHelper implements BaseHelper {
             }
 
             if (res) {
-                console.log("update:" + res._id);
+                console.log("find");
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }else {
-                console.log("not update");
+                console.log("not find");
                 if (callback) callback(MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
         });
     }
 
-    public add(data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void) {
+    public add(data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void) {
         if (!data) {
             console.log("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
         
-        new RecordHelper.model(data).save((err, res, count) => {
+        new RouteHelper.model(data).save((err, res, count) => {
             if (err) {
                 console.log("add error" + err);
                 if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
@@ -70,7 +69,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        RecordHelper.model.remove({_id : id}, (err) => {
+        RouteHelper.model.remove({_id : id}, (err) => {
             if (err) {
                 console.log("remove by id error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
@@ -82,15 +81,15 @@ export class RecordHelper implements BaseHelper {
     }
 
     public list(userId: string);
-    public list(userId: string, callback: (code: MONGODB_CODE, results: IRecord[]) => void);
-    public list(userId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
+    public list(userId: string, callback: (code: MONGODB_CODE, results: IRoute[]) => void);
+    public list(userId: string, callback?: (code: MONGODB_CODE, results: IRoute[]) => void) {
         if (!userId) {
             console.log("id error：" + userId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
-        RecordHelper.model.find( {userId: userId} , (err, ress) => {
+        RouteHelper.model.find( {userId: userId} , (err, ress) => {
             if (err) {
                 console.log("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -100,4 +99,5 @@ export class RecordHelper implements BaseHelper {
             }
         });
     }
+
 }

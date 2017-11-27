@@ -1,4 +1,6 @@
-export interface IUser {
+import { IBase } from "./IBase";
+
+export interface IUser extends IBase {
     name?: string;
     height?: number;
     weight?: number;
