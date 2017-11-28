@@ -4,6 +4,7 @@ import { IRecord } from "../mongo/interface/IRecord";
 import { ResultCodeMsg } from  "./ResultCode";
 
 export class BaseRoute {
+    
     protected title: string;
     private scripts: string[];
 
