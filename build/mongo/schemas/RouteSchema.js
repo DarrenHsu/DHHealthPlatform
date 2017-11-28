@@ -9,9 +9,11 @@ exports.RouteSchema = new mongoose_1.Schema({
     name: String,
     startTime: Date,
     endTime: Date,
+    ytbroadcastId: String,
     createdAt: {
         type: Date,
         required: true,
         default: new Date()
-    }
+    },
+    modifyAt: Date
 });

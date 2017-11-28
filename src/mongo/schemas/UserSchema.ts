@@ -18,5 +18,5 @@ export var UserSchema: Schema = new Schema({
         type: String,
         required: true        
     },
-    modifyAt?: Date
+    modifyAt: Date
 });

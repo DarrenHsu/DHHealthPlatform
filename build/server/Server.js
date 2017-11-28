@@ -12,6 +12,7 @@ const IndexRoute_1 = require("../routes/IndexRoute");
 const RecordRouter_1 = require("../routes/RecordRouter");
 const RecordAPI_1 = require("../routes/api/RecordAPI");
 const UserAPI_1 = require("../routes/api/UserAPI");
+const RouteAPI_1 = require("../routes/api/RouteAPI");
 class Server {
     constructor() {
         this.pkgjson = require("../../package.json");
@@ -19,7 +20,7 @@ class Server {
         this.app = express();
         this.config();
         this.routes();
-        this.api();
+        // this.api();
     }
     static bootstrap() {
         return new Server();
@@ -51,6 +52,7 @@ class Server {
         let router = express.Router();
         RecordAPI_1.RecordAPI.create(router);
         UserAPI_1.UserAPI.create(router);
+        RouteAPI_1.RouteAPI.create(router);
         this.app.use(router);
     }
 }

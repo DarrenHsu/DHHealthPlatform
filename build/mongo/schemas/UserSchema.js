@@ -18,5 +18,6 @@ exports.UserSchema = new mongoose_1.Schema({
     gAccessToken: {
         type: String,
         required: true
-    }
+    },
+    modifyAt: Date
 });

@@ -24,5 +24,6 @@ exports.RecordSchema = new mongoose_1.Schema({
         type: Date,
         required: true,
         default: new Date()
-    }
+    },
+    modifyAt: Date
 });
