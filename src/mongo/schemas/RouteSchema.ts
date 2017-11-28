@@ -8,9 +8,11 @@ export var RouteSchema: Schema = new Schema({
     name: String,
     startTime: Date,
     endTime: Date,
+    ytbroadcastId?: String,
     createdAt: {
         type: Date,
         required: true,
         default: new Date()
-    }
+    },
+    modifyAt?: Date
 });

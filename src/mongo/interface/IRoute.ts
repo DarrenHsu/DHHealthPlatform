@@ -5,4 +5,6 @@ export interface IRoute extends IBase {
     name?: string;
     startTime?: Date;
     endTime?: Date;
+    ytbroadcastId?: string;
+    modifyAt?: Date;
 }

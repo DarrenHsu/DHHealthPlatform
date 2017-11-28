@@ -23,5 +23,6 @@ export var RecordSchema: Schema = new Schema({
         type: Date,
         required: true,
         default: new Date()
-    }
+    },
+    modifyAt?: Date
 });

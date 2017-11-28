@@ -7,4 +7,5 @@ export interface IUser extends IBase {
     age?: number;
     gmail?: string;
     gAccessToken?: string;
+    modifyAt?: Date;
 }

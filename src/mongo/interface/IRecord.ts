@@ -16,4 +16,5 @@ export interface IRecord extends IBase {
         longitude: number; 
         latitude: number; 
     }];
+    modifyAt?: Date;
 }

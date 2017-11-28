@@ -17,5 +17,6 @@ export var UserSchema: Schema = new Schema({
     gAccessToken: {
         type: String,
         required: true        
-    }
+    },
+    modifyAt?: Date
 });
