@@ -24,7 +24,7 @@ export class Server {
     }
 
     constructor() {
-        DBHelper.openDB(this.pkgjson.mongodb);
+        // DBHelper.openDB(this.pkgjson.mongodb);
         this.app = express();
         this.config();
         this.routes();

@@ -7,7 +7,6 @@ const logger = require("morgan");
 const path = require("path");
 const errorHandler = require("errorhandler");
 const methodOverride = require("method-override");
-const DBHelper_1 = require("../mongo/helper/DBHelper");
 const IndexRoute_1 = require("../routes/IndexRoute");
 const RecordRouter_1 = require("../routes/RecordRouter");
 const RecordAPI_1 = require("../routes/api/RecordAPI");
@@ -16,7 +15,7 @@ const RouteAPI_1 = require("../routes/api/RouteAPI");
 class Server {
     constructor() {
         this.pkgjson = require("../../package.json");
-        DBHelper_1.DBHelper.openDB(this.pkgjson.mongodb);
+        // DBHelper.openDB(this.pkgjson.mongodb);
         this.app = express();
         this.config();
         this.routes();
