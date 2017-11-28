@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var server = require('../build/server/server');
+var server = require('../build/server/Server');
 var debug = require('debug')('dhhealthplatform:server');
 var http = require('http');
 
