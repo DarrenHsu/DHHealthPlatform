@@ -10,9 +10,10 @@ import mongoose = require("mongoose");
 import { DBHelper } from  "../mongo/helper/DBHelper";
 import { IndexRoute } from "../routes/IndexRoute";
 import { RecordRouter } from "../routes/RecordRouter";
+import { DHAPI } from "../const/Path";
 import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
-import { DHAPI } from "../const/Path";
+import { RouteAPI } from "../routes/api/RouteAPI";
 
 export class Server {
     private pkgjson = require("../../package.json");
@@ -27,7 +28,7 @@ export class Server {
         this.app = express();
         this.config();
         this.routes();
-        this.api();
+        // this.api();
     }
 
     public config() {
@@ -62,6 +63,7 @@ export class Server {
 
         RecordAPI.create(router);
         UserAPI.create(router)
+        RouteAPI.create(router);
 
         this.app.use(router);
     }

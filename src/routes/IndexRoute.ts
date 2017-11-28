@@ -10,13 +10,12 @@ export class IndexRoute extends BaseRoute {
     public static create(router: Router) {
         console.log("[IndexRoute::create] Creating index route " + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
-          new IndexRoute().index(req, res, next);          
+          new IndexRoute().index(req, res, next);
         });
     }
 
     constructor() {
         super();
-        this.helper = new RecordHelper(DBHelper.connection);
     }
 
     public index(req: Request, res: Response, next: NextFunction) {
