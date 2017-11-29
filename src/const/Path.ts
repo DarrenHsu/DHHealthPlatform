@@ -7,5 +7,6 @@ export class DHAPI {
     public static API_RECORD_PATH =     DHAPI.API_PATH + "/record";
     public static API_USER_PATH =       DHAPI.API_PATH + "/user";
     public static API_ROUTE_PATH =      DHAPI.API_PATH + "/route";
+    public static API_LINEBOT_PATH =      DHAPI.API_PATH + "/linebot";
     
 }

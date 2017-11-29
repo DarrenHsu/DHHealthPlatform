@@ -13,6 +13,7 @@ const RecordRouter_1 = require("../routes/RecordRouter");
 const RecordAPI_1 = require("../routes/api/RecordAPI");
 const UserAPI_1 = require("../routes/api/UserAPI");
 const RouteAPI_1 = require("../routes/api/RouteAPI");
+const LineWebhookAPI_1 = require("../routes/api/LineWebhookAPI");
 class Server {
     constructor() {
         this.pkgjson = require("../../package.json");
@@ -53,6 +54,7 @@ class Server {
         RecordAPI_1.RecordAPI.create(router);
         UserAPI_1.UserAPI.create(router);
         RouteAPI_1.RouteAPI.create(router);
+        LineWebhookAPI_1.LineWebhookAPI.create(router);
         this.app.use(router);
     }
 }

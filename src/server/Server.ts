@@ -13,6 +13,7 @@ import { DHAPI } from "../const/Path";
 import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
 import { RouteAPI } from "../routes/api/RouteAPI";
+import { LineWebhookAPI } from "../routes/api/LineWebhookAPI"
 
 export class Server {
     private pkgjson = require("../../package.json");
@@ -63,6 +64,7 @@ export class Server {
         RecordAPI.create(router);
         UserAPI.create(router)
         RouteAPI.create(router);
+        LineWebhookAPI.create(router);
 
         this.app.use(router);
     }
