@@ -8,15 +8,18 @@ class DBHelper {
         this.connection = mongoose.createConnection(path);
         this.connection.on("error", console.error.bind(console, "Connection Error:"));
         this.connection.once("open", function () {
+            this.isConnection = true;
             console.log("DB " + path + " Connected!");
         });
     }
     static closeDB() {
         if (this.connection) {
             this.connection.close((err) => {
+                this.isConnection = false;
                 console.log("DB Closed!");
             });
         }
     }
 }
+DBHelper.isConnection = false;
 exports.DBHelper = DBHelper;

@@ -24,11 +24,11 @@ export class Server {
     }
 
     constructor() {
-        // DBHelper.openDB(this.pkgjson.mongodb);
+        DBHelper.openDB(this.pkgjson.mongodb[1].server);
         this.app = express();
         this.config();
         this.routes();
-        // this.api();
+        this.api();
     }
 
     public config() {

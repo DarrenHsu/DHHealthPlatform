@@ -8,7 +8,11 @@
     "test": "mocha dist/test",
     "start": "node ./bin/www"
   },
-  "mongodb": "mongodb://localhost:27017/DHDataBase",
+  "mongodb": [{
+    "server": "mongodb://localhost:27017/DHDataBase"
+  },{
+    "server": "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9"
+  }],
   "dependencies": {
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
