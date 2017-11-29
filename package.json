@@ -22,6 +22,7 @@
     "channelAccessToken": "75w9WwKV7oGtTKIu5tF9/ijpstio6cNJi5l3uR5dnq/qN9kv8q0nV5hXzEBetjtsFsVqzC93axMtte6EW3HDWyg8Be3luuGJJ7hrE9BftONnpK/ukn6oSjyA7h1uMbBfrVOqgqQ2F6KuXDIGWHQRGwdB04t89/1O/w1cDnyilFU="
   },
   "dependencies": {
+    "@line/bot-sdk": "^5.0.1",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "crypto-js": "^3.1.9-1",
@@ -37,6 +38,7 @@
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
+    "@line/bot-sdk": "^5.0.1",
     "@types/body-parser": "^1.16.7",
     "@types/chai": "^4.0.4",
     "@types/cookie-parser": "^1.4.1",

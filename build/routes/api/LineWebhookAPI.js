@@ -2,20 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Path_1 = require("../../const/Path");
 const BaseAPI_1 = require("./BaseAPI");
-const crypto_1 = require("crypto");
+const bot_sdk_1 = require("@line/bot-sdk");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor() {
         super();
         this.pkgjson = require("../../../package.json");
         this.uri = Path_1.DHAPI.API_LINEBOT_PATH;
-        var body = {
-            "message": "tjos is a test"
-        };
         console.log("LINE Chanel Id: " + this.pkgjson.linebot.channelId);
         console.log("LINE Chanel Secret: " + this.pkgjson.linebot.channelSecret);
         console.log("LINE Chanel Access Token: " + this.pkgjson.linebot.channelAccessToken);
-        var digest = crypto_1.createHmac("SHA256", this.pkgjson.linebot.channelSecret).update(JSON.stringify(body)).digest("base64");
-        console.log("digest " + digest);
+        var config = {
+            channelSecret: this.pkgjson.linebot.channelSecret,
+            channelAccessToken: this.pkgjson.linebot.channelAccessToken
+        };
+        this.client = new bot_sdk_1.Client(config);
     }
     static create(router) {
         let api = new LineWebhookAPI();
