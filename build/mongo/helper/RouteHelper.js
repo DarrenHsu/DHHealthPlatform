@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const RouteSchema_1 = require("../schemas/RouteSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
+const DHLog_1 = require("../../util/DHLog");
 class RouteHelper {
     constructor(connection) {
         if (!RouteHelper.model) {
@@ -10,20 +11,20 @@ class RouteHelper {
     }
     save(id, data, callback) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog_1.DHLog.d("id error：" + id);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
         RouteHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
-                console.log("find by id and update error：" + err);
+                DHLog_1.DHLog.d("find by id and update error：" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
                 return;
             }
             if (res) {
-                console.log("find");
+                DHLog_1.DHLog.d("find");
                 res.name = data.name;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
@@ -32,7 +33,7 @@ class RouteHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
             }
             else {
-                console.log("not find");
+                DHLog_1.DHLog.d("not find");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
@@ -40,19 +41,19 @@ class RouteHelper {
     }
     add(data, callback) {
         if (!data) {
-            console.log("add data error " + data);
+            DHLog_1.DHLog.d("add data error " + data);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
         new RouteHelper.model(data).save((err, res, count) => {
             if (err) {
-                console.log("add error" + err);
+                DHLog_1.DHLog.d("add error" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
             }
             else {
-                console.log("add data:" + res._id);
+                DHLog_1.DHLog.d("add data:" + res._id);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
             }
@@ -60,19 +61,19 @@ class RouteHelper {
     }
     remove(id, callback) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog_1.DHLog.d("id error：" + id);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION);
             return;
         }
         RouteHelper.model.remove({ _id: id }, (err) => {
             if (err) {
-                console.log("remove by id error：" + err);
+                DHLog_1.DHLog.d("remove by id error：" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
             }
             else {
-                console.log("remove by id success");
+                DHLog_1.DHLog.d("remove by id success");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
             }
@@ -80,19 +81,19 @@ class RouteHelper {
     }
     list(userId, callback) {
         if (!userId) {
-            console.log("id error：" + userId);
+            DHLog_1.DHLog.d("id error：" + userId);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
         RouteHelper.model.find({ userId: userId }, (err, ress) => {
             if (err) {
-                console.log("find error:" + err);
+                DHLog_1.DHLog.d("find error:" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                console.log("find");
+                DHLog_1.DHLog.d("find");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }

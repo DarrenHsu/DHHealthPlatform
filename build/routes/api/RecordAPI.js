@@ -4,6 +4,7 @@ const BaseAPI_1 = require("./BaseAPI");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
 const Path_1 = require("../../const/Path");
+const DHLog_1 = require("../../util/DHLog");
 class RecordAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();
@@ -12,7 +13,7 @@ class RecordAPI extends BaseAPI_1.BaseAPI {
     }
     static create(router) {
         let api = new RecordAPI(DBHelper_1.DBHelper.connection);
-        console.log("[RecordAPI::create] Creating RecordAPI route " + api.uri);
+        DHLog_1.DHLog.d("[" + this.name + ":create] " + api.uri);
         api.get(router);
         api.post(router);
         api.put(router);

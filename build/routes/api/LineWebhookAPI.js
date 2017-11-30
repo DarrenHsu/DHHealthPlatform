@@ -4,6 +4,7 @@ const Path_1 = require("../../const/Path");
 const BaseAPI_1 = require("./BaseAPI");
 const crypto_1 = require("crypto");
 const bot_sdk_1 = require("@line/bot-sdk");
+const DHLog_1 = require("../../util/DHLog");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor() {
         super();
@@ -18,24 +19,23 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     }
     static create(router) {
         let api = new LineWebhookAPI();
-        console.log("[LineWebhookAPI::create] Creating LineWebhookAPI route " + api.uri);
+        DHLog_1.DHLog.d("[" + this.name + ":create] " + api.uri);
         api.post(router);
     }
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
         return signature;
     }
-    runValidateSignature(req) {
-        console.log("x-line-signature = " + req.headers["x-line-signature"]);
-        console.log("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+    isValidateSignature(req) {
+        DHLog_1.DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
+        DHLog_1.DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
         return bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
     }
     post(router) {
         router.post(this.uri, (req, res, next) => {
-            if (!this.runValidateSignature(req))
+            if (!this.isValidateSignature(req))
                 return;
-            console.log("header:" + JSON.stringify(req.headers));
-            console.log("body:" + JSON.stringify(req.body));
+            this.printRequestInfo(req);
             let event = req.body.events[0];
             if (event.type === "message") {
                 let client = new bot_sdk_1.Client(this.clientConfig);

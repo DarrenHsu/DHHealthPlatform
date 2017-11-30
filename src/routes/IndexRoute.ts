@@ -1,18 +1,15 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/Path";
+import { DHLog } from "../util/DHLog";
 
 export class IndexRoute extends BaseRoute {
     
     public static create(router: Router) {
-        console.log("[IndexRoute::create] Creating index route " + DHAPI.ROOT_PATH);
+        DHLog.d("[" + this.name + "::create] " + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
             new IndexRoute().index(req, res, next);
-        });
-
-        router.post(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
-            new IndexRoute().index(req, res, next);
-        });
+        });    
     }
 
     constructor() {

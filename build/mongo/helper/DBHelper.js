@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
+const DHLog_1 = require("../../util/DHLog");
 class DBHelper {
     static openDB(path) {
         global.Promise = require("q").Promise;
@@ -9,14 +10,14 @@ class DBHelper {
         this.connection.on("error", console.error.bind(console, "Connection Error:"));
         this.connection.once("open", function () {
             this.isConnection = true;
-            console.log("DB " + path + " Connected!");
+            DHLog_1.DHLog.d("DB " + path + " Connected!");
         });
     }
     static closeDB() {
         if (this.connection) {
             this.connection.close((err) => {
                 this.isConnection = false;
-                console.log("DB Closed!");
+                DHLog_1.DHLog.d("DB Closed!");
             });
         }
     }

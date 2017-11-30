@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseRoute_1 = require("./BaseRoute");
 const Path_1 = require("../const/Path");
+const DHLog_1 = require("../util/DHLog");
 class RecordRouter extends BaseRoute_1.BaseRoute {
     static create(router) {
-        console.log("[RecordRouter::create] Creating record route " + Path_1.DHAPI.RECORD_PATH);
+        DHLog_1.DHLog.d("[" + this.name + "::create] " + Path_1.DHAPI.RECORD_PATH);
         router.get(Path_1.DHAPI.RECORD_PATH, (req, res, next) => {
             new RecordRouter().index(req, res, next);
         });

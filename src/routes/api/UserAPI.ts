@@ -6,6 +6,7 @@ import { DBHelper } from "../../mongo/helper/DBHelper";
 import { UserHelper } from "../../mongo/helper/UserHelper";
 import { IUser } from "../../mongo/interface/IUser";
 import { DHAPI } from "../../const/Path";
+import { DHLog } from "../../util/DHLog";
 
 export class UserAPI extends BaseAPI {
     
@@ -14,7 +15,7 @@ export class UserAPI extends BaseAPI {
     
     public static create(router: Router) {
         let api = new UserAPI(DBHelper.connection);
-        console.log("[RecordAPI::create] Creating RecordAPI route " + api.uri);
+        DHLog.d("[" + this.name + ":create] " + api.uri);
         api.get(router);
         api.post(router);
         api.put(router);

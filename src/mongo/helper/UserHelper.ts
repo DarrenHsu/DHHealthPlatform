@@ -4,6 +4,7 @@ import { UserSchema } from "../schemas/UserSchema";
 import { IUserModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
 import { MONGODB_CODE } from "../../routes/ResultCode";
+import { DHLog } from "../../util/DHLog";
 
 export class UserHelper implements BaseHelper {
     
@@ -19,20 +20,20 @@ export class UserHelper implements BaseHelper {
     public save(id: string, data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void);
     public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUser) => void) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
         
         UserHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
-                console.log("find by id and update error：" + err);
+                DHLog.d("find by id and update error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
                 return;
             }
 
             if (res) {
-                console.log("find");
+                DHLog.d("find");
                 res.name = data.name;
                 res.age = data.age;
                 res.height = data.height;
@@ -42,7 +43,7 @@ export class UserHelper implements BaseHelper {
                 res.save();
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }else {
-                console.log("not find");
+                DHLog.d("not find");
                 if (callback) callback(MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
         });
@@ -50,28 +51,28 @@ export class UserHelper implements BaseHelper {
     
     public add(data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void) {
         if (!data || !data.gmail) {
-            console.log("add data error " + data);
+            DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
 
         UserHelper.model.count({gmail: data.gmail}, (err, count) => {
             if (err) {
-                console.log("count error:" + err);
+                DHLog.d("count error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
             
             if (count > 0) {
-                console.log("data exist!");
+                DHLog.d("data exist!");
                 if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
             }else {
                 new UserHelper.model(data).save((err, res, count) => {
                     if (err) {
-                        console.log("add error:" + err);
+                        DHLog.d("add error:" + err);
                         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
                     }else {
-                        console.log("add data:" + res._id);
+                        DHLog.d("add data:" + res._id);
                         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
                     }
                 });
@@ -83,17 +84,17 @@ export class UserHelper implements BaseHelper {
     public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION);
             return;
         }
 
         UserHelper.model.remove( { _id: id} , (err) => {
             if (err) {
-                console.log("remove by id error：" + err);
+                DHLog.d("remove by id error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);                    
             }else {
-                console.log("remove by id success");
+                DHLog.d("remove by id success");
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
             }
         });
@@ -103,17 +104,17 @@ export class UserHelper implements BaseHelper {
     public list(id: string, callback: (code: MONGODB_CODE, results: IUser[]) => void);
     public list(id: string, callback?: (code: MONGODB_CODE, results: IUser[]) => void) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
         UserHelper.model.find( { _id: id}, (err, ress) => {
             if (err) {
-                console.log("find error:" + err);
+                DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
             }else {
-                console.log("find");
+                DHLog.d("find");
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);                    
             }
         });

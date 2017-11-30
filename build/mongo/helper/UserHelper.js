@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserSchema_1 = require("../schemas/UserSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
+const DHLog_1 = require("../../util/DHLog");
 class UserHelper {
     constructor(connection) {
         if (!UserHelper.model) {
@@ -10,20 +11,20 @@ class UserHelper {
     }
     save(id, data, callback) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog_1.DHLog.d("id error：" + id);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
         UserHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
-                console.log("find by id and update error：" + err);
+                DHLog_1.DHLog.d("find by id and update error：" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
                 return;
             }
             if (res) {
-                console.log("find");
+                DHLog_1.DHLog.d("find");
                 res.name = data.name;
                 res.age = data.age;
                 res.height = data.height;
@@ -35,7 +36,7 @@ class UserHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
             }
             else {
-                console.log("not find");
+                DHLog_1.DHLog.d("not find");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
@@ -43,32 +44,32 @@ class UserHelper {
     }
     add(data, callback) {
         if (!data || !data.gmail) {
-            console.log("add data error " + data);
+            DHLog_1.DHLog.d("add data error " + data);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
         UserHelper.model.count({ gmail: data.gmail }, (err, count) => {
             if (err) {
-                console.log("count error:" + err);
+                DHLog_1.DHLog.d("count error:" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
             if (count > 0) {
-                console.log("data exist!");
+                DHLog_1.DHLog.d("data exist!");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_DATA_EXIST, null);
             }
             else {
                 new UserHelper.model(data).save((err, res, count) => {
                     if (err) {
-                        console.log("add error:" + err);
+                        DHLog_1.DHLog.d("add error:" + err);
                         if (callback)
                             callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
                     }
                     else {
-                        console.log("add data:" + res._id);
+                        DHLog_1.DHLog.d("add data:" + res._id);
                         if (callback)
                             callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
                     }
@@ -78,19 +79,19 @@ class UserHelper {
     }
     remove(id, callback) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog_1.DHLog.d("id error：" + id);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION);
             return;
         }
         UserHelper.model.remove({ _id: id }, (err) => {
             if (err) {
-                console.log("remove by id error：" + err);
+                DHLog_1.DHLog.d("remove by id error：" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);
             }
             else {
-                console.log("remove by id success");
+                DHLog_1.DHLog.d("remove by id success");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
             }
@@ -98,19 +99,19 @@ class UserHelper {
     }
     list(id, callback) {
         if (!id) {
-            console.log("id error：" + id);
+            DHLog_1.DHLog.d("id error：" + id);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
         UserHelper.model.find({ _id: id }, (err, ress) => {
             if (err) {
-                console.log("find error:" + err);
+                DHLog_1.DHLog.d("find error:" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                console.log("find");
+                DHLog_1.DHLog.d("find");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IResult } from "./interface/IResult";
 import { IRecord } from "../mongo/interface/IRecord";
 import { ResultCodeMsg } from  "./ResultCode";
+import { DHLog } from "../util/DHLog";
 
 export class BaseRoute {
     
@@ -11,6 +12,11 @@ export class BaseRoute {
     constructor() {
         this.title = "DHHealthPlatform";
         this.scripts = [];
+    }
+
+    protected printRequestInfo(req: Request) {
+        DHLog.d("header:" + JSON.stringify(req.headers));
+        DHLog.d("body:" + JSON.stringify(req.body))
     }
 
     public addScript(src: string): BaseRoute {

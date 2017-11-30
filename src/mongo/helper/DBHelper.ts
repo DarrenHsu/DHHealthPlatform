@@ -1,4 +1,5 @@
 import mongoose = require("mongoose");
+import { DHLog } from "../../util/DHLog";
 
 export class DBHelper {
 
@@ -12,7 +13,7 @@ export class DBHelper {
         this.connection.on("error", console.error.bind(console, "Connection Error:"));
         this.connection.once("open", function() {
             this.isConnection = true;
-            console.log("DB " + path + " Connected!");
+            DHLog.d("DB " + path + " Connected!");
         });
     }
 
@@ -20,7 +21,7 @@ export class DBHelper {
         if (this.connection) {
             this.connection.close((err) => {
                 this.isConnection = false;
-                console.log("DB Closed!");
+                DHLog.d("DB Closed!");
             });
         }
     }
