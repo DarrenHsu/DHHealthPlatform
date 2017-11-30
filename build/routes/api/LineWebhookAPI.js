@@ -23,6 +23,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.post(router);
     }
     post(router) {
+        console.log("LINE Chanel Secret: " + this.config.channelSecret);
+        console.log("LINE Chanel Access Token: " + this.config.channelAccessToken);
         router.post(this.uri, bot_sdk_1.middleware(this.config), (req, res, next) => {
             console.log("post !");
             console.log("header:" + JSON.stringify(req.headers));

@@ -31,11 +31,14 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     protected post(router: Router) {
-        router.post(this.uri, middleware(this.config) , (req, res, next) => {
+        console.log("LINE Chanel Secret: " + this.config.channelSecret);
+        console.log("LINE Chanel Access Token: " + this.config.channelAccessToken);
+
+        router.post(this.uri, middleware(this.config) ,(req, res, next) => {
             console.log("post !");
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body))
-            
+
             let client = new Client(this.config);
             let event = req.body.events[0];
             if (event.type === "message") {
