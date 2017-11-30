@@ -20,6 +20,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     static create(router) {
         let api = new LineWebhookAPI();
         console.log("[LineWebhookAPI::create] Creating LineWebhookAPI route " + api.uri);
+        api.get(router);
         api.post(router);
     }
     post(router) {
