@@ -27,13 +27,13 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     post(router) {
         console.log("LINE Chanel Secret: " + this.middlewareConfig.channelSecret);
         console.log("LINE Chanel Access Token: " + this.clientConfig.channelAccessToken);
-        router.post(this.uri, bot_sdk_1.middleware(this.middlewareConfig), (req, res) => {
+        router.post(this.uri, (req, res, next) => {
             console.log("post !");
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body));
-            let client = new bot_sdk_1.Client(this.clientConfig);
             let event = req.body.events[0];
             if (event.type === "message") {
+                let client = new bot_sdk_1.Client(this.clientConfig);
                 client.replyMessage(event.replyToken, {
                     type: "text",
                     text: "你好我是聊天機器人",
