@@ -11,9 +11,11 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         console.log("LINE Chanel Id: " + this.pkgjson.linebot.channelId);
         console.log("LINE Chanel Secret: " + this.pkgjson.linebot.channelSecret);
         console.log("LINE Chanel Access Token: " + this.pkgjson.linebot.channelAccessToken);
-        this.config = {
-            channelSecret: this.pkgjson.linebot.channelSecret,
+        this.clientConfig = {
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
+        };
+        this.middlewareConfig = {
+            channelSecret: this.pkgjson.linebot.channelSecret
         };
     }
     static create(router) {
@@ -23,13 +25,13 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.post(router);
     }
     post(router) {
-        console.log("LINE Chanel Secret: " + this.config.channelSecret);
-        console.log("LINE Chanel Access Token: " + this.config.channelAccessToken);
-        router.post(this.uri, bot_sdk_1.middleware(this.config), (req, res, next) => {
+        console.log("LINE Chanel Secret: " + this.middlewareConfig.channelSecret);
+        console.log("LINE Chanel Access Token: " + this.clientConfig.channelAccessToken);
+        router.post(this.uri, bot_sdk_1.middleware(this.middlewareConfig), (req, res) => {
             console.log("post !");
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body));
-            let client = new bot_sdk_1.Client(this.config);
+            let client = new bot_sdk_1.Client(this.clientConfig);
             let event = req.body.events[0];
             if (event.type === "message") {
                 client.replyMessage(event.replyToken, {
@@ -37,7 +39,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     text: "你好我是聊天機器人",
                 });
             }
-            res.end();
         });
     }
     get(router) {
