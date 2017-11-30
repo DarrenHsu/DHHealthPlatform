@@ -26,14 +26,16 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     post(router) {
         router.post(this.uri, (req, res, next) => {
             console.log("post !");
-            res.send("header:" + JSON.stringify(req.headers) + "<br/>header:" + JSON.stringify(req.body));
+            console.log("header:" + JSON.stringify(req.headers));
+            console.log("body:" + JSON.stringify(req.body));
             res.end();
         });
     }
     get(router) {
         router.get(this.uri, (req, res, next) => {
             console.log("get !");
-            res.send("header:" + JSON.stringify(req.headers) + "<br/>header:" + JSON.stringify(req.body));
+            console.log("header:" + JSON.stringify(req.headers));
+            console.log("body:" + JSON.stringify(req.body));
             res.end();
         });
     }
