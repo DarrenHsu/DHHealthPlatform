@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { DHAPI } from "../../const/Path";
 import { BaseAPI } from "./BaseAPI";
 import { createHmac } from "crypto";
-import { Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent, ClientConfig,} from "@line/bot-sdk";
+import { Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig } from "@line/bot-sdk";
 
 export class LineWebhookAPI extends BaseAPI {
     
@@ -27,11 +27,19 @@ export class LineWebhookAPI extends BaseAPI {
             channelSecret: this.pkgjson.linebot.channelSecret,
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
         }
-        
+
         this.client = new Client(config);
     }
 
     protected post(router: Router) {
-
+        router.post(this.uri, (req, res, next) => {
+            console.log("post !");
+        });
+    }
+    
+    protected get(router: Router) {
+        router.get(this.uri, (req, res, next) => {
+            console.log("get !");
+        });
     }
 }
