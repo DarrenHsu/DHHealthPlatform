@@ -2,13 +2,13 @@ import { NextFunction, Request, Response, Router } from "express";
 import { DHAPI } from "../../const/Path";
 import { BaseAPI } from "./BaseAPI";
 import { createHmac } from "crypto";
-import { Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig } from "@line/bot-sdk";
+import { Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig, Config } from "@line/bot-sdk";
 
 export class LineWebhookAPI extends BaseAPI {
     
     private pkgjson = require("../../../package.json");
     protected uri = DHAPI.API_LINEBOT_PATH;
-    private client: Client;
+    private config;
     
     public static create(router: Router) {
         let api = new LineWebhookAPI();
@@ -24,19 +24,26 @@ export class LineWebhookAPI extends BaseAPI {
         console.log("LINE Chanel Secret: " + this.pkgjson.linebot.channelSecret);
         console.log("LINE Chanel Access Token: " + this.pkgjson.linebot.channelAccessToken);
 
-        var config = {
+        this.config = {
             channelSecret: this.pkgjson.linebot.channelSecret,
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
         }
-
-        this.client = new Client(config);
     }
 
     protected post(router: Router) {
-        router.post(this.uri, (req, res, next) => {
+        router.post(this.uri, middleware(this.config) , (req, res, next) => {
             console.log("post !");
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body))
+            
+            let client = new Client(this.config);
+            let event = req.body.events[0];
+            if (event.type === "message") {
+                client.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "你好我是聊天機器人",
+                });
+            }
             res.end();
         });
     }

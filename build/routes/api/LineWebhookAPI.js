@@ -11,11 +11,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         console.log("LINE Chanel Id: " + this.pkgjson.linebot.channelId);
         console.log("LINE Chanel Secret: " + this.pkgjson.linebot.channelSecret);
         console.log("LINE Chanel Access Token: " + this.pkgjson.linebot.channelAccessToken);
-        var config = {
+        this.config = {
             channelSecret: this.pkgjson.linebot.channelSecret,
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
         };
-        this.client = new bot_sdk_1.Client(config);
     }
     static create(router) {
         let api = new LineWebhookAPI();
@@ -24,10 +23,18 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.post(router);
     }
     post(router) {
-        router.post(this.uri, (req, res, next) => {
+        router.post(this.uri, bot_sdk_1.middleware(this.config), (req, res, next) => {
             console.log("post !");
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body));
+            let client = new bot_sdk_1.Client(this.config);
+            let event = req.body.events[0];
+            if (event.type === "message") {
+                client.replyMessage(event.replyToken, {
+                    type: "text",
+                    text: "你好我是聊天機器人",
+                });
+            }
             res.end();
         });
     }
