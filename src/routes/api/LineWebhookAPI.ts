@@ -35,12 +35,14 @@ export class LineWebhookAPI extends BaseAPI {
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             console.log("post !");
+            res.end();
         });
     }
     
     protected get(router: Router) {
         router.get(this.uri, (req, res, next) => {
             console.log("get !");
+            res.end();
         });
     }
 }
