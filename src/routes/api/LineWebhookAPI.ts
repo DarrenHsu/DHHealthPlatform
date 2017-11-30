@@ -35,6 +35,7 @@ export class LineWebhookAPI extends BaseAPI {
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             console.log("post !");
+            res.send("header:" + JSON.stringify(req.headers) + "<br/>header:" + JSON.stringify(req.body));
             res.end();
         });
     }
@@ -42,6 +43,7 @@ export class LineWebhookAPI extends BaseAPI {
     protected get(router: Router) {
         router.get(this.uri, (req, res, next) => {
             console.log("get !");
+            res.send("header:" + JSON.stringify(req.headers) + "<br/>header:" + JSON.stringify(req.body));
             res.end();
         });
     }
