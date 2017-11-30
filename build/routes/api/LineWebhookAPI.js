@@ -25,10 +25,15 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
         return signature;
     }
+    runValidateSignature(req) {
+        console.log("x-line-signature = " + req.headers["x-line-signature"]);
+        console.log("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+        return bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
+    }
     post(router) {
         router.post(this.uri, (req, res, next) => {
-            console.log("x-line-signature = " + req.headers["x-line-signature"]);
-            console.log("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+            if (!this.runValidateSignature(req))
+                return;
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body));
             let event = req.body.events[0];

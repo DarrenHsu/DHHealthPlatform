@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { DHAPI } from "../../const/Path";
 import { BaseAPI } from "./BaseAPI";
 import { createHmac } from "crypto";
-import { MiddlewareConfig,Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig, Config } from "@line/bot-sdk";
+import { MiddlewareConfig,Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig, Config, validateSignature } from "@line/bot-sdk";
 
 export class LineWebhookAPI extends BaseAPI {
     
@@ -22,6 +22,12 @@ export class LineWebhookAPI extends BaseAPI {
         return signature;
     }
 
+    public runValidateSignature(req: Request): boolean{
+        console.log("x-line-signature = " + req.headers["x-line-signature"]);
+        console.log("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+        return validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
+    }
+
     constructor() {
         super();
         
@@ -36,9 +42,8 @@ export class LineWebhookAPI extends BaseAPI {
 
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
-            console.log("x-line-signature = " + req.headers["x-line-signature"]);
-            console.log("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
-                        
+            if (!this.runValidateSignature(req)) return;
+
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body))
 
