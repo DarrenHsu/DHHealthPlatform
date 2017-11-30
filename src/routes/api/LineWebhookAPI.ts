@@ -10,21 +10,21 @@ export class LineWebhookAPI extends BaseAPI {
     protected uri = DHAPI.API_LINEBOT_PATH;
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
-    
+
     public static create(router: Router) {
         let api = new LineWebhookAPI();
         console.log("[LineWebhookAPI::create] Creating LineWebhookAPI route " + api.uri);
-        api.get(router);
         api.post(router);
+    }
+
+    public static getSignature(body: string, screat: string): string {
+        let signature = createHmac('SHA256', screat).update(body).digest('base64');
+        return signature;
     }
 
     constructor() {
         super();
         
-        console.log("LINE Chanel Id: " + this.pkgjson.linebot.channelId);
-        console.log("LINE Chanel Secret: " + this.pkgjson.linebot.channelSecret);
-        console.log("LINE Chanel Access Token: " + this.pkgjson.linebot.channelAccessToken);
-
         this.clientConfig = {
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
         }
@@ -35,11 +35,10 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     protected post(router: Router) {
-        console.log("LINE Chanel Secret: " + this.middlewareConfig.channelSecret);
-        console.log("LINE Chanel Access Token: " + this.clientConfig.channelAccessToken);
-
         router.post(this.uri, (req, res, next) => {
-            console.log("post !");
+            console.log("x-line-signature = " + req.headers["x-line-signature"]);
+            console.log("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+                        
             console.log("header:" + JSON.stringify(req.headers));
             console.log("body:" + JSON.stringify(req.body))
 
@@ -48,18 +47,9 @@ export class LineWebhookAPI extends BaseAPI {
                 let client = new Client(this.clientConfig);
                 client.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "你好我是聊天機器人",
+                    text: "你好，我是聊天機器人",
                 });
             }
         });
-    }
-    
-    protected get(router: Router) {
-        router.get(this.uri, (req, res, next) => {
-            console.log("get !");
-            console.log("header:" + JSON.stringify(req.headers));
-            console.log("body:" + JSON.stringify(req.body));
-            res.end();
-        });
-    }
+    }    
 }
