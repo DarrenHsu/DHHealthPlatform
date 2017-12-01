@@ -71,6 +71,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         this.helper.add(source, (code, result) => {
                             DHLog_1.DHLog.d("add chat code:" + code);
                         });
+                    }).catch((err) => {
+                        DHLog_1.DHLog.d("getRoomMemberIds error " + err);
                     });
                 }
                 break;
@@ -80,9 +82,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         ids.forEach((id) => {
                             source.members.push({ lineUserId: id });
                         });
+                        DHLog_1.DHLog.d("chat " + JSON.stringify(source));
                         this.helper.add(source, (code, result) => {
                             DHLog_1.DHLog.d("add chat code:" + code);
                         });
+                    }).catch((err) => {
+                        DHLog_1.DHLog.d("getRoomMemberIds error " + err);
                     });
                 }
                 break;
