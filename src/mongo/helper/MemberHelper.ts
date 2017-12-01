@@ -1,31 +1,31 @@
 import mongoose = require("mongoose");
-import { IRecord } from "../interface/IRecord";
-import { RecordSchema } from "../schemas/RecordSchema";
-import { IRecordModel } from "../models/model";
+import { IMember } from "../interface/IMember";
+import { MemberSchema } from "../schemas/MemberSchema";
+import { IMemberModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
 import { MONGODB_CODE } from "../../routes/ResultCode";
 import { DHLog } from "../../util/DHLog";
 
-export class RecordHelper implements BaseHelper {
+export class MemberHelper implements BaseHelper {
     
-    private static model: mongoose.Model<IRecordModel>;
+    private static model: mongoose.Model<IMemberModel>;
 
     constructor(connection: mongoose.Connection) {
-        if (!RecordHelper.model)  {
-            RecordHelper.model = connection.model<IRecordModel>("record", RecordSchema);
+        if (!MemberHelper.model)  {
+            MemberHelper.model = connection.model<IMemberModel>("chat", MemberSchema);
         }
     }
 
-    public save(id: string, data: IRecord);
-    public save(id: string, data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void);
-    public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
+    public save(id: string, data: IMember);
+    public save(id: string, data: IMember, callback: (code: MONGODB_CODE, result: IMember) => void);
+    public save(id: string, data: IMember, callback?: (code: MONGODB_CODE, result: IMember) => void) {
         if (!data || !id) {
             DHLog.d("data error：" + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
         
-        RecordHelper.model.findByIdAndUpdate(id, data, (err, res) => {
+        MemberHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
                 DHLog.d("find by id and update error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -34,14 +34,9 @@ export class RecordHelper implements BaseHelper {
 
             if (res) {
                 DHLog.d("update:" + res._id);
-                res.name = data.name;
-                res.distance = data.distance;
-                res.startTime = data.startTime;
-                res.endTime = data.endTime;
-                res.avgSpeed = data.avgSpeed;
-                res.maxSpeed = data.maxSpeed;
-                res.locations = data.locations;
-                res.imglocations = data.imglocations;
+                res.lineUserId = data.lineUserId;
+                res.displayNmae = data.displayNmae;
+                res.pictureUrl = data.pictureUrl;
                 res.modifyAt = new Date();
                 res.save();
 
@@ -53,20 +48,33 @@ export class RecordHelper implements BaseHelper {
         });
     }
 
-    public add(data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void) {
+    public add(data: IMember, callback: (code: MONGODB_CODE, result: IMember) => void) {
         if (!data) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        
-        new RecordHelper.model(data).save((err, res, count) => {
+
+        MemberHelper.model.count({lineUserId: data.lineUserId}, (err, count) => {
             if (err) {
-                DHLog.d("add error" + err);
-                if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+                DHLog.d("count error:" + err);
+                if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
+                return;
+            }
+            
+            if (count > 0) {
+                DHLog.d("data exist!");
+                if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
             }else {
-                DHLog.d("add data:" + res._id);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+                new MemberHelper.model(data).save((err, res, count) => {
+                    if (err) {
+                        DHLog.d("add error" + err);
+                        if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+                    }else {
+                        DHLog.d("add data:" + res._id);
+                        if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+                    }
+                });
             }
         });
     }
@@ -80,7 +88,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        RecordHelper.model.remove({_id : id}, (err) => {
+        MemberHelper.model.remove({_id : id}, (err) => {
             if (err) {
                 DHLog.d("remove by id error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
@@ -92,15 +100,15 @@ export class RecordHelper implements BaseHelper {
     }
 
     public list(userId: string);
-    public list(userId: string, callback: (code: MONGODB_CODE, results: IRecord[]) => void);
-    public list(userId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
+    public list(userId: string, callback: (code: MONGODB_CODE, results: IMember[]) => void);
+    public list(userId: string, callback?: (code: MONGODB_CODE, results: IMember[]) => void) {
         if (!userId) {
             DHLog.d("id error：" + userId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
-        RecordHelper.model.find( {userId: userId} , (err, ress) => {
+        MemberHelper.model.find( {userId: userId} , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);

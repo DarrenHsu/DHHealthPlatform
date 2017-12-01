@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const RecordSchema_1 = require("../schemas/RecordSchema");
+const ChatroomSchema_1 = require("../schemas/ChatroomSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
-class RecordHelper {
+class ChatroomHelper {
     constructor(connection) {
-        if (!RecordHelper.model) {
-            RecordHelper.model = connection.model("record", RecordSchema_1.RecordSchema);
+        if (!ChatroomHelper.model) {
+            ChatroomHelper.model = connection.model("chat", ChatroomSchema_1.ChatroomSchema);
         }
     }
     save(id, data, callback) {
@@ -16,7 +16,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        RecordHelper.model.findByIdAndUpdate(id, data, (err, res) => {
+        ChatroomHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
                 DHLog_1.DHLog.d("find by id and update error：" + err);
                 if (callback)
@@ -25,14 +25,8 @@ class RecordHelper {
             }
             if (res) {
                 DHLog_1.DHLog.d("update:" + res._id);
-                res.name = data.name;
-                res.distance = data.distance;
-                res.startTime = data.startTime;
-                res.endTime = data.endTime;
-                res.avgSpeed = data.avgSpeed;
-                res.maxSpeed = data.maxSpeed;
-                res.locations = data.locations;
-                res.imglocations = data.imglocations;
+                res.type = data.type;
+                res.members = data.members;
                 res.modifyAt = new Date();
                 res.save();
                 if (callback)
@@ -52,16 +46,31 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        new RecordHelper.model(data).save((err, res, count) => {
+        ChatroomHelper.model.count({ userId: data.userId, chatId: data.chatId }, (err, count) => {
             if (err) {
-                DHLog_1.DHLog.d("add error" + err);
+                DHLog_1.DHLog.d("count error:" + err);
                 if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
+                    callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
+                return;
+            }
+            if (count > 0) {
+                DHLog_1.DHLog.d("data exist!");
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_DATA_EXIST, null);
             }
             else {
-                DHLog_1.DHLog.d("add data:" + res._id);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+                new ChatroomHelper.model(data).save((err, res, count) => {
+                    if (err) {
+                        DHLog_1.DHLog.d("add error" + err);
+                        if (callback)
+                            callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
+                    }
+                    else {
+                        DHLog_1.DHLog.d("add data:" + res._id);
+                        if (callback)
+                            callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+                    }
+                });
             }
         });
     }
@@ -72,7 +81,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION);
             return;
         }
-        RecordHelper.model.remove({ _id: id }, (err) => {
+        ChatroomHelper.model.remove({ _id: id }, (err) => {
             if (err) {
                 DHLog_1.DHLog.d("remove by id error：" + err);
                 if (callback)
@@ -92,7 +101,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
-        RecordHelper.model.find({ userId: userId }, (err, ress) => {
+        ChatroomHelper.model.find({ userId: userId }, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d("find error:" + err);
                 if (callback)
@@ -106,4 +115,4 @@ class RecordHelper {
         });
     }
 }
-exports.RecordHelper = RecordHelper;
+exports.ChatroomHelper = ChatroomHelper;

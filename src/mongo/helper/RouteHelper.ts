@@ -37,6 +37,7 @@ export class RouteHelper implements BaseHelper {
                 res.name = data.name;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
+                res.modifyAt = new Date();
                 res.save();
 
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);

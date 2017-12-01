@@ -40,7 +40,9 @@ export class UserHelper implements BaseHelper {
                 res.weight = data.weight;
                 res.gmail = data.gmail;
                 res.gAccessToken = data.gAccessToken;
+                res.modifyAt = new Date();
                 res.save();
+                
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }else {
                 DHLog.d("not find");

@@ -31,6 +31,7 @@ class UserHelper {
                 res.weight = data.weight;
                 res.gmail = data.gmail;
                 res.gAccessToken = data.gAccessToken;
+                res.modifyAt = new Date();
                 res.save();
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);

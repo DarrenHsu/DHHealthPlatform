@@ -1,31 +1,31 @@
 import mongoose = require("mongoose");
-import { IRecord } from "../interface/IRecord";
-import { RecordSchema } from "../schemas/RecordSchema";
-import { IRecordModel } from "../models/model";
+import { IChatroom } from "../interface/IChatroom";
+import { ChatroomSchema } from "../schemas/ChatroomSchema";
+import { IChatroomModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
 import { MONGODB_CODE } from "../../routes/ResultCode";
 import { DHLog } from "../../util/DHLog";
 
-export class RecordHelper implements BaseHelper {
+export class ChatroomHelper implements BaseHelper {
     
-    private static model: mongoose.Model<IRecordModel>;
+    private static model: mongoose.Model<IChatroomModel>;
 
     constructor(connection: mongoose.Connection) {
-        if (!RecordHelper.model)  {
-            RecordHelper.model = connection.model<IRecordModel>("record", RecordSchema);
+        if (!ChatroomHelper.model)  {
+            ChatroomHelper.model = connection.model<IChatroomModel>("chat", ChatroomSchema);
         }
     }
 
-    public save(id: string, data: IRecord);
-    public save(id: string, data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void);
-    public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
+    public save(id: string, data: IChatroom);
+    public save(id: string, data: IChatroom, callback: (code: MONGODB_CODE, result: IChatroom) => void);
+    public save(id: string, data: IChatroom, callback?: (code: MONGODB_CODE, result: IChatroom) => void) {
         if (!data || !id) {
             DHLog.d("data error：" + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
         
-        RecordHelper.model.findByIdAndUpdate(id, data, (err, res) => {
+        ChatroomHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
                 DHLog.d("find by id and update error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -34,14 +34,8 @@ export class RecordHelper implements BaseHelper {
 
             if (res) {
                 DHLog.d("update:" + res._id);
-                res.name = data.name;
-                res.distance = data.distance;
-                res.startTime = data.startTime;
-                res.endTime = data.endTime;
-                res.avgSpeed = data.avgSpeed;
-                res.maxSpeed = data.maxSpeed;
-                res.locations = data.locations;
-                res.imglocations = data.imglocations;
+                res.type = data.type;
+                res.members = data.members;
                 res.modifyAt = new Date();
                 res.save();
 
@@ -53,20 +47,33 @@ export class RecordHelper implements BaseHelper {
         });
     }
 
-    public add(data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void) {
+    public add(data: IChatroom, callback: (code: MONGODB_CODE, result: IChatroom) => void) {
         if (!data) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        
-        new RecordHelper.model(data).save((err, res, count) => {
+
+        ChatroomHelper.model.count({userId: data.userId, chatId: data.chatId}, (err, count) => {
             if (err) {
-                DHLog.d("add error" + err);
-                if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+                DHLog.d("count error:" + err);
+                if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
+                return;
+            }
+            
+            if (count > 0) {
+                DHLog.d("data exist!");
+                if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
             }else {
-                DHLog.d("add data:" + res._id);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+                new ChatroomHelper.model(data).save((err, res, count) => {
+                    if (err) {
+                        DHLog.d("add error" + err);
+                        if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+                    }else {
+                        DHLog.d("add data:" + res._id);
+                        if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+                    }
+                });
             }
         });
     }
@@ -80,7 +87,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        RecordHelper.model.remove({_id : id}, (err) => {
+        ChatroomHelper.model.remove({_id : id}, (err) => {
             if (err) {
                 DHLog.d("remove by id error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
@@ -92,15 +99,15 @@ export class RecordHelper implements BaseHelper {
     }
 
     public list(userId: string);
-    public list(userId: string, callback: (code: MONGODB_CODE, results: IRecord[]) => void);
-    public list(userId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
+    public list(userId: string, callback: (code: MONGODB_CODE, results: IChatroom[]) => void);
+    public list(userId: string, callback?: (code: MONGODB_CODE, results: IChatroom[]) => void) {
         if (!userId) {
             DHLog.d("id error：" + userId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
-        RecordHelper.model.find( {userId: userId} , (err, ress) => {
+        ChatroomHelper.model.find( {userId: userId} , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);

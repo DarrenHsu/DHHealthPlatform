@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { DHAPI } from "../../const/Path";
 import { BaseAPI } from "./BaseAPI";
 import { createHmac } from "crypto";
-import { MiddlewareConfig,Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig, Config, validateSignature } from "@line/bot-sdk";
+import { MiddlewareConfig,Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig,validateSignature } from "@line/bot-sdk";
 import { DHLog } from "../../util/DHLog";
 
 export class LineWebhookAPI extends BaseAPI {
@@ -45,11 +45,11 @@ export class LineWebhookAPI extends BaseAPI {
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req)) return;
-            
+
             this.printRequestInfo(req);
             
             let event = req.body.events[0];
-            if (event.type === "message") {
+            if (event && event.type === "message") {
                 let client = new Client(this.clientConfig);
                 client.replyMessage(event.replyToken, {
                     type: "text",

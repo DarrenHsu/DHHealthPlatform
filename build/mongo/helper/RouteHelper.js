@@ -28,6 +28,7 @@ class RouteHelper {
                 res.name = data.name;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
+                res.modifyAt = new Date();
                 res.save();
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
