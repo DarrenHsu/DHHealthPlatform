@@ -78,7 +78,7 @@ export class LineWebhookAPI extends BaseAPI {
         };
 
         this.helper.add(source, (code, result) => {
-            DHLog.d("save chat code:" + code);
+            DHLog.d("add chat code:" + code);
         });
     }
 

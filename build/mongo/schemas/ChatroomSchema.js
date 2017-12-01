@@ -2,10 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 exports.ChatroomSchema = new mongoose_1.Schema({
-    chatId: {
-        type: String,
-        required: true
-    },
+    chatId: String,
     userId: {
         type: String,
         required: true

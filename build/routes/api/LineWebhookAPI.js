@@ -59,14 +59,14 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             type: type
         };
         this.helper.add(source, (code, result) => {
-            DHLog_1.DHLog.d("save chat code:" + code);
+            DHLog_1.DHLog.d("add chat code:" + code);
         });
     }
     getChatId(source) {
         if (source && source.type) {
             switch (source.type) {
                 case "user":
-                    return null;
+                    return "";
                 case "room":
                     return source.roomId;
                 default:
