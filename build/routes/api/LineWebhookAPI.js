@@ -47,7 +47,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 this.saveChat(client, source.userId, chatId, source.type);
                 client.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "你好，我是聊天機器人",
+                    text: "你好，我是回覆機器人",
                 });
             }
         });
@@ -59,6 +59,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             type: type,
             members: []
         };
+        client.pushMessage(source.chatId, {
+            type: "text",
+            text: "你好，我是推播機器人",
+        }).catch((err) => {
+            DHLog_1.DHLog.d("push error " + err);
+        });
         DHLog_1.DHLog.d("chat " + JSON.stringify(source));
         switch (source.type) {
             case "room":
@@ -78,7 +84,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 break;
             case "group":
                 {
-                    client.getRoomMemberIds(source.chatId).then((ids) => {
+                    client.getGroupMemberIds(source.chatId).then((ids) => {
                         ids.forEach((id) => {
                             source.members.push({ lineUserId: id });
                         });
@@ -87,7 +93,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                             DHLog_1.DHLog.d("add chat code:" + code);
                         });
                     }).catch((err) => {
-                        DHLog_1.DHLog.d("getRoomMemberIds error " + err);
+                        DHLog_1.DHLog.d("getGroupMemberIds error " + err);
                     });
                 }
                 break;

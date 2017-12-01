@@ -8,6 +8,7 @@ import { IChatroom } from  "../../mongo/interface/IChatroom";
 import { DHLog } from "../../util/DHLog";
 import { ChatroomHelper } from "../../mongo/helper/ChatroomHelper";
 import { DBHelper } from "../../mongo/helper/DBHelper";
+import { error } from "util";
 
 export class LineWebhookAPI extends BaseAPI {
     
@@ -64,7 +65,7 @@ export class LineWebhookAPI extends BaseAPI {
 
                 client.replyMessage(event.replyToken, {
                     type: "text",
-                    text: "你好，我是聊天機器人",
+                    text: "你好，我是回覆機器人",
                 });
             }
         });
@@ -78,10 +79,17 @@ export class LineWebhookAPI extends BaseAPI {
             members: []
         };
 
+        client.pushMessage(source.chatId, {
+            type: "text",
+            text: "你好，我是推播機器人",
+        }).catch((err) => {
+            DHLog.d("push error " + err);
+        })
+
         DHLog.d("chat " + JSON.stringify(source));
 
         switch(source.type) {
-            case "room": {
+            case "room": {                
                 client.getRoomMemberIds(source.chatId).then((ids) => {
                     ids.forEach((id) => {
                         source.members.push({lineUserId: id});
@@ -95,7 +103,7 @@ export class LineWebhookAPI extends BaseAPI {
                 });
             } break;
             case "group": {
-                client.getRoomMemberIds(source.chatId).then((ids) => {
+                client.getGroupMemberIds(source.chatId).then((ids) => {
                     ids.forEach((id) => {
                         source.members.push({lineUserId: id});
                     });
@@ -104,7 +112,7 @@ export class LineWebhookAPI extends BaseAPI {
                         DHLog.d("add chat code:" + code);
                     });
                 }).catch((err) => {
-                    DHLog.d("getRoomMemberIds error " + err);
+                    DHLog.d("getGroupMemberIds error " + err);
                 });
             } break;
             default: {
