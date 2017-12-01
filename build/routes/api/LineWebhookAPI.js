@@ -59,13 +59,15 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             type: type,
             members: []
         };
-        switch (type) {
+        DHLog_1.DHLog.d("chat " + JSON.stringify(source));
+        switch (source.type) {
             case "room":
                 {
                     client.getRoomMemberIds(source.chatId).then((ids) => {
                         ids.forEach((id) => {
                             source.members.push({ lineUserId: id });
                         });
+                        DHLog_1.DHLog.d("chat " + JSON.stringify(source));
                         this.helper.add(source, (code, result) => {
                             DHLog_1.DHLog.d("add chat code:" + code);
                         });
