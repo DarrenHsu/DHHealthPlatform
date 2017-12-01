@@ -37,7 +37,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 return;
             this.printRequestInfo(req);
             let event = req.body.events[0];
-            if (event.type === "message") {
+            if (event && event.type === "message") {
                 let client = new bot_sdk_1.Client(this.clientConfig);
                 client.replyMessage(event.replyToken, {
                     type: "text",
