@@ -1,9 +1,13 @@
+import mongoose = require("mongoose");
 import { NextFunction, Request, Response, Router } from "express";
 import { DHAPI } from "../../const/Path";
 import { BaseAPI } from "./BaseAPI";
 import { createHmac } from "crypto";
 import { MiddlewareConfig,Client,middleware,JSONParseError,SignatureValidationFailed,TemplateMessage,WebhookEvent,ClientConfig,validateSignature } from "@line/bot-sdk";
+import { IChatroom } from  "../../mongo/interface/IChatroom";
 import { DHLog } from "../../util/DHLog";
+import { ChatroomHelper } from "../../mongo/helper/ChatroomHelper";
+import { DBHelper } from "../../mongo/helper/DBHelper";
 
 export class LineWebhookAPI extends BaseAPI {
     
@@ -13,7 +17,7 @@ export class LineWebhookAPI extends BaseAPI {
     private middlewareConfig: MiddlewareConfig;
 
     public static create(router: Router) {
-        let api = new LineWebhookAPI();
+        let api = new LineWebhookAPI(DBHelper.connection);
         DHLog.d("[" + this.name + ":create] " + api.uri);
 
         api.post(router);
@@ -30,9 +34,11 @@ export class LineWebhookAPI extends BaseAPI {
         return validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
     }
 
-    constructor() {
+    constructor(connection: mongoose.Connection) {
         super();
         
+        this.helper = new ChatroomHelper(connection);
+
         this.clientConfig = {
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
         }
@@ -50,6 +56,11 @@ export class LineWebhookAPI extends BaseAPI {
             
             let event = req.body.events[0];
             if (event && event.type === "message") {
+                var source = event.source;
+                var chatId = this.getChatId(source);
+
+                this.saveChat(source.userId, chatId, source.type);
+                
                 let client = new Client(this.clientConfig);
                 client.replyMessage(event.replyToken, {
                     type: "text",
@@ -57,5 +68,32 @@ export class LineWebhookAPI extends BaseAPI {
                 });
             }
         });
-    }    
+    }
+
+    private saveChat(userId: string, chatId: string, type:string) {
+        var source: IChatroom = {
+            chatId: chatId,
+            userId: userId,
+            type: type
+        };
+
+        this.helper.add(source, (code, result) => {
+            DHLog.d("save chat code:" + code);
+        });
+    }
+
+    private getChatId(source: any): string {
+        if (source && source.type) {
+            switch(source.type) {
+                case "user":
+                    return null;
+                case "room":
+                    return source.roomId;
+                default:
+                    return source.groupId;
+            }
+        }
+
+        return null;
+    }
 }

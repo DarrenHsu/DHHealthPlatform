@@ -5,11 +5,14 @@ const BaseAPI_1 = require("./BaseAPI");
 const crypto_1 = require("crypto");
 const bot_sdk_1 = require("@line/bot-sdk");
 const DHLog_1 = require("../../util/DHLog");
+const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
+const DBHelper_1 = require("../../mongo/helper/DBHelper");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
-    constructor() {
+    constructor(connection) {
         super();
         this.pkgjson = require("../../../package.json");
         this.uri = Path_1.DHAPI.API_LINEBOT_PATH;
+        this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.clientConfig = {
             channelAccessToken: this.pkgjson.linebot.channelAccessToken
         };
@@ -18,7 +21,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         };
     }
     static create(router) {
-        let api = new LineWebhookAPI();
+        let api = new LineWebhookAPI(DBHelper_1.DBHelper.connection);
         DHLog_1.DHLog.d("[" + this.name + ":create] " + api.uri);
         api.post(router);
     }
@@ -38,6 +41,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             this.printRequestInfo(req);
             let event = req.body.events[0];
             if (event && event.type === "message") {
+                var source = event.source;
+                var chatId = this.getChatId(source);
+                this.saveChat(source.userId, chatId, source.type);
                 let client = new bot_sdk_1.Client(this.clientConfig);
                 client.replyMessage(event.replyToken, {
                     type: "text",
@@ -45,6 +51,29 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 });
             }
         });
+    }
+    saveChat(userId, chatId, type) {
+        var source = {
+            chatId: chatId,
+            userId: userId,
+            type: type
+        };
+        this.helper.add(source, (code, result) => {
+            DHLog_1.DHLog.d("save chat code:" + code);
+        });
+    }
+    getChatId(source) {
+        if (source && source.type) {
+            switch (source.type) {
+                case "user":
+                    return null;
+                case "room":
+                    return source.roomId;
+                default:
+                    return source.groupId;
+            }
+        }
+        return null;
     }
 }
 exports.LineWebhookAPI = LineWebhookAPI;
