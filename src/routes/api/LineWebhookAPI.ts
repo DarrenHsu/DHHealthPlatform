@@ -29,12 +29,6 @@ export class LineWebhookAPI extends BaseAPI {
         return signature;
     }
 
-    private isValidateSignature(req: Request): boolean{
-        DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
-        DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
-        return validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
-    }
-
     constructor(connection: mongoose.Connection) {
         super();
         
@@ -47,6 +41,12 @@ export class LineWebhookAPI extends BaseAPI {
         this.middlewareConfig = {
             channelSecret: this.pkgjson.linebot.channelSecret
         }
+    }
+
+    private isValidateSignature(req: Request): boolean{
+        DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
+        DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+        return validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
     }
 
     protected post(router: Router) {
@@ -77,7 +77,7 @@ export class LineWebhookAPI extends BaseAPI {
             }).catch((err) => {
                 DHLog.d("replyMessage error " + err);
             });
-            
+
             res.end();
         });
     }
@@ -140,5 +140,5 @@ export class LineWebhookAPI extends BaseAPI {
         }
 
         return null;
-    }
+    }    
 }
