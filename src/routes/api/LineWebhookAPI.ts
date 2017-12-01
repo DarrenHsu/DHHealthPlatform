@@ -56,18 +56,25 @@ export class LineWebhookAPI extends BaseAPI {
             this.printRequestInfo(req);
             
             let event = req.body.events[0];
-            if (event && event.type === "message") {
+            if (!event) {
+                res.statusCode = 500;
+                res.end();
+                return;
+            }
+
+            let client = new Client(this.clientConfig);
+            
+            if (event.type === "message") {
                 var source = event.source;
                 var chatId = this.getChatId(source);
-                let client = new Client(this.clientConfig);
-
+                
                 this.saveChat(client, source.userId, chatId, source.type);
-
-                client.replyMessage(event.replyToken, {
-                    type: "text",
-                    text: "你好，我是回覆機器人",
-                });
             }
+
+            client.replyMessage(event.replyToken, {
+                type: "text",
+                text: "你好，我是回覆機器人",
+            });
         });
     }
 
@@ -78,13 +85,6 @@ export class LineWebhookAPI extends BaseAPI {
             type: type,
             members: []
         };
-
-        client.pushMessage(source.chatId, {
-            type: "text",
-            text: "你好，我是推播機器人",
-        }).catch((err) => {
-            DHLog.d("push error " + err);
-        })
 
         DHLog.d("chat " + JSON.stringify(source));
 
