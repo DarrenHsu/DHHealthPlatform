@@ -54,7 +54,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             client.replyMessage(event.replyToken, {
                 type: "text",
                 text: "你好，我是回覆機器人",
+            }).catch((err) => {
+                DHLog_1.DHLog.d("replyMessage error " + err);
             });
+            res.end();
         });
     }
     saveChat(client, userId, chatId, type) {

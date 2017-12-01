@@ -63,7 +63,7 @@ export class LineWebhookAPI extends BaseAPI {
             }
 
             let client = new Client(this.clientConfig);
-            
+
             if (event.type === "message") {
                 var source = event.source;
                 var chatId = this.getChatId(source);
@@ -74,7 +74,11 @@ export class LineWebhookAPI extends BaseAPI {
             client.replyMessage(event.replyToken, {
                 type: "text",
                 text: "你好，我是回覆機器人",
+            }).catch((err) => {
+                DHLog.d("replyMessage error " + err);
             });
+            
+            res.end();
         });
     }
 
