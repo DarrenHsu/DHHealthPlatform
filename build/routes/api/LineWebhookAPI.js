@@ -43,8 +43,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             if (event && event.type === "message") {
                 var source = event.source;
                 var chatId = this.getChatId(source);
-                this.saveChat(source.userId, chatId, source.type);
                 let client = new bot_sdk_1.Client(this.clientConfig);
+                this.saveChat(client, source.userId, chatId, source.type);
                 client.replyMessage(event.replyToken, {
                     type: "text",
                     text: "你好，我是聊天機器人",
@@ -52,21 +52,52 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             }
         });
     }
-    saveChat(userId, chatId, type) {
+    saveChat(client, userId, chatId, type) {
         var source = {
             chatId: chatId,
             userId: userId,
-            type: type
+            type: type,
+            members: []
         };
-        this.helper.add(source, (code, result) => {
-            DHLog_1.DHLog.d("add chat code:" + code);
-        });
+        switch (type) {
+            case "room":
+                {
+                    client.getRoomMemberIds(source.chatId).then((ids) => {
+                        ids.forEach((id) => {
+                            source.members.push({ lineUserId: id });
+                        });
+                        this.helper.add(source, (code, result) => {
+                            DHLog_1.DHLog.d("add chat code:" + code);
+                        });
+                    });
+                }
+                break;
+            case "group":
+                {
+                    client.getRoomMemberIds(source.chatId).then((ids) => {
+                        ids.forEach((id) => {
+                            source.members.push({ lineUserId: id });
+                        });
+                        this.helper.add(source, (code, result) => {
+                            DHLog_1.DHLog.d("add chat code:" + code);
+                        });
+                    });
+                }
+                break;
+            default:
+                {
+                    this.helper.add(source, (code, result) => {
+                        DHLog_1.DHLog.d("add chat code:" + code);
+                    });
+                }
+                break;
+        }
     }
     getChatId(source) {
         if (source && source.type) {
             switch (source.type) {
                 case "user":
-                    return "";
+                    return source.userId;
                 case "room":
                     return source.roomId;
                 default:
