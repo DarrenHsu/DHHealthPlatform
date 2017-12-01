@@ -1,10 +1,7 @@
 import { Schema } from "mongoose";
 
 export var ChatroomSchema: Schema = new Schema({
-    chatId: {
-        type: String,
-        required: true        
-    },
+    chatId: String,
     userId: {
         type: String,
         required: true        

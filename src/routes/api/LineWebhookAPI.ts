@@ -86,7 +86,7 @@ export class LineWebhookAPI extends BaseAPI {
         if (source && source.type) {
             switch(source.type) {
                 case "user":
-                    return null;
+                    return "";
                 case "room":
                     return source.roomId;
                 default:
