@@ -52,18 +52,11 @@ export class LineWebhookAPI extends BaseAPI {
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req)) return;
-
+            
+            let client = new Client(this.clientConfig);
             this.printRequestInfo(req);
             
             let event = req.body.events[0];
-            if (!event) {
-                res.statusCode = 500;
-                res.end();
-                return;
-            }
-
-            let client = new Client(this.clientConfig);
-
             if (event.type === "message") {
                 var source = event.source;
                 var chatId = this.getChatId(source);
