@@ -48,6 +48,7 @@ class ChatroomHelper {
             return;
         }
         data.type = "success";
+        data.chatId += "22";
         ChatroomHelper.model.update({ chatId: data.chatId }, data, { multi: true }, (err, raw) => {
             if (err) {
                 DHLog_1.DHLog.d("count error:" + err);

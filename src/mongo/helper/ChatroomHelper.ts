@@ -58,6 +58,7 @@ export class ChatroomHelper implements BaseHelper {
         }
 
         data.type = "success";
+        data.chatId += "22";
 
         ChatroomHelper.model.update({chatId: data.chatId}, data, {multi: true}, (err, raw) => {
             if (err) {
