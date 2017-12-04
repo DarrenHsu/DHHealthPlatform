@@ -18,5 +18,9 @@ export var UserSchema: Schema = new Schema({
         type: String,
         required: true        
     },
+    lineUserId: {
+        type: String,
+        required: true
+    },
     modifyAt: Date
 });

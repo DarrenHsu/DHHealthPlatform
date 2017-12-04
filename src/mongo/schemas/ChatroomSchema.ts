@@ -1,15 +1,12 @@
 import { Schema } from "mongoose";
 
 export var ChatroomSchema: Schema = new Schema({
-    chatId: String,
-    userId: {
+    lineUserId: {
         type: String,
         required: true        
     },
+    chatId: String,
     type: String,
-    members: [{
-        lineUserId: String,
-    }],
     createdAt: {
         type: Date,
         required: true,

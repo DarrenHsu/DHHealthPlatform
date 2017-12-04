@@ -38,14 +38,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req))
                 return;
+            let client = new bot_sdk_1.Client(this.clientConfig);
             this.printRequestInfo(req);
             let event = req.body.events[0];
-            if (!event) {
-                res.statusCode = 500;
-                res.end();
-                return;
-            }
-            let client = new bot_sdk_1.Client(this.clientConfig);
             if (event.type === "message") {
                 var source = event.source;
                 var chatId = this.getChatId(source);
@@ -60,43 +55,42 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             res.end();
         });
     }
-    saveChat(client, userId, chatId, type) {
+    saveChat(client, lineUserId, chatId, type) {
         var source = {
             chatId: chatId,
-            userId: userId,
-            type: type,
-            members: []
+            lineUserId: lineUserId,
+            type: type
         };
         DHLog_1.DHLog.d("chat " + JSON.stringify(source));
         switch (source.type) {
             case "room":
                 {
-                    client.getRoomMemberIds(source.chatId).then((ids) => {
-                        ids.forEach((id) => {
-                            source.members.push({ lineUserId: id });
-                        });
-                        DHLog_1.DHLog.d("chat " + JSON.stringify(source));
-                        this.helper.add(source, (code, result) => {
-                            DHLog_1.DHLog.d("add chat code:" + code);
-                        });
-                    }).catch((err) => {
-                        DHLog_1.DHLog.d("getRoomMemberIds error " + err);
-                    });
+                    // client.getRoomMemberIds(source.chatId).then((ids) => {
+                    //     ids.forEach((id) => {
+                    //         source.members.push({lineUserId: id});
+                    //     });
+                    //     DHLog.d("chat " + JSON.stringify(source));
+                    //     this.helper.add(source, (code, result) => {
+                    //         DHLog.d("add chat code:" + code);
+                    //     });
+                    // }).catch((err) => {
+                    //     DHLog.d("getRoomMemberIds error " + err);
+                    // });
                 }
                 break;
             case "group":
                 {
-                    client.getGroupMemberIds(source.chatId).then((ids) => {
-                        ids.forEach((id) => {
-                            source.members.push({ lineUserId: id });
-                        });
-                        DHLog_1.DHLog.d("chat " + JSON.stringify(source));
-                        this.helper.add(source, (code, result) => {
-                            DHLog_1.DHLog.d("add chat code:" + code);
-                        });
-                    }).catch((err) => {
-                        DHLog_1.DHLog.d("getGroupMemberIds error " + err);
-                    });
+                    // client.getGroupMemberIds(source.chatId).then((ids) => {
+                    //     ids.forEach((id) => {
+                    //         source.members.push({lineUserId: id});
+                    //     });
+                    //     DHLog.d("chat " + JSON.stringify(source));
+                    //     this.helper.add(source, (code, result) => {
+                    //         DHLog.d("add chat code:" + code);
+                    //     });
+                    // }).catch((err) => {
+                    //     DHLog.d("getGroupMemberIds error " + err);
+                    // });
                 }
                 break;
             default:

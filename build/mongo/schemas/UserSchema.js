@@ -19,5 +19,9 @@ exports.UserSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    lineUserId: {
+        type: String,
+        required: true
+    },
     modifyAt: Date
 });

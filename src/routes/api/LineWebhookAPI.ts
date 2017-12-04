@@ -75,42 +75,41 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    private saveChat(client: Client, userId: string, chatId: string, type:string) {
+    private saveChat(client: Client, lineUserId: string, chatId: string, type:string) {
         var source = {
             chatId: chatId,
-            userId: userId,
-            type: type,
-            members: []
+            lineUserId: lineUserId,
+            type: type
         };
 
         DHLog.d("chat " + JSON.stringify(source));
 
         switch(source.type) {
-            case "room": {                
-                client.getRoomMemberIds(source.chatId).then((ids) => {
-                    ids.forEach((id) => {
-                        source.members.push({lineUserId: id});
-                    });
-                    DHLog.d("chat " + JSON.stringify(source));
-                    this.helper.add(source, (code, result) => {
-                        DHLog.d("add chat code:" + code);
-                    });
-                }).catch((err) => {
-                    DHLog.d("getRoomMemberIds error " + err);
-                });
+            case "room": {
+                // client.getRoomMemberIds(source.chatId).then((ids) => {
+                //     ids.forEach((id) => {
+                //         source.members.push({lineUserId: id});
+                //     });
+                //     DHLog.d("chat " + JSON.stringify(source));
+                //     this.helper.add(source, (code, result) => {
+                //         DHLog.d("add chat code:" + code);
+                //     });
+                // }).catch((err) => {
+                //     DHLog.d("getRoomMemberIds error " + err);
+                // });
             } break;
             case "group": {
-                client.getGroupMemberIds(source.chatId).then((ids) => {
-                    ids.forEach((id) => {
-                        source.members.push({lineUserId: id});
-                    });
-                    DHLog.d("chat " + JSON.stringify(source));
-                    this.helper.add(source, (code, result) => {
-                        DHLog.d("add chat code:" + code);
-                    });
-                }).catch((err) => {
-                    DHLog.d("getGroupMemberIds error " + err);
-                });
+                // client.getGroupMemberIds(source.chatId).then((ids) => {
+                //     ids.forEach((id) => {
+                //         source.members.push({lineUserId: id});
+                //     });
+                //     DHLog.d("chat " + JSON.stringify(source));
+                //     this.helper.add(source, (code, result) => {
+                //         DHLog.d("add chat code:" + code);
+                //     });
+                // }).catch((err) => {
+                //     DHLog.d("getGroupMemberIds error " + err);
+                // });
             } break;
             default: {
                 this.helper.add(source, (code, result) => {

@@ -27,7 +27,6 @@ class ChatroomHelper {
             if (res) {
                 DHLog_1.DHLog.d("update:" + res._id);
                 res.type = data.type;
-                res.members = data.members;
                 res.modifyAt = new Date();
                 res.save();
                 if (callback)
@@ -48,13 +47,25 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        ChatroomHelper.model.update({ userId: data.userId, chatId: data.chatId }, data, (err, raw) => {
+        ChatroomHelper.model.update({ lineUserId: data.lineUserId, chatId: data.chatId }, data, (err, raw) => {
             if (err) {
                 DHLog_1.DHLog.d("count error:" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
+            new ChatroomHelper.model(data).save((err, res, count) => {
+                if (err) {
+                    DHLog_1.DHLog.d("add error" + err);
+                    if (callback)
+                        callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
+                }
+                else {
+                    DHLog_1.DHLog.d("add data:" + res._id);
+                    if (callback)
+                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+                }
+            });
             DHLog_1.DHLog.d("raw:" + raw);
         });
         // ChatroomHelper.model.count({userId: data.userId, chatId: data.chatId}, (err, count) => {
@@ -67,15 +78,15 @@ class ChatroomHelper {
         //         DHLog.d("data exist!");
         //         if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
         //     }else {
-        //         new ChatroomHelper.model(data).save((err, res, count) => {
-        //             if (err) {
-        //                 DHLog.d("add error" + err);
-        //                 if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-        //             }else {
-        //                 DHLog.d("add data:" + res._id);
-        //                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-        //             }
-        //         });
+        // new ChatroomHelper.model(data).save((err, res, count) => {
+        //     if (err) {
+        //         DHLog.d("add error" + err);
+        //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+        //     }else {
+        //         DHLog.d("add data:" + res._id);
+        //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+        //     }
+        // });
         //     }
         // });
     }
