@@ -44,9 +44,13 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     private isValidateSignature(req: Request): boolean{
-        DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
-        DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
-        return validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
+        if (validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString())) {
+            return true;
+        }else {
+            DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
+            DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+            return false;
+        }
     }
 
     protected post(router: Router) {

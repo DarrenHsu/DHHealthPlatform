@@ -30,9 +30,14 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         return signature;
     }
     isValidateSignature(req) {
-        DHLog_1.DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
-        DHLog_1.DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
-        return bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString());
+        if (bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString())) {
+            return true;
+        }
+        else {
+            DHLog_1.DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
+            DHLog_1.DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+            return false;
+        }
     }
     post(router) {
         router.post(this.uri, (req, res, next) => {
