@@ -62,45 +62,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             type: type
         };
         DHLog_1.DHLog.d("chat " + JSON.stringify(source));
-        switch (source.type) {
-            case "room":
-                {
-                    // client.getRoomMemberIds(source.chatId).then((ids) => {
-                    //     ids.forEach((id) => {
-                    //         source.members.push({lineUserId: id});
-                    //     });
-                    //     DHLog.d("chat " + JSON.stringify(source));
-                    //     this.helper.add(source, (code, result) => {
-                    //         DHLog.d("add chat code:" + code);
-                    //     });
-                    // }).catch((err) => {
-                    //     DHLog.d("getRoomMemberIds error " + err);
-                    // });
-                }
-                break;
-            case "group":
-                {
-                    // client.getGroupMemberIds(source.chatId).then((ids) => {
-                    //     ids.forEach((id) => {
-                    //         source.members.push({lineUserId: id});
-                    //     });
-                    //     DHLog.d("chat " + JSON.stringify(source));
-                    //     this.helper.add(source, (code, result) => {
-                    //         DHLog.d("add chat code:" + code);
-                    //     });
-                    // }).catch((err) => {
-                    //     DHLog.d("getGroupMemberIds error " + err);
-                    // });
-                }
-                break;
-            default:
-                {
-                    this.helper.add(source, (code, result) => {
-                        DHLog_1.DHLog.d("add chat code:" + code);
-                    });
-                }
-                break;
-        }
+        this.helper.add(source, (code, result) => {
+            DHLog_1.DHLog.d("add chat code:" + code);
+        });
     }
     getChatId(source) {
         if (source && source.type) {
