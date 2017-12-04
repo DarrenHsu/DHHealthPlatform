@@ -47,26 +47,31 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        ChatroomHelper.model.update({ lineUserId: data.lineUserId, chatId: data.chatId }, data, (err, raw) => {
+        data.type = "test";
+        ChatroomHelper.model.update({ chatId: data.chatId }, data, (err, raw) => {
             if (err) {
                 DHLog_1.DHLog.d("count error:" + err);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
-            new ChatroomHelper.model(data).save((err, res, count) => {
-                if (err) {
-                    DHLog_1.DHLog.d("add error" + err);
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
-                }
-                else {
-                    DHLog_1.DHLog.d("add data:" + res._id);
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
-                }
-            });
-            DHLog_1.DHLog.d("raw:" + raw);
+            if (raw) {
+                DHLog_1.DHLog.d("raw:" + raw.type);
+            }
+            else {
+                new ChatroomHelper.model(data).save((err, res, count) => {
+                    if (err) {
+                        DHLog_1.DHLog.d("add error" + err);
+                        if (callback)
+                            callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
+                    }
+                    else {
+                        DHLog_1.DHLog.d("add data:" + res._id);
+                        if (callback)
+                            callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+                    }
+                });
+            }
         });
         // ChatroomHelper.model.count({userId: data.userId, chatId: data.chatId}, (err, count) => {
         //     if (err) {
@@ -78,15 +83,15 @@ class ChatroomHelper {
         //         DHLog.d("data exist!");
         //         if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
         //     }else {
-        // new ChatroomHelper.model(data).save((err, res, count) => {
-        //     if (err) {
-        //         DHLog.d("add error" + err);
-        //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-        //     }else {
-        //         DHLog.d("add data:" + res._id);
-        //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-        //     }
-        // });
+        //         new ChatroomHelper.model(data).save((err, res, count) => {
+        //             if (err) {
+        //                 DHLog.d("add error" + err);
+        //                 if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+        //             }else {
+        //                 DHLog.d("add data:" + res._id);
+        //                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+        //             }
+        //         });
         //     }
         // });
     }
