@@ -8,5 +8,6 @@ export interface IUser extends IBase {
     gmail?: string;
     gAccessToken?: string;
     lineUserId?: string;
+    pictureUrl?: string;
     modifyAt?: Date;
 }

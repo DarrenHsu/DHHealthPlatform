@@ -15,13 +15,11 @@ export class BaseRoute {
     }
 
     protected printRequestInfo(req: Request) {
-        var logStr = 
-        "<----------------- " + req.method + " ---------------->\n" +
-        req.url + "\n" +
-        "header:" + JSON.stringify(req.headers) + "\n" +
-        "body:" + JSON.stringify(req.body) + "\n" +
-        "<---------------------------------------->";
-        DHLog.d(logStr);
+        DHLog.d("<----------------- " + req.method + " ---------------->");
+        DHLog.d(req.url);
+        DHLog.d("header:" + JSON.stringify(req.headers));
+        DHLog.d("body:" + JSON.stringify(req.body));
+        DHLog.d("<---------------------------------------->");
     }
 
     public addScript(src: string): BaseRoute {

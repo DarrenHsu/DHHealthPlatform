@@ -23,5 +23,6 @@ exports.UserSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    pictureUrl: String,
     modifyAt: Date
 });

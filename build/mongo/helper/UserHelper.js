@@ -30,6 +30,7 @@ class UserHelper {
                 res.height = data.height;
                 res.weight = data.weight;
                 res.gmail = data.gmail;
+                res.pictureUrl = data.pictureUrl;
                 res.gAccessToken = data.gAccessToken;
                 res.modifyAt = new Date();
                 res.save();

@@ -22,5 +22,6 @@ export var UserSchema: Schema = new Schema({
         type: String,
         required: true
     },
+    pictureUrl: String,
     modifyAt: Date
 });

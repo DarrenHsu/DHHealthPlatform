@@ -39,6 +39,7 @@ export class UserHelper implements BaseHelper {
                 res.height = data.height;
                 res.weight = data.weight;
                 res.gmail = data.gmail;
+                res.pictureUrl = data.pictureUrl;
                 res.gAccessToken = data.gAccessToken;
                 res.modifyAt = new Date();
                 res.save();
