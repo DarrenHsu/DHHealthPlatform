@@ -19,8 +19,6 @@ export class UserHelper implements BaseHelper {
     public save(id: string, data: IUser);
     public save(id: string, data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void);
     public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUser) => void) {
-        DHLog.d("save id " + id + JSON.stringify(data));
-
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
@@ -54,8 +52,6 @@ export class UserHelper implements BaseHelper {
     }
     
     public add(data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void) {
-        DHLog.d("add id " + JSON.stringify(data));
-
         if (!data || !data.gmail) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
@@ -89,8 +85,6 @@ export class UserHelper implements BaseHelper {
     public remove(id: string);
     public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
-        DHLog.d("remove id " + id);
-
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION);
@@ -111,8 +105,6 @@ export class UserHelper implements BaseHelper {
     public list(id: string);
     public list(id: string, callback: (code: MONGODB_CODE, results: IUser[]) => void);
     public list(id: string, callback?: (code: MONGODB_CODE, results: IUser[]) => void) {
-        DHLog.d("list id " + id);
-
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);

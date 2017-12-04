@@ -10,7 +10,6 @@ class UserHelper {
         }
     }
     save(id, data, callback) {
-        DHLog_1.DHLog.d("save id " + id + JSON.stringify(data));
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
@@ -45,7 +44,6 @@ class UserHelper {
         });
     }
     add(data, callback) {
-        DHLog_1.DHLog.d("add id " + JSON.stringify(data));
         if (!data || !data.gmail) {
             DHLog_1.DHLog.d("add data error " + data);
             if (callback)
@@ -81,7 +79,6 @@ class UserHelper {
         });
     }
     remove(id, callback) {
-        DHLog_1.DHLog.d("remove id " + id);
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
@@ -102,7 +99,6 @@ class UserHelper {
         });
     }
     list(id, callback) {
-        DHLog_1.DHLog.d("list id " + id);
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)

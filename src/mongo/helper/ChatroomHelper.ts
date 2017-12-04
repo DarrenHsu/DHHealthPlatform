@@ -19,8 +19,6 @@ export class ChatroomHelper implements BaseHelper {
     public save(id: string, data: IChatroom);
     public save(id: string, data: IChatroom, callback: (code: MONGODB_CODE, result: IChatroom) => void);
     public save(id: string, data: IChatroom, callback?: (code: MONGODB_CODE, result: IChatroom) => void) {
-        DHLog.d("save id " + id + JSON.stringify(data));
-
         if (!data || !id) {
             DHLog.d("data error：" + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
@@ -49,8 +47,6 @@ export class ChatroomHelper implements BaseHelper {
     }
 
     public add(data: IChatroom, callback: (code: MONGODB_CODE, result: IChatroom) => void) {
-        DHLog.d("add " + JSON.stringify(data));
-
         if (!data) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
@@ -85,8 +81,6 @@ export class ChatroomHelper implements BaseHelper {
     public remove(id: string);
     public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
-        DHLog.d("remove id " + id);
-
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION);
@@ -107,8 +101,6 @@ export class ChatroomHelper implements BaseHelper {
     public list(userId: string);
     public list(userId: string, callback: (code: MONGODB_CODE, results: IChatroom[]) => void);
     public list(userId: string, callback?: (code: MONGODB_CODE, results: IChatroom[]) => void) {
-        DHLog.d("list id " + userId);
-
         if (!userId) {
             DHLog.d("id error：" + userId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);

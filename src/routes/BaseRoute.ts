@@ -16,10 +16,10 @@ export class BaseRoute {
 
     protected printRequestInfo(req: Request) {
         DHLog.d("<----------------- " + req.method + " ---------------->");
-        DHLog.d("url:" + req.url);
+        DHLog.d(req.url);
         DHLog.d("header:" + JSON.stringify(req.headers));
         DHLog.d("body:" + JSON.stringify(req.body))
-        DHLog.d("<===============================================>");
+        DHLog.d("<---------------------------------------->");
     }
 
     public addScript(src: string): BaseRoute {

@@ -10,7 +10,6 @@ class ChatroomHelper {
         }
     }
     save(id, data, callback) {
-        DHLog_1.DHLog.d("save id " + id + JSON.stringify(data));
         if (!data || !id) {
             DHLog_1.DHLog.d("data error：" + data);
             if (callback)
@@ -40,7 +39,6 @@ class ChatroomHelper {
         });
     }
     add(data, callback) {
-        DHLog_1.DHLog.d("add " + JSON.stringify(data));
         if (!data) {
             DHLog_1.DHLog.d("add data error " + data);
             if (callback)
@@ -77,7 +75,6 @@ class ChatroomHelper {
         });
     }
     remove(id, callback) {
-        DHLog_1.DHLog.d("remove id " + id);
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
@@ -98,7 +95,6 @@ class ChatroomHelper {
         });
     }
     list(userId, callback) {
-        DHLog_1.DHLog.d("list id " + userId);
         if (!userId) {
             DHLog_1.DHLog.d("id error：" + userId);
             if (callback)

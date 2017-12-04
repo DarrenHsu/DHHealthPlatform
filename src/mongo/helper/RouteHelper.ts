@@ -19,8 +19,6 @@ export class RouteHelper implements BaseHelper {
     public save(id: string, data: IRoute);
     public save(id: string, data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void);
     public save(id: string, data: IRoute, callback?: (code: MONGODB_CODE, result: IRoute) => void) {
-        DHLog.d("save id " + id + JSON.stringify(data));
-
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
@@ -51,8 +49,6 @@ export class RouteHelper implements BaseHelper {
     }
 
     public add(data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void) {
-        DHLog.d("add id " + JSON.stringify(data));
-
         if (!data) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
@@ -73,8 +69,6 @@ export class RouteHelper implements BaseHelper {
     public remove(id: string);
     public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
-        DHLog.d("remove id " + id);
-
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION);
@@ -95,8 +89,6 @@ export class RouteHelper implements BaseHelper {
     public list(userId: string);
     public list(userId: string, callback: (code: MONGODB_CODE, results: IRoute[]) => void);
     public list(userId: string, callback?: (code: MONGODB_CODE, results: IRoute[]) => void) {
-        DHLog.d("remove id " + userId);
-
         if (!userId) {
             DHLog.d("id error：" + userId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
