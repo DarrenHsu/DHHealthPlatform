@@ -47,8 +47,6 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        data.type = "success";
-        data.chatId += "22";
         ChatroomHelper.model.update({ chatId: data.chatId }, data, { multi: true }, (err, raw) => {
             if (err) {
                 DHLog_1.DHLog.d("count error:" + err);
@@ -56,8 +54,10 @@ class ChatroomHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
-            if (raw) {
+            if (raw && raw.nModified && raw.nModified > 0) {
                 DHLog_1.DHLog.d("raw:" + JSON.stringify(raw));
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, data);
             }
             else {
                 new ChatroomHelper.model(data).save((err, res, count) => {
@@ -74,27 +74,6 @@ class ChatroomHelper {
                 });
             }
         });
-        // ChatroomHelper.model.count({userId: data.userId, chatId: data.chatId}, (err, count) => {
-        //     if (err) {
-        //         DHLog.d("count error:" + err);
-        //         if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
-        //         return;
-        //     }
-        //     if (count > 0) {
-        //         DHLog.d("data exist!");
-        //         if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
-        //     }else {
-        //         new ChatroomHelper.model(data).save((err, res, count) => {
-        //             if (err) {
-        //                 DHLog.d("add error" + err);
-        //                 if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-        //             }else {
-        //                 DHLog.d("add data:" + res._id);
-        //                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-        //             }
-        //         });
-        //     }
-        // });
     }
     remove(id, callback) {
         DHLog_1.DHLog.d("remove id " + id);
