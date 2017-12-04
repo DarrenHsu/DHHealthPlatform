@@ -47,8 +47,8 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        data.type = "test";
-        ChatroomHelper.model.update({ chatId: data.chatId }, data, (err, raw) => {
+        data.type = "success";
+        ChatroomHelper.model.update({ chatId: data.chatId }, data, { multi: true }, (err, raw) => {
             if (err) {
                 DHLog_1.DHLog.d("count error:" + err);
                 if (callback)
@@ -56,7 +56,7 @@ class ChatroomHelper {
                 return;
             }
             if (raw) {
-                DHLog_1.DHLog.d("raw:" + raw.type);
+                DHLog_1.DHLog.d("raw:" + JSON.stringify(raw));
             }
             else {
                 new ChatroomHelper.model(data).save((err, res, count) => {
