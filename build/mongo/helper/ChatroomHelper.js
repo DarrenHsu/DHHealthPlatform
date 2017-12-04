@@ -54,7 +54,7 @@ class ChatroomHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
-            if (raw && raw.nModified && raw.nModified > 0) {
+            if (raw && raw.nModified > 0) {
                 DHLog_1.DHLog.d("raw:" + JSON.stringify(raw));
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, data);
