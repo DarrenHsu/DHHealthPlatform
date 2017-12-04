@@ -63,9 +63,10 @@ export class ChatroomHelper implements BaseHelper {
                 if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
                 return;
             }
-
+            
+            DHLog.d("raw:" + JSON.stringify(raw));
             if (raw && raw.nModified > 0) {
-                DHLog.d("raw:" + JSON.stringify(raw));
+                DHLog.d("update exist data");
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, data);
             }else {
                 new ChatroomHelper.model(data).save((err, res, count) => {
