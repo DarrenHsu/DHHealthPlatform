@@ -87,6 +87,9 @@ export class LineWebhookAPI extends BaseAPI {
         };
 
         this.helper.add(source, null);
+        client.getProfile(source.lineUserId).catch((err) => {
+            DHLog.d("err " + err);
+        });
     }
 
     private getChatId(source: any): string {
