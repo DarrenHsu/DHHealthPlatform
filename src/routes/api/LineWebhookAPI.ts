@@ -87,14 +87,12 @@ export class LineWebhookAPI extends BaseAPI {
         };
 
         this.helper.add(source, null);
-        var profile = client.getProfile(source.lineUserId).catch((err) => {
+        
+        client.getProfile(source.lineUserId).then((profile) => {
+            DHLog.d("profile " + JSON.stringify(profile));
+        }).catch((err) => {
             DHLog.d("err " + err);
         });
-
-        if (profile) {
-            DHLog.d("profile " + JSON.stringify(profile));
-        }
-
     }
 
     private getChatId(source: any): string {

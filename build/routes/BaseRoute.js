@@ -8,11 +8,12 @@ class BaseRoute {
         this.scripts = [];
     }
     printRequestInfo(req) {
-        DHLog_1.DHLog.d("<----------------- " + req.method + " ---------------->");
-        DHLog_1.DHLog.d(req.url);
-        DHLog_1.DHLog.d("header:" + JSON.stringify(req.headers));
-        DHLog_1.DHLog.d("body:" + JSON.stringify(req.body));
-        DHLog_1.DHLog.d("<---------------------------------------->");
+        var logStr = "<----------------- " + req.method + " ---------------->\n" +
+            req.url + "\n" +
+            "header:" + JSON.stringify(req.headers) + "\n" +
+            "body:" + JSON.stringify(req.body) + "\n" +
+            "<---------------------------------------->";
+        DHLog_1.DHLog.d(logStr);
     }
     addScript(src) {
         this.scripts.push(src);
