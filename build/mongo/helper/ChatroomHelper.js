@@ -55,7 +55,7 @@ class ChatroomHelper {
                 return;
             }
             DHLog_1.DHLog.d("raw:" + JSON.stringify(raw));
-            if (raw && raw.nModified > 0) {
+            if (raw && (raw.n > 0 || raw.nModified > 0)) {
                 DHLog_1.DHLog.d("update exist data");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, data);
