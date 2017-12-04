@@ -50,7 +50,7 @@ export class ChatroomHelper implements BaseHelper {
 
     public add(data: IChatroom, callback: (code: MONGODB_CODE, result: IChatroom) => void) {
         DHLog.d("add " + JSON.stringify(data));
-
+        
         if (!data) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);

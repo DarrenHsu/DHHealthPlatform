@@ -82,10 +82,7 @@ export class LineWebhookAPI extends BaseAPI {
             type: type
         };
 
-        DHLog.d("chat " + JSON.stringify(source));
-        this.helper.add(source, (code, result) => {
-            DHLog.d("add chat code:" + code);
-        });
+        this.helper.add(source, null);
     }
 
     private getChatId(source: any): string {
