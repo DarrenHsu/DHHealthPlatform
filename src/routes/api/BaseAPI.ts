@@ -1,4 +1,5 @@
 import mongoose = require("mongoose");
+import { createHmac, createHash } from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "../BaseRoute";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
@@ -6,14 +7,27 @@ import { DBHelper } from "../../mongo/helper/DBHelper";
 import { BaseHelper } from "../../mongo/helper/BaseHelper";
 import { IBase } from "../../mongo/interface/IBase";
 import { DHAPI } from "../../const/Path";
+import { DHLog } from "../../util/DHLog";
 
 export class BaseAPI extends BaseRoute {
 
+    protected static FEED_AUTH: string = "Darren Hsu I Love You";
+    protected static FEED_AUTH_PASS: string = "I'm Darren";
     protected helper: BaseHelper;
     protected uri: string;
 
     public static create(router: Router) {}
 
+    protected checkHeader(auth: string, text: string): Boolean {
+        if (text == BaseAPI.FEED_AUTH_PASS) 
+            return true;
+        
+        var s0 = createHash("SHA256").update(BaseAPI.FEED_AUTH + test).digest("base64");
+        DHLog.d("s0  :" + s0);
+        DHLog.d("auth:" + auth);
+        return auth == s0;
+    }
+    
     protected get(router: Router) {
         router.get(this.uri + "/:userId", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
