@@ -15,10 +15,7 @@ export var RecordSchema: Schema = new Schema({
         longitude: Number,
         latitude: Number
     }],
-    imglocations: [{
-        longitude: Number,
-        latitude: Number
-    }],
+    imglocations: [Number],
     createdAt: {
         type: Date,
         required: true,

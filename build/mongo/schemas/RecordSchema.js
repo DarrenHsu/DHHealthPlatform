@@ -16,10 +16,7 @@ exports.RecordSchema = new mongoose_1.Schema({
             longitude: Number,
             latitude: Number
         }],
-    imglocations: [{
-            longitude: Number,
-            latitude: Number
-        }],
+    imglocations: [Number],
     createdAt: {
         type: Date,
         required: true,

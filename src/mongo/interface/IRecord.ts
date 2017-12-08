@@ -12,9 +12,6 @@ export interface IRecord extends IBase {
         longitude: number; 
         latitude: number; 
     }];
-    imglocations?: [{ 
-        longitude: number; 
-        latitude: number; 
-    }];
+    imglocations?: number[];
     modifyAt?: Date;
 }
