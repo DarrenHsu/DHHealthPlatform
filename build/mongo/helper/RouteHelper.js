@@ -95,7 +95,9 @@ class RouteHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                DHLog_1.DHLog.d("find");
+                DHLog_1.DHLog.d("find " + ress.length);
+                if (ress.length == 0)
+                    callback(ResultCode_1.MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
