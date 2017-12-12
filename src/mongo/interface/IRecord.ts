@@ -1,7 +1,7 @@
 import { IBase } from "./IBase";
 
 export interface IRecord extends IBase {
-    userId?: string;
+    lineUserId?: string;
     name?: string;
     distance?: number;
     startTime?: Date;

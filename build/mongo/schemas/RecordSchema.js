@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 exports.RecordSchema = new mongoose_1.Schema({
-    userId: {
+    lineUserId: {
         type: String,
         required: true
     },

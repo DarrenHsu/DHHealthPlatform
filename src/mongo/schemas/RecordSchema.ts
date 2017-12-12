@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 
 export var RecordSchema: Schema = new Schema({
-    userId: {
+    lineUserId: {
         type: String,
         required: true        
     },

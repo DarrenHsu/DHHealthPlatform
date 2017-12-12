@@ -35,6 +35,7 @@ export class RouteHelper implements BaseHelper {
             if (res) {
                 DHLog.d("find");
                 res.name = data.name;
+                res.lineUserId = data.lineUserId;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
                 res.modifyAt = new Date();
@@ -86,16 +87,16 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
-    public list(userId: string);
-    public list(userId: string, callback: (code: MONGODB_CODE, results: IRoute[]) => void);
-    public list(userId: string, callback?: (code: MONGODB_CODE, results: IRoute[]) => void) {
-        if (!userId) {
-            DHLog.d("id error：" + userId);
+    public list(lineUserId: string);
+    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IRoute[]) => void);
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRoute[]) => void) {
+        if (!lineUserId) {
+            DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
-        RouteHelper.model.find({userId: userId} , (err, ress) => {
+        RouteHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);

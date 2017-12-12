@@ -26,6 +26,7 @@ class RouteHelper {
             if (res) {
                 DHLog_1.DHLog.d("find");
                 res.name = data.name;
+                res.lineUserId = data.lineUserId;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
                 res.modifyAt = new Date();
@@ -80,14 +81,14 @@ class RouteHelper {
             }
         });
     }
-    list(userId, callback) {
-        if (!userId) {
-            DHLog_1.DHLog.d("id error：" + userId);
+    list(lineUserId, callback) {
+        if (!lineUserId) {
+            DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
-        RouteHelper.model.find({ userId: userId }, (err, ress) => {
+        RouteHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d("find error:" + err);
                 if (callback)

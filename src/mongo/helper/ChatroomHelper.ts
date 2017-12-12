@@ -98,16 +98,16 @@ export class ChatroomHelper implements BaseHelper {
         });
     }
 
-    public list(userId: string);
-    public list(userId: string, callback: (code: MONGODB_CODE, results: IChatroom[]) => void);
-    public list(userId: string, callback?: (code: MONGODB_CODE, results: IChatroom[]) => void) {
-        if (!userId) {
-            DHLog.d("id error：" + userId);
+    public list(lineUserId: string);
+    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IChatroom[]) => void);
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IChatroom[]) => void) {
+        if (!lineUserId) {
+            DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
-        ChatroomHelper.model.find( {userId: userId} , (err, ress) => {
+        ChatroomHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);

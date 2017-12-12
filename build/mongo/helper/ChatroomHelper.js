@@ -94,14 +94,14 @@ class ChatroomHelper {
             }
         });
     }
-    list(userId, callback) {
-        if (!userId) {
-            DHLog_1.DHLog.d("id error：" + userId);
+    list(lineUserId, callback) {
+        if (!lineUserId) {
+            DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
-        ChatroomHelper.model.find({ userId: userId }, (err, ress) => {
+        ChatroomHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d("find error:" + err);
                 if (callback)

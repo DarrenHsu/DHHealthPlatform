@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 
 export var RouteSchema: Schema = new Schema({
-    userId: {
+    lineUserId: {
         type: String,
         required: true        
     },
