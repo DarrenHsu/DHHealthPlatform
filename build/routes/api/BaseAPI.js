@@ -21,12 +21,12 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     get(router) {
         router.get(this.uri + "/:id", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            res.setHeader("Content-type", "application/json");
             if (!req.params.id) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
@@ -38,12 +38,12 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     put(router) {
         router.put(this.uri + "/:id", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            res.setHeader("Content-type", "application/json");
             if (!req.params.id) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
@@ -59,12 +59,12 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     post(router) {
         router.post(this.uri, (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            res.setHeader("Content-type", "application/json");
             if (!req.body) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
                 return;
@@ -76,12 +76,12 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     delete(router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            res.setHeader("Content-type", "application/json");
             if (!req.params.id) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;

@@ -114,10 +114,14 @@ class UserHelper {
             }
             else {
                 DHLog_1.DHLog.d("find " + ress.length);
-                if (ress.length == 0)
-                    callback(ResultCode_1.MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+                if (ress.length == 0) {
+                    if (callback)
+                        callback(ResultCode_1.MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
+                }
+                else {
+                    if (callback)
+                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+                }
             }
         });
     }

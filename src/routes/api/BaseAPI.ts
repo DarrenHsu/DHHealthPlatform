@@ -36,13 +36,13 @@ export class BaseAPI extends BaseRoute {
     
     protected get(router: Router) {
         router.get(this.uri + "/:id", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
+
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            
-            res.setHeader("Content-type", "application/json");
             
             if (!req.params.id) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
@@ -57,14 +57,14 @@ export class BaseAPI extends BaseRoute {
 
     protected put(router: Router) {
         router.put(this.uri + "/:id", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
+
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
 
-            res.setHeader("Content-type", "application/json");
-            
             if (!req.params.id) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
@@ -83,13 +83,13 @@ export class BaseAPI extends BaseRoute {
 
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
+
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            
-            res.setHeader("Content-type", "application/json");
             
             if (!req.body) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
@@ -104,14 +104,14 @@ export class BaseAPI extends BaseRoute {
 
     protected delete(router: Router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
+
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
 
-            res.setHeader("Content-type", "application/json");
-            
             if (!req.params.id) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
