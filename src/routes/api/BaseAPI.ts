@@ -19,8 +19,8 @@ export class BaseAPI extends BaseRoute {
     public static create(router: Router) {}
 
     protected checkHeader(req: Request): Boolean {
-        var auth: string = req.header["Authorization"];
-        var verfy: string = req.header["verfy"];
+        var auth: string = req.get("Authorization");
+        var verfy: string = req.get("verfy");
         DHLog.d("o verfy:" + verfy);
         DHLog.d("o auth:" + auth);
         return this.checkValue(auth, verfy);

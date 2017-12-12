@@ -7,8 +7,8 @@ const DHLog_1 = require("../../util/DHLog");
 class BaseAPI extends BaseRoute_1.BaseRoute {
     static create(router) { }
     checkHeader(req) {
-        var auth = req.header["Authorization"];
-        var verfy = req.header["verfy"];
+        var auth = req.get("Authorization");
+        var verfy = req.get("verfy");
         DHLog_1.DHLog.d("o verfy:" + verfy);
         DHLog_1.DHLog.d("o auth:" + auth);
         return this.checkValue(auth, verfy);
