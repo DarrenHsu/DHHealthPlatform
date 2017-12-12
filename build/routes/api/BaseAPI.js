@@ -21,6 +21,11 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     get(router) {
         router.get(this.uri + "/:id", (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.end();
+                return;
+            }
             res.setHeader("Content-type", "application/json");
             if (!req.params.id) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
@@ -33,6 +38,11 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     put(router) {
         router.put(this.uri + "/:id", (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.end();
+                return;
+            }
             res.setHeader("Content-type", "application/json");
             if (!req.params.id) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
@@ -66,6 +76,11 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     delete(router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.end();
+                return;
+            }
             res.setHeader("Content-type", "application/json");
             if (!req.params.id) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));

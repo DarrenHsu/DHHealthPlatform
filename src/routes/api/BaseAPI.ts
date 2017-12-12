@@ -36,6 +36,12 @@ export class BaseAPI extends BaseRoute {
     
     protected get(router: Router) {
         router.get(this.uri + "/:id", (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.end()
+                return;
+            }
+            
             res.setHeader("Content-type", "application/json");
             
             if (!req.params.id) {
@@ -51,6 +57,12 @@ export class BaseAPI extends BaseRoute {
 
     protected put(router: Router) {
         router.put(this.uri + "/:id", (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.end()
+                return;
+            }
+
             res.setHeader("Content-type", "application/json");
             
             if (!req.params.id) {
@@ -92,6 +104,12 @@ export class BaseAPI extends BaseRoute {
 
     protected delete(router: Router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.end()
+                return;
+            }
+
             res.setHeader("Content-type", "application/json");
             
             if (!req.params.id) {
