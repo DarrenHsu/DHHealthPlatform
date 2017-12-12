@@ -6,7 +6,12 @@ const ResultCode_1 = require("../ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 class BaseAPI extends BaseRoute_1.BaseRoute {
     static create(router) { }
-    checkHeader(auth, text) {
+    checkHeader(req) {
+        var auth = req.header["Authorization"];
+        var verfy = req.header["verfy"];
+        return this.checkValue(auth, verfy);
+    }
+    checkValue(auth, text) {
         if (text == BaseAPI.FEED_AUTH_PASS)
             return true;
         var s0 = crypto_1.createHash("SHA256").update(BaseAPI.FEED_AUTH + test).digest("base64");
@@ -44,6 +49,10 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     }
     post(router) {
         router.post(this.uri, (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
+                return;
+            }
             res.setHeader("Content-type", "application/json");
             if (!req.body) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));

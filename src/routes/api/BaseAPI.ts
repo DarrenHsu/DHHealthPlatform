@@ -18,7 +18,14 @@ export class BaseAPI extends BaseRoute {
 
     public static create(router: Router) {}
 
-    protected checkHeader(auth: string, text: string): Boolean {
+    protected checkHeader(req: Request): Boolean {
+        var auth: string = req.header["Authorization"];
+        var verfy: string = req.header["verfy"];
+
+        return this.checkValue(auth, verfy);
+    }
+
+    protected checkValue(auth: string, text: string): Boolean {
         if (text == BaseAPI.FEED_AUTH_PASS) 
             return true;
         
@@ -65,6 +72,11 @@ export class BaseAPI extends BaseRoute {
 
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                return;
+            }
+            
             res.setHeader("Content-type", "application/json");
             
             if (!req.body) {

@@ -5,6 +5,7 @@ var CONNECTION_CODE;
     CONNECTION_CODE[CONNECTION_CODE["CC_SUCCESS"] = 0] = "CC_SUCCESS";
     CONNECTION_CODE[CONNECTION_CODE["CC_PARAMETER_ERROR"] = -1] = "CC_PARAMETER_ERROR";
     CONNECTION_CODE[CONNECTION_CODE["CC_REQUEST_BODY_ERROR"] = -2] = "CC_REQUEST_BODY_ERROR";
+    CONNECTION_CODE[CONNECTION_CODE["CC_AUTH_ERROR"] = -3] = "CC_AUTH_ERROR";
 })(CONNECTION_CODE = exports.CONNECTION_CODE || (exports.CONNECTION_CODE = {}));
 var MONGODB_CODE;
 (function (MONGODB_CODE) {
@@ -26,6 +27,7 @@ class ResultMsg {
 ResultMsg.CC_SUCCESS = "執行成功";
 ResultMsg.CC_PARAMETER_ERROR = "輸入的參數有誤";
 ResultMsg.CC_REQUEST_BODY_ERROR = "傳入的資料有誤";
+ResultMsg.CC_AUTH_ERROR = "認證失敗";
 ResultMsg.MC_DATA_EXIST = "資料已存在";
 ResultMsg.MC_SUCCESS = "執行成功";
 ResultMsg.MC_INSERT_ERROR = "新增失敗";
@@ -47,6 +49,8 @@ class ResultCodeMsg {
                 return ResultMsg.CC_PARAMETER_ERROR;
             case CONNECTION_CODE.CC_REQUEST_BODY_ERROR:
                 return ResultMsg.CC_REQUEST_BODY_ERROR;
+            case CONNECTION_CODE.CC_AUTH_ERROR:
+                return ResultMsg.CC_AUTH_ERROR;
             case MONGODB_CODE.MC_DATA_EXIST:
                 return ResultMsg.MC_DATA_EXIST;
             case MONGODB_CODE.MC_SUCCESS:

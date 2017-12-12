@@ -2,6 +2,7 @@ export enum CONNECTION_CODE {
     CC_SUCCESS = 0,
     CC_PARAMETER_ERROR = -1,
     CC_REQUEST_BODY_ERROR = -2,
+    CC_AUTH_ERROR = -3
 }
 
 export enum MONGODB_CODE {
@@ -23,6 +24,7 @@ class ResultMsg {
     public static CC_SUCCESS = "執行成功";
     public static CC_PARAMETER_ERROR = "輸入的參數有誤";
     public static CC_REQUEST_BODY_ERROR = "傳入的資料有誤";
+    public static CC_AUTH_ERROR = "認證失敗";
 
     public static MC_DATA_EXIST = "資料已存在";
     public static MC_SUCCESS = "執行成功";
@@ -47,6 +49,8 @@ export class ResultCodeMsg {
                 return ResultMsg.CC_PARAMETER_ERROR;
             case CONNECTION_CODE.CC_REQUEST_BODY_ERROR:
                 return ResultMsg.CC_REQUEST_BODY_ERROR;
+            case CONNECTION_CODE.CC_AUTH_ERROR:
+                return ResultMsg.CC_AUTH_ERROR;
             
             case MONGODB_CODE.MC_DATA_EXIST:
                 return ResultMsg.MC_DATA_EXIST;
