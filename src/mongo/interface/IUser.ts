@@ -6,7 +6,6 @@ export interface IUser extends IBase {
     weight?: number;
     age?: number;
     gmail?: string;
-    gAccessToken?: string;
     lineUserId?: string;
     pictureUrl?: string;
     modifyAt?: Date;

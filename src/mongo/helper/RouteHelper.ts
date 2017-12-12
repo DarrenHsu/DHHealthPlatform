@@ -95,7 +95,7 @@ export class RouteHelper implements BaseHelper {
             return;
         }
 
-        RouteHelper.model.find( {userId: userId} , (err, ress) => {
+        RouteHelper.model.find({userId: userId} , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);

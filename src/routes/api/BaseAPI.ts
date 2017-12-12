@@ -35,15 +35,15 @@ export class BaseAPI extends BaseRoute {
     }
     
     protected get(router: Router) {
-        router.get(this.uri + "/:userId", (req, res, next) => {
+        router.get(this.uri + "/:id", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             
-            if (!req.params.userId) {
+            if (!req.params.id) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
             }
 
-            this.helper.list(req.params.userId, (code, results) => {
+            this.helper.list(req.params.id, (code, results) => {
                 res.json(BaseRoute.createResult(results, code));
             });
         });

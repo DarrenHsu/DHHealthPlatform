@@ -10,10 +10,6 @@ exports.UserSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
-    gAccessToken: {
-        type: String,
-        required: true
-    },
     lineUserId: {
         type: String,
         required: true

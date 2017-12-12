@@ -32,7 +32,6 @@ class UserHelper {
                 res.gmail = data.gmail;
                 res.lineUserId = data.lineUserId;
                 res.pictureUrl = data.pictureUrl;
-                res.gAccessToken = data.gAccessToken;
                 res.modifyAt = new Date();
                 res.save();
                 if (callback)
@@ -72,7 +71,7 @@ class UserHelper {
                             callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
                     }
                     else {
-                        DHLog_1.DHLog.d("add data:" + res.lineUserId);
+                        DHLog_1.DHLog.d("add data:" + res.toJSON.toString);
                         if (callback)
                             callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
                     }
@@ -100,14 +99,14 @@ class UserHelper {
             }
         });
     }
-    list(id, callback) {
-        if (!id) {
-            DHLog_1.DHLog.d("id error：" + id);
+    list(lineUserId, callback) {
+        if (!lineUserId) {
+            DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
-        UserHelper.model.find({ _id: id }, (err, ress) => {
+        UserHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d("find error:" + err);
                 if (callback)

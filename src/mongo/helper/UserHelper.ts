@@ -41,7 +41,6 @@ export class UserHelper implements BaseHelper {
                 res.gmail = data.gmail;
                 res.lineUserId = data.lineUserId;
                 res.pictureUrl = data.pictureUrl;
-                res.gAccessToken = data.gAccessToken;
                 res.modifyAt = new Date();
                 res.save();
                 
@@ -76,7 +75,7 @@ export class UserHelper implements BaseHelper {
                         DHLog.d("add error:" + err);
                         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
                     }else {
-                        DHLog.d("add data:" + res.lineUserId);
+                        DHLog.d("add data:" + res.toJSON.toString);
                         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
                     }
                 });
@@ -93,7 +92,7 @@ export class UserHelper implements BaseHelper {
             return;
         }
 
-        UserHelper.model.remove( { _id: id} , (err) => {
+        UserHelper.model.remove({_id: id} , (err) => {
             if (err) {
                 DHLog.d("remove by id error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);                    
@@ -104,16 +103,16 @@ export class UserHelper implements BaseHelper {
         });
     }
 
-    public list(id: string);
-    public list(id: string, callback: (code: MONGODB_CODE, results: IUser[]) => void);
-    public list(id: string, callback?: (code: MONGODB_CODE, results: IUser[]) => void) {
-        if (!id) {
-            DHLog.d("id error：" + id);
+    public list(lineUserId: string);
+    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IUser[]) => void);
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IUser[]) => void) {
+        if (!lineUserId) {
+            DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
             return;
         }
 
-        UserHelper.model.find( { _id: id}, (err, ress) => {
+        UserHelper.model.find({lineUserId: lineUserId}, (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
