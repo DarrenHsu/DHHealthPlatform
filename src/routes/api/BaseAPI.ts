@@ -38,7 +38,7 @@ export class BaseAPI extends BaseRoute {
         router.get(this.uri + "/:id", (req, res, next) => {
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
-                res.end()
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
             
@@ -59,7 +59,7 @@ export class BaseAPI extends BaseRoute {
         router.put(this.uri + "/:id", (req, res, next) => {
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
-                res.end()
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
 
@@ -85,7 +85,7 @@ export class BaseAPI extends BaseRoute {
         router.post(this.uri, (req, res, next) => {
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
-                res.end()
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
             
@@ -106,7 +106,7 @@ export class BaseAPI extends BaseRoute {
         router.delete(this.uri + "/:id", (req, res, next) => {
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
-                res.end()
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
 
