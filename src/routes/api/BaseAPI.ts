@@ -72,7 +72,8 @@ export class BaseAPI extends BaseRoute {
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.checkHeader(req)) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                res.statusCode = 403;
+                res.end()
                 return;
             }
             

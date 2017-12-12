@@ -50,7 +50,8 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     post(router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.checkHeader(req)) {
-                res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
+                res.statusCode = 403;
+                res.end();
                 return;
             }
             res.setHeader("Content-type", "application/json");
