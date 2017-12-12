@@ -113,8 +113,11 @@ export class ChatroomHelper implements BaseHelper {
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
             }else {
                 DHLog.d("find " + ress.length);
-                if (ress.length == 0) callback(MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);                    
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);                    
+                if (ress.length == 0) {
+                    if (callback) callback(MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
+                } else  {
+                    if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
+                }
             }
         });
     }
