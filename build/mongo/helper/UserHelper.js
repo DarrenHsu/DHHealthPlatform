@@ -30,6 +30,7 @@ class UserHelper {
                 res.height = data.height;
                 res.weight = data.weight;
                 res.gmail = data.gmail;
+                res.lineUserId = data.lineUserId;
                 res.pictureUrl = data.pictureUrl;
                 res.gAccessToken = data.gAccessToken;
                 res.modifyAt = new Date();
@@ -51,7 +52,7 @@ class UserHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
             return;
         }
-        UserHelper.model.count({ gmail: data.gmail }, (err, count) => {
+        UserHelper.model.count({ lineUserId: data.lineUserId }, (err, count) => {
             if (err) {
                 DHLog_1.DHLog.d("count error:" + err);
                 if (callback)
