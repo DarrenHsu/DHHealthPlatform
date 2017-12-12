@@ -12,7 +12,6 @@ exports.RouteSchema = new mongoose_1.Schema({
     ytbroadcastId: String,
     createdAt: {
         type: Date,
-        required: true,
         default: new Date()
     },
     modifyAt: Date

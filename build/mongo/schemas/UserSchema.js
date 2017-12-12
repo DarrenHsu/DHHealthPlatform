@@ -22,7 +22,6 @@ exports.UserSchema = new mongoose_1.Schema({
     modifyAt: Date,
     createdAt: {
         type: Date,
-        required: true,
         default: new Date()
     }
 });
