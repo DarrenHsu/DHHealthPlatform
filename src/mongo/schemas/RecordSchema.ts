@@ -18,7 +18,6 @@ export var RecordSchema: Schema = new Schema({
     imglocations: [Number],
     createdAt: {
         type: Date,
-        required: true,
         default: new Date()
     },
     modifyAt: Date

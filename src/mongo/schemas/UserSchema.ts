@@ -21,7 +21,6 @@ export var UserSchema: Schema = new Schema({
     modifyAt: Date,
     createdAt: {
         type: Date,
-        required: true,
         default: new Date()
     }
 });
