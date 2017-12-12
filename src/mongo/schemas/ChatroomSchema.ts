@@ -9,6 +9,7 @@ export var ChatroomSchema: Schema = new Schema({
     type: String,
     createdAt: {
         type: Date,
+        required: true,
         default: new Date()
     },
     modifyAt: Date

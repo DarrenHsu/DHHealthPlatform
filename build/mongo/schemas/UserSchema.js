@@ -2,10 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 exports.UserSchema = new mongoose_1.Schema({
-    createdAt: {
-        type: Date,
-        default: new Date()
-    },
     name: String,
     age: Number,
     height: Number,
@@ -23,5 +19,10 @@ exports.UserSchema = new mongoose_1.Schema({
         required: true
     },
     pictureUrl: String,
-    modifyAt: Date
+    modifyAt: Date,
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
+    }
 });

@@ -1,10 +1,6 @@
 import { Schema } from "mongoose";
 
 export var UserSchema: Schema = new Schema({
-    createdAt: {
-        type: Date,
-        default: new Date()
-    },
     name: String,
     age: Number,
     height: Number,
@@ -22,5 +18,10 @@ export var UserSchema: Schema = new Schema({
         required: true
     },
     pictureUrl: String,
-    modifyAt: Date
+    modifyAt: Date,
+    createdAt: {
+        type: Date,
+        required: true,
+        default: new Date()
+    }
 });

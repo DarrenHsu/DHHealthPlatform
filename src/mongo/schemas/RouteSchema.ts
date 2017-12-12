@@ -11,6 +11,7 @@ export var RouteSchema: Schema = new Schema({
     ytbroadcastId: String,
     createdAt: {
         type: Date,
+        required: true,
         default: new Date()
     },
     modifyAt: Date

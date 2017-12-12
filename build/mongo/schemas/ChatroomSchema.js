@@ -10,6 +10,7 @@ exports.ChatroomSchema = new mongoose_1.Schema({
     type: String,
     createdAt: {
         type: Date,
+        required: true,
         default: new Date()
     },
     modifyAt: Date
