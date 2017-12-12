@@ -19,6 +19,7 @@ var MONGODB_CODE;
     MONGODB_CODE[MONGODB_CODE["MC_UPDATE_NOT_FOUND_ERROR"] = -6] = "MC_UPDATE_NOT_FOUND_ERROR";
     MONGODB_CODE[MONGODB_CODE["MC_DELETE_NOT_FOUND_ERROR"] = -7] = "MC_DELETE_NOT_FOUND_ERROR";
     MONGODB_CODE[MONGODB_CODE["MC_COUNT_ERROR"] = -8] = "MC_COUNT_ERROR";
+    MONGODB_CODE[MONGODB_CODE["MC_LIST_NO_DATA_ERROR"] = -9] = "MC_LIST_NO_DATA_ERROR";
     MONGODB_CODE[MONGODB_CODE["MC_NO_DATA"] = -98] = "MC_NO_DATA";
     MONGODB_CODE[MONGODB_CODE["MC_NO_CONDITION"] = -99] = "MC_NO_CONDITION";
 })(MONGODB_CODE = exports.MONGODB_CODE || (exports.MONGODB_CODE = {}));
@@ -38,6 +39,7 @@ ResultMsg.MC_INSERT_EXIST_ERROR = "新增了重覆的資料";
 ResultMsg.MC_UPDATE_NOT_FOUND_ERROR = "找不到可以更新的資料";
 ResultMsg.MC_DELETE_NOT_FOUND_ERROR = "找不到可以刪除的資料";
 ResultMsg.MC_COUNT_ERROR = "取得數量失敗";
+ResultMsg.MC_LIST_NO_DATA_ERROR = "查無任何資料";
 ResultMsg.MC_NO_DATA = "無傳入處理資料";
 ResultMsg.MC_NO_CONDITION = "無傳入選擇條件";
 class ResultCodeMsg {
@@ -71,6 +73,8 @@ class ResultCodeMsg {
                 return ResultMsg.MC_DELETE_NOT_FOUND_ERROR;
             case MONGODB_CODE.MC_COUNT_ERROR:
                 return ResultMsg.MC_COUNT_ERROR;
+            case MONGODB_CODE.MC_LIST_NO_DATA_ERROR:
+                return ResultMsg.MC_LIST_NO_DATA_ERROR;
             case MONGODB_CODE.MC_NO_DATA:
                 return ResultMsg.MC_NO_DATA;
             case MONGODB_CODE.MC_NO_CONDITION:

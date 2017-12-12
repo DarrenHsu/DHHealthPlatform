@@ -117,7 +117,8 @@ export class UserHelper implements BaseHelper {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
             }else {
-                DHLog.d("find");
+                DHLog.d("find " + ress.length);
+                if (ress.length == 0) callback(MONGODB_CODE.MC_SUCCESS, ress);                    
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);                    
             }
         });

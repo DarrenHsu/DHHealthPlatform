@@ -113,7 +113,9 @@ class UserHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                DHLog_1.DHLog.d("find");
+                DHLog_1.DHLog.d("find " + ress.length);
+                if (ress.length == 0)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
