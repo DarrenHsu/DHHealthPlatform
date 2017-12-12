@@ -46,7 +46,7 @@ class UserHelper {
         });
     }
     add(data, callback) {
-        if (!data || !data.gmail) {
+        if (!data || !data.lineUserId) {
             DHLog_1.DHLog.d("add data error " + data);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
@@ -72,7 +72,7 @@ class UserHelper {
                             callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
                     }
                     else {
-                        DHLog_1.DHLog.d("add data:" + res._id);
+                        DHLog_1.DHLog.d("add data:" + res.lineUserId);
                         if (callback)
                             callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
                     }

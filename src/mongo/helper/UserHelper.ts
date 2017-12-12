@@ -54,7 +54,7 @@ export class UserHelper implements BaseHelper {
     }
     
     public add(data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void) {
-        if (!data || !data.gmail) {
+        if (!data || !data.lineUserId) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
             return;
@@ -76,7 +76,7 @@ export class UserHelper implements BaseHelper {
                         DHLog.d("add error:" + err);
                         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
                     }else {
-                        DHLog.d("add data:" + res._id);
+                        DHLog.d("add data:" + res.lineUserId);
                         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
                     }
                 });

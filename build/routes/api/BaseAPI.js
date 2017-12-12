@@ -9,8 +9,6 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     checkHeader(req) {
         var auth = req.get("Authorization");
         var verfy = req.get("verfy");
-        DHLog_1.DHLog.d("o verfy:" + verfy);
-        DHLog_1.DHLog.d("o auth:" + auth);
         return this.checkValue(auth, verfy);
     }
     checkValue(auth, verfy) {
