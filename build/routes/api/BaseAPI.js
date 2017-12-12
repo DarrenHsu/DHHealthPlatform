@@ -16,7 +16,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
             return true;
         var str = crypto_1.createHash("SHA256").update(BaseAPI.FEED_AUTH + verfy).digest("base64");
         DHLog_1.DHLog.d("verfy:" + str);
-        DHLog_1.DHLog.d("auth:" + auth);
+        DHLog_1.DHLog.d("auth :" + auth);
         return auth == str;
     }
     get(router) {

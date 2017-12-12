@@ -19,7 +19,6 @@ exports.RecordSchema = new mongoose_1.Schema({
     imglocations: [Number],
     createdAt: {
         type: Date,
-        required: true,
         default: new Date()
     },
     modifyAt: Date

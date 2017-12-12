@@ -30,7 +30,7 @@ export class BaseAPI extends BaseRoute {
         
         var str = createHash("SHA256").update(BaseAPI.FEED_AUTH + verfy).digest("base64");
         DHLog.d("verfy:" + str);
-        DHLog.d("auth:" + auth);
+        DHLog.d("auth :" + auth);
         return auth == str;
     }
     

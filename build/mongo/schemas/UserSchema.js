@@ -4,7 +4,6 @@ const mongoose_1 = require("mongoose");
 exports.UserSchema = new mongoose_1.Schema({
     createdAt: {
         type: Date,
-        required: true,
         default: new Date()
     },
     name: String,
