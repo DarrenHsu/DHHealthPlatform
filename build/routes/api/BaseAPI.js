@@ -9,15 +9,17 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
     checkHeader(req) {
         var auth = req.header["Authorization"];
         var verfy = req.header["verfy"];
+        DHLog_1.DHLog.d("o verfy:" + verfy);
+        DHLog_1.DHLog.d("o auth:" + auth);
         return this.checkValue(auth, verfy);
     }
-    checkValue(auth, text) {
-        if (text == BaseAPI.FEED_AUTH_PASS)
+    checkValue(auth, verfy) {
+        if (verfy == BaseAPI.FEED_AUTH_PASS)
             return true;
-        var s0 = crypto_1.createHash("SHA256").update(BaseAPI.FEED_AUTH + test).digest("base64");
-        DHLog_1.DHLog.d("s0  :" + s0);
+        var str = crypto_1.createHash("SHA256").update(BaseAPI.FEED_AUTH + verfy).digest("base64");
+        DHLog_1.DHLog.d("verfy:" + str);
         DHLog_1.DHLog.d("auth:" + auth);
-        return auth == s0;
+        return auth == str;
     }
     get(router) {
         router.get(this.uri + "/:userId", (req, res, next) => {

@@ -21,18 +21,19 @@ export class BaseAPI extends BaseRoute {
     protected checkHeader(req: Request): Boolean {
         var auth: string = req.header["Authorization"];
         var verfy: string = req.header["verfy"];
-
+        DHLog.d("o verfy:" + verfy);
+        DHLog.d("o auth:" + auth);
         return this.checkValue(auth, verfy);
     }
 
-    protected checkValue(auth: string, text: string): Boolean {
-        if (text == BaseAPI.FEED_AUTH_PASS) 
+    protected checkValue(auth: string, verfy: string): Boolean {
+        if (verfy == BaseAPI.FEED_AUTH_PASS) 
             return true;
         
-        var s0 = createHash("SHA256").update(BaseAPI.FEED_AUTH + test).digest("base64");
-        DHLog.d("s0  :" + s0);
+        var str = createHash("SHA256").update(BaseAPI.FEED_AUTH + verfy).digest("base64");
+        DHLog.d("verfy:" + str);
         DHLog.d("auth:" + auth);
-        return auth == s0;
+        return auth == str;
     }
     
     protected get(router: Router) {
