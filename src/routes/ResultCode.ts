@@ -18,8 +18,8 @@ export enum MONGODB_CODE {
     MC_COUNT_ERROR = -8,
     MC_LIST_NO_DATA_ERROR = -9,
     MC_NO_USER_DATA_ERROR = -97,
-    MC_NO_DATA = -98,
-    MC_NO_CONDITION = -99
+    MC_NO_DATA_ERROR = -98,
+    MC_NO_CONDITION_ERROR = -99
 }
 
 class ResultMsg {
@@ -40,8 +40,8 @@ class ResultMsg {
     public static MC_COUNT_ERROR = "取得數量失敗";
     public static MC_LIST_NO_DATA_ERROR = "查無任何資料";
     public static MC_NO_USER_DATA_ERROR = "查無會員資料";
-    public static MC_NO_DATA = "無傳入處理資料";
-    public static MC_NO_CONDITION = "無傳入選擇條件";
+    public static MC_NO_DATA_ERROR = "無傳入處理資料";
+    public static MC_NO_CONDITION_ERROR = "無傳入選擇條件";
 }
 
 export class ResultCodeMsg {
@@ -81,10 +81,10 @@ export class ResultCodeMsg {
             case MONGODB_CODE.MC_NO_USER_DATA_ERROR:
                 return ResultMsg.MC_NO_USER_DATA_ERROR;
 
-            case MONGODB_CODE.MC_NO_DATA:
-                return ResultMsg.MC_NO_DATA;
-            case MONGODB_CODE.MC_NO_CONDITION:
-                return ResultMsg.MC_NO_CONDITION;
+            case MONGODB_CODE.MC_NO_DATA_ERROR:
+                return ResultMsg.MC_NO_DATA_ERROR;
+            case MONGODB_CODE.MC_NO_CONDITION_ERROR:
+                return ResultMsg.MC_NO_CONDITION_ERROR;
             default:
                 return ResultMsg.MC_SUCCESS;
         }

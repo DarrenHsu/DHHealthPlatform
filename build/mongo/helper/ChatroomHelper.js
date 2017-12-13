@@ -13,7 +13,7 @@ class ChatroomHelper {
         if (!data || !id) {
             DHLog_1.DHLog.d("data error：" + data);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
         ChatroomHelper.model.findByIdAndUpdate(id, data, (err, res) => {
@@ -42,7 +42,7 @@ class ChatroomHelper {
         if (!data) {
             DHLog_1.DHLog.d("add data error " + data);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
         ChatroomHelper.model.update({ chatId: data.chatId }, data, { multi: true }, (err, raw) => {
@@ -78,7 +78,7 @@ class ChatroomHelper {
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
         ChatroomHelper.model.remove({ _id: id }, (err) => {
@@ -98,7 +98,7 @@ class ChatroomHelper {
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
         ChatroomHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
@@ -109,14 +109,8 @@ class ChatroomHelper {
             }
             else {
                 DHLog_1.DHLog.d("find " + ress.length);
-                if (ress.length == 0) {
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
-                }
-                else {
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-                }
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }

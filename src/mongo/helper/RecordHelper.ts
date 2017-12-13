@@ -21,7 +21,7 @@ export class RecordHelper implements BaseHelper {
     public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
         if (!data || !id) {
             DHLog.d("data error：" + data);
-            if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
+            if (callback) callback(MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
         
@@ -57,7 +57,7 @@ export class RecordHelper implements BaseHelper {
     public add(data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void) {
         if (!data) {
             DHLog.d("add data error " + data);
-            if (callback) callback(MONGODB_CODE.MC_NO_DATA, null);
+            if (callback) callback(MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
         
@@ -77,7 +77,7 @@ export class RecordHelper implements BaseHelper {
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
-            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION);
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
 
@@ -97,7 +97,7 @@ export class RecordHelper implements BaseHelper {
     public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
-            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION, null);
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
 
@@ -107,11 +107,7 @@ export class RecordHelper implements BaseHelper {
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
             }else {
                 DHLog.d("find " + ress.length);
-                if (ress.length == 0) {
-                    if (callback) callback(MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
-                } else  {
-                    if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
-                }
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }

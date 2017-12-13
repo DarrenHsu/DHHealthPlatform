@@ -13,7 +13,7 @@ class RouteHelper {
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
         RouteHelper.model.findByIdAndUpdate(id, data, (err, res) => {
@@ -45,7 +45,7 @@ class RouteHelper {
         if (!data) {
             DHLog_1.DHLog.d("add data error " + data);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
         new RouteHelper.model(data).save((err, res, count) => {
@@ -65,7 +65,7 @@ class RouteHelper {
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
         RouteHelper.model.remove({ _id: id }, (err) => {
@@ -85,7 +85,7 @@ class RouteHelper {
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
         RouteHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
@@ -96,14 +96,8 @@ class RouteHelper {
             }
             else {
                 DHLog_1.DHLog.d("find " + ress.length);
-                if (ress.length == 0) {
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_LIST_NO_DATA_ERROR, null);
-                }
-                else {
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-                }
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }

@@ -13,7 +13,7 @@ class UserHelper {
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
         UserHelper.model.findByIdAndUpdate(id, data, (err, res) => {
@@ -48,7 +48,7 @@ class UserHelper {
         if (!data || !data.lineUserId) {
             DHLog_1.DHLog.d("add data error " + data);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
         UserHelper.model.count({ lineUserId: data.lineUserId }, (err, count) => {
@@ -83,7 +83,7 @@ class UserHelper {
         if (!id) {
             DHLog_1.DHLog.d("id error：" + id);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
         UserHelper.model.remove({ _id: id }, (err) => {
@@ -103,7 +103,7 @@ class UserHelper {
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION, null);
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
         UserHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
