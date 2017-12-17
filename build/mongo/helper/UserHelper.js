@@ -71,7 +71,7 @@ class UserHelper {
                             callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
                     }
                     else {
-                        DHLog_1.DHLog.d("add data:" + res.toJSON.toString);
+                        DHLog_1.DHLog.d("add data: %j" + res.toJSON);
                         if (callback)
                             callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
                     }
