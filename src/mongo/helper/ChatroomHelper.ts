@@ -70,7 +70,7 @@ export class ChatroomHelper implements BaseHelper {
                         DHLog.d("add error" + err);
                         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
                     }else {
-                        DHLog.d("add data:" + res._id);
+                        DHLog.d("add data:" + JSON.stringify(res));
                         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
                     }
                 });

@@ -66,7 +66,7 @@ class ChatroomHelper {
                             callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
                     }
                     else {
-                        DHLog_1.DHLog.d("add data:" + res._id);
+                        DHLog_1.DHLog.d("add data:" + JSON.stringify(res));
                         if (callback)
                             callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
                     }
