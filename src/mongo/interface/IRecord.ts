@@ -9,7 +9,7 @@ export interface IRecord extends IBase {
     endTime?: string;
     avgSpeed?: number;
     maxSpeed?: number;
-    locations?: [number, number];
+    locations?: [[number, number]];
     imglocations?: number[];
     modifyAt?: Date;
 }

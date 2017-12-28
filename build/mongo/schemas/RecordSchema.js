@@ -13,7 +13,7 @@ exports.RecordSchema = new mongoose_1.Schema({
     endTime: String,
     avgSpeed: Number,
     maxSpeed: Number,
-    locations: [Number, Number],
+    locations: [[Number, Number]],
     imglocations: [Number],
     createdAt: {
         type: Date,
