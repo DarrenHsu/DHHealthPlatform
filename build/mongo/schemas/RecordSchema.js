@@ -8,14 +8,12 @@ exports.RecordSchema = new mongoose_1.Schema({
     },
     name: String,
     distance: Number,
-    startTime: Date,
-    endTime: Date,
+    startDate: String,
+    startTime: String,
+    endTime: String,
     avgSpeed: Number,
     maxSpeed: Number,
-    locations: [{
-            longitude: Number,
-            latitude: Number
-        }],
+    locations: [Number, Number],
     imglocations: [Number],
     createdAt: {
         type: Date,

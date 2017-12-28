@@ -36,6 +36,7 @@ export class RouteHelper implements BaseHelper {
                 DHLog.d("find");
                 res.name = data.name;
                 res.lineUserId = data.lineUserId;
+                res.startDate = data.startDate;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
                 res.modifyAt = new Date();

@@ -7,8 +7,9 @@ exports.RouteSchema = new mongoose_1.Schema({
         required: true
     },
     name: String,
-    startTime: Date,
-    endTime: Date,
+    startDate: String,
+    startTime: String,
+    endTime: String,
     ytbroadcastId: String,
     createdAt: {
         type: Date,

@@ -28,6 +28,7 @@ class RecordHelper {
                 res.name = data.name;
                 res.lineUserId = data.lineUserId;
                 res.distance = data.distance;
+                res.startDate = data.startDate;
                 res.startTime = data.startTime;
                 res.endTime = data.endTime;
                 res.avgSpeed = data.avgSpeed;
