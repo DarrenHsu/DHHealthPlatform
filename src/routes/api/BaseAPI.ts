@@ -75,7 +75,7 @@ export class BaseAPI extends BaseRoute {
                 return;
             }
 
-            this.helper.save(req.params.id, req.body, (code, result) => {
+            this.helper.save(req.params.id, JSON.parse(req.body), (code, result) => {
                 res.json(BaseRoute.createResult(result, code));
             });
         });
@@ -96,7 +96,7 @@ export class BaseAPI extends BaseRoute {
                 return;
             }
 
-            this.helper.add(req.body, (code, result) => {
+            this.helper.add(JSON.parse(req.body), (code, result) => {
                 res.json(BaseRoute.createResult(result, code));
             });
         });

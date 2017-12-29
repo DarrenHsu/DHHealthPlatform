@@ -4,9 +4,8 @@ export interface IRecord extends IBase {
     lineUserId?: string;
     name?: string;
     distance?: number;
-    startDate?: string;
-    startTime?: string;
-    endTime?: string;
+    startTime?: Date;
+    endTime?: Date;
     avgSpeed?: number;
     maxSpeed?: number;
     locations?: [[number, number]];

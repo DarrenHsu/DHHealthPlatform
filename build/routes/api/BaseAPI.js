@@ -52,7 +52,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
                 return;
             }
-            this.helper.save(req.params.id, req.body, (code, result) => {
+            this.helper.save(req.params.id, JSON.parse(req.body), (code, result) => {
                 res.json(BaseRoute_1.BaseRoute.createResult(result, code));
             });
         });
@@ -69,7 +69,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
                 return;
             }
-            this.helper.add(req.body, (code, result) => {
+            this.helper.add(JSON.parse(req.body), (code, result) => {
                 res.json(BaseRoute_1.BaseRoute.createResult(result, code));
             });
         });
