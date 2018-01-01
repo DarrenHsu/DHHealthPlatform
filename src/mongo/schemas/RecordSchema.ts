@@ -6,6 +6,7 @@ export var RecordSchema: Schema = new Schema({
         required: true        
     },
     name: String,
+    locality: String,
     distance: Number,
     startTime: Date,
     endTime: Date,

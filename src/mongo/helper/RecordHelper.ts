@@ -35,6 +35,7 @@ export class RecordHelper implements BaseHelper {
             if (res) {
                 DHLog.d("update:" + res._id);
                 res.name = data.name;
+                res.locality = data.locality;
                 res.lineUserId = data.lineUserId;
                 res.distance = data.distance;
                 res.startTime = data.startTime;
