@@ -7,6 +7,7 @@ exports.RecordSchema = new mongoose_1.Schema({
         required: true
     },
     name: String,
+    locality: String,
     distance: Number,
     startTime: Date,
     endTime: Date,
