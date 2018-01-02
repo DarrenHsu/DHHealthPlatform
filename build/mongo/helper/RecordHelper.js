@@ -34,6 +34,7 @@ class RecordHelper {
                 res.endTime = data.endTime;
                 res.avgSpeed = data.avgSpeed;
                 res.maxSpeed = data.maxSpeed;
+                res.altitude = data.altitude;
                 res.locations = data.locations;
                 res.imglocations = data.imglocations;
                 res.modifyAt = new Date();

@@ -13,6 +13,7 @@ export var RecordSchema: Schema = new Schema({
     endTime: Date,
     avgSpeed: Number,
     maxSpeed: Number,
+    altitude: Number,
     locations: [[Number, Number]],
     imglocations: [Number],
     createdAt: {
