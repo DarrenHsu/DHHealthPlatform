@@ -14,9 +14,9 @@ export class RecordRouter extends BaseRoute {
     protected uri = DHAPI.RECORD_PATH;
     
     public static create(router: Router) {
-        DHLog.d("[" + this.name + ":create] " + app.uri);
         var app = new RecordRouter(DBHelper.connection);
-
+        DHLog.d("[" + this.name + ":create] " + app.uri);
+        
         app.get(router);
     }
 

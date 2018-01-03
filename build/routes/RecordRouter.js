@@ -13,8 +13,8 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
         this.helper = new RecordHelper_1.RecordHelper(connection);
     }
     static create(router) {
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + app.uri);
         var app = new RecordRouter(DBHelper_1.DBHelper.connection);
+        DHLog_1.DHLog.d("[" + this.name + ":create] " + app.uri);
         app.get(router);
     }
     get(router) {
