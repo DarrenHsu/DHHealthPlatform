@@ -16,8 +16,6 @@ export class ChatroomHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IChatroom);
-    public save(id: string, data: IChatroom, callback: (code: MONGODB_CODE, result: IChatroom) => void);
     public save(id: string, data: IChatroom, callback?: (code: MONGODB_CODE, result: IChatroom) => void) {
         if (!data || !id) {
             DHLog.d("data error：" + data);
@@ -78,8 +76,6 @@ export class ChatroomHelper implements BaseHelper {
         });        
     }
 
-    public remove(id: string);
-    public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
@@ -98,8 +94,6 @@ export class ChatroomHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string);
-    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IChatroom[]) => void);
     public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IChatroom[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);

@@ -105,36 +105,43 @@ class RecordHelper {
             }
         });
     }
-    list(lineUserId, recordIdOrCallback, callback) {
-        var _callback = null;
-        if (callback) {
-            _callback = callback;
+    get(recordId, callback) {
+        if (!recordId) {
+            DHLog_1.DHLog.d("recordId error：" + recordId);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
+            return;
         }
+        RecordHelper.model.findOne({ recordId: recordId }, (err, res) => {
+            if (err) {
+                DHLog_1.DHLog.d("find error:" + err);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+            }
+            else {
+                DHLog_1.DHLog.d("find " + JSON.stringify(res));
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+            }
+        });
+    }
+    list(lineUserId, callback) {
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        var condition = { lineUserId: lineUserId };
-        if (recordIdOrCallback) {
-            if (typeof (recordIdOrCallback) == "string") {
-                condition["recordId"] = recordIdOrCallback;
-            }
-            else {
-                _callback = recordIdOrCallback;
-            }
-        }
-        RecordHelper.model.find(condition, (err, ress) => {
+        RecordHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d("find error:" + err);
-                if (_callback)
-                    _callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
                 DHLog_1.DHLog.d("find " + ress.length);
-                if (_callback)
-                    _callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }

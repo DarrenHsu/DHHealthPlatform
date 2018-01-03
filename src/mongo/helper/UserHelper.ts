@@ -16,8 +16,6 @@ export class UserHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IUser);
-    public save(id: string, data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void);
     public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUser) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
@@ -83,8 +81,6 @@ export class UserHelper implements BaseHelper {
         });
     }
 
-    public remove(id: string);
-    public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
@@ -103,8 +99,6 @@ export class UserHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string);
-    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IUser[]) => void);
     public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IUser[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);

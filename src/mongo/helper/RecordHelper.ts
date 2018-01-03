@@ -17,8 +17,6 @@ export class RecordHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IRecord);
-    public save(id: string, data: IRecord, callback: (code: MONGODB_CODE, result: IRecord) => void);
     public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
         if (!data || !id) {
             DHLog.d("data error：" + data);
@@ -90,8 +88,6 @@ export class RecordHelper implements BaseHelper {
         });
     }
 
-    public remove(id: string);
-    public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
@@ -110,38 +106,38 @@ export class RecordHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string);
-    public list(lineUserId: string, recordIdOrCallback: (code: MONGODB_CODE, results: IRecord[]) => void);
-    public list(lineUserId: string, recordIdOrCallback: string, callback: (code: MONGODB_CODE, results: IRecord[]) => void);
-    public list(lineUserId: string, recordIdOrCallback?: string | ((code: MONGODB_CODE, results: IRecord[]) => void), callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
-        var _callback = null;
-        if (callback) {
-            _callback = callback
+    public get(recordId: string, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
+        if (!recordId) {
+            DHLog.d("recordId error：" + recordId);
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
+            return;
         }
 
+        RecordHelper.model.findOne({recordId: recordId} , (err, res) => {
+            if (err) {
+                DHLog.d("find error:" + err);
+                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+            }else {
+                DHLog.d("find " + JSON.stringify(res));
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+            }
+        });
+    }
+    
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
 
-        var condition = {lineUserId: lineUserId}
-        
-        if (recordIdOrCallback) {
-            if (typeof(recordIdOrCallback) == "string") {
-                condition["recordId"] = recordIdOrCallback
-            }else {
-                _callback = recordIdOrCallback
-            }
-        }
-
-        RecordHelper.model.find(condition , (err, ress) => {
+        RecordHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
-                if (_callback) _callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
             }else {
                 DHLog.d("find " + ress.length);
-                if (_callback) _callback(MONGODB_CODE.MC_SUCCESS, ress);
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }

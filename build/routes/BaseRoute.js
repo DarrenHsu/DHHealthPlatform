@@ -8,6 +8,9 @@ class BaseRoute {
         this.title = "DHHealthPlatform";
         this.scripts = [];
     }
+    checkParam(auth, value) {
+        return this.checkValue(auth, value);
+    }
     checkHeader(req) {
         var auth = req.get("Authorization");
         var verfy = req.get("verfy");

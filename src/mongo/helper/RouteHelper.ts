@@ -16,8 +16,6 @@ export class RouteHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IRoute);
-    public save(id: string, data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void);
     public save(id: string, data: IRoute, callback?: (code: MONGODB_CODE, result: IRoute) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
@@ -67,8 +65,6 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
-    public remove(id: string);
-    public remove(id: string, callback: (code: MONGODB_CODE) => void);
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
@@ -87,8 +83,6 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string);
-    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IRoute[]) => void);
     public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRoute[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);

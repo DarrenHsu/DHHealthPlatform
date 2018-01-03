@@ -18,6 +18,10 @@ export class BaseRoute {
         this.scripts = [];
     }
 
+    protected checkParam(auth: string, value: string): Boolean {
+        return this.checkValue(auth, value);
+    }
+
     protected checkHeader(req: Request): Boolean {
         var auth: string = req.get("Authorization");
         var verfy: string = req.get("verfy");
