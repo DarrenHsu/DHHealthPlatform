@@ -105,23 +105,36 @@ class RecordHelper {
             }
         });
     }
-    list(lineUserId, callback) {
+    list(lineUserId, recordIdOrCallback, callback) {
+        var _callback = null;
+        if (callback) {
+            _callback = callback;
+        }
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        RecordHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
+        var condition = { lineUserId: lineUserId };
+        if (recordIdOrCallback) {
+            if (typeof (recordIdOrCallback) == "string") {
+                condition["recordId"] = recordIdOrCallback;
+            }
+            else {
+                _callback = recordIdOrCallback;
+            }
+        }
+        RecordHelper.model.find(condition, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d("find error:" + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+                if (_callback)
+                    _callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
                 DHLog_1.DHLog.d("find " + ress.length);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+                if (_callback)
+                    _callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }

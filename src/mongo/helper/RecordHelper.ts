@@ -5,6 +5,7 @@ import { IRecordModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
 import { MONGODB_CODE } from "../../routes/ResultCode";
 import { DHLog } from "../../util/DHLog";
+import { listenerCount } from "cluster";
 
 export class RecordHelper implements BaseHelper {
     
@@ -110,21 +111,37 @@ export class RecordHelper implements BaseHelper {
     }
 
     public list(lineUserId: string);
-    public list(lineUserId: string, callback: (code: MONGODB_CODE, results: IRecord[]) => void);
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
+    public list(lineUserId: string, recordIdOrCallback: (code: MONGODB_CODE, results: IRecord[]) => void);
+    public list(lineUserId: string, recordIdOrCallback: string, callback: (code: MONGODB_CODE, results: IRecord[]) => void);
+    public list(lineUserId: string, recordIdOrCallback?: string | ((code: MONGODB_CODE, results: IRecord[]) => void), callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
+        var _callback = null;
+        if (callback) {
+            _callback = callback
+        }
+
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
 
-        RecordHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
+        var condition = {lineUserId: lineUserId}
+        
+        if (recordIdOrCallback) {
+            if (typeof(recordIdOrCallback) == "string") {
+                condition["recordId"] = recordIdOrCallback
+            }else {
+                _callback = recordIdOrCallback
+            }
+        }
+
+        RecordHelper.model.find(condition , (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+                if (_callback) _callback(MONGODB_CODE.MC_SELECT_ERROR, null);
             }else {
                 DHLog.d("find " + ress.length);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
+                if (_callback) _callback(MONGODB_CODE.MC_SUCCESS, ress);
             }
         });
     }
