@@ -1,3 +1,4 @@
+import { createHmac, createHash } from "crypto";
 import { NextFunction, Request, Response } from "express";
 import { IResult } from "./interface/IResult";
 import { IRecord } from "../mongo/interface/IRecord";
@@ -6,12 +7,31 @@ import { DHLog } from "../util/DHLog";
 
 export class BaseRoute {
     
+    protected static FEED_AUTH: string = "Darren Hsu I Love You";
+    protected static FEED_AUTH_PASS: string = "I'm Darren";
+    
     protected title: string;
     private scripts: string[];
 
     constructor() {
         this.title = "DHHealthPlatform";
         this.scripts = [];
+    }
+
+    protected checkHeader(req: Request): Boolean {
+        var auth: string = req.get("Authorization");
+        var verfy: string = req.get("verfy");
+        return this.checkValue(auth, verfy);
+    }
+
+    protected checkValue(auth: string, verfy: string): Boolean {
+        if (verfy == BaseRoute.FEED_AUTH_PASS) 
+            return true;
+        
+        var str = createHash("SHA256").update(BaseRoute.FEED_AUTH + verfy).digest("base64");
+        DHLog.d("verfy:" + str);
+        DHLog.d("auth :" + auth);
+        return auth == str;
     }
 
     protected printRequestInfo(req: Request) {

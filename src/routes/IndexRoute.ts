@@ -6,7 +6,7 @@ import { DHLog } from "../util/DHLog";
 export class IndexRoute extends BaseRoute {
     
     public static create(router: Router) {
-        DHLog.d("[" + this.name + "::create] " + DHAPI.ROOT_PATH);
+        DHLog.d("[" + this.name + ":create] " + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
             new IndexRoute().index(req, res, next);
         });

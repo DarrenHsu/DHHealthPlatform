@@ -5,7 +5,7 @@ const Path_1 = require("../const/Path");
 const DHLog_1 = require("../util/DHLog");
 class IndexRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
-        DHLog_1.DHLog.d("[" + this.name + "::create] " + Path_1.DHAPI.ROOT_PATH);
+        DHLog_1.DHLog.d("[" + this.name + ":create] " + Path_1.DHAPI.ROOT_PATH);
         router.get(Path_1.DHAPI.ROOT_PATH, (req, res, next) => {
             new IndexRoute().index(req, res, next);
         });

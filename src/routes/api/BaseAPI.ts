@@ -1,5 +1,4 @@
 import mongoose = require("mongoose");
-import { createHmac, createHash } from "crypto";
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "../BaseRoute";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
@@ -11,29 +10,11 @@ import { DHLog } from "../../util/DHLog";
 
 export class BaseAPI extends BaseRoute {
 
-    protected static FEED_AUTH: string = "Darren Hsu I Love You";
-    protected static FEED_AUTH_PASS: string = "I'm Darren";
     protected helper: BaseHelper;
     protected uri: string;
 
     public static create(router: Router) {}
 
-    protected checkHeader(req: Request): Boolean {
-        var auth: string = req.get("Authorization");
-        var verfy: string = req.get("verfy");
-        return this.checkValue(auth, verfy);
-    }
-
-    protected checkValue(auth: string, verfy: string): Boolean {
-        if (verfy == BaseAPI.FEED_AUTH_PASS) 
-            return true;
-        
-        var str = createHash("SHA256").update(BaseAPI.FEED_AUTH + verfy).digest("base64");
-        DHLog.d("verfy:" + str);
-        DHLog.d("auth :" + auth);
-        return auth == str;
-    }
-    
     protected get(router: Router) {
         router.get(this.uri + "/:id", (req, res, next) => {
             res.setHeader("Content-type", "application/json");

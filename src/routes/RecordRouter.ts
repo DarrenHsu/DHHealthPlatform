@@ -6,7 +6,7 @@ import { DHLog } from "../util/DHLog";
 export class RecordRouter extends BaseRoute {
 
     public static create(router: Router) {
-        DHLog.d("[" + this.name + "::create] " + DHAPI.RECORD_PATH);
+        DHLog.d("[" + this.name + ":create] " + DHAPI.RECORD_PATH);
         router.get(DHAPI.RECORD_PATH, (req: Request, res: Response, next: NextFunction) => {
             new RecordRouter().index(req, res, next);
         });

@@ -1,24 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const crypto_1 = require("crypto");
 const BaseRoute_1 = require("../BaseRoute");
 const ResultCode_1 = require("../ResultCode");
-const DHLog_1 = require("../../util/DHLog");
 class BaseAPI extends BaseRoute_1.BaseRoute {
     static create(router) { }
-    checkHeader(req) {
-        var auth = req.get("Authorization");
-        var verfy = req.get("verfy");
-        return this.checkValue(auth, verfy);
-    }
-    checkValue(auth, verfy) {
-        if (verfy == BaseAPI.FEED_AUTH_PASS)
-            return true;
-        var str = crypto_1.createHash("SHA256").update(BaseAPI.FEED_AUTH + verfy).digest("base64");
-        DHLog_1.DHLog.d("verfy:" + str);
-        DHLog_1.DHLog.d("auth :" + auth);
-        return auth == str;
-    }
     get(router) {
         router.get(this.uri + "/:id", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
@@ -92,6 +77,4 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
         });
     }
 }
-BaseAPI.FEED_AUTH = "Darren Hsu I Love You";
-BaseAPI.FEED_AUTH_PASS = "I'm Darren";
 exports.BaseAPI = BaseAPI;
