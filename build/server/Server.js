@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const compression = require("compression");
 const logger = require("morgan");
 const path = require("path");
 const errorHandler = require("errorhandler");
@@ -30,6 +31,7 @@ class Server {
         this.app.use(express.static(path.join(__dirname, "../../public")));
         this.app.set("views", path.join(__dirname, "../../views"));
         this.app.set("view engine", "pug");
+        this.app.use(compression());
         this.app.use(logger("dev"));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({

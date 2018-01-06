@@ -1,6 +1,7 @@
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
+import * as compression from "compression";
 import * as logger from "morgan";
 import * as path from "path";
 import errorHandler = require("errorhandler");
@@ -35,6 +36,7 @@ export class Server {
         this.app.use(express.static(path.join(__dirname, "../../public")));
         this.app.set("views", path.join(__dirname, "../../views"));
         this.app.set("view engine", "pug");
+        this.app.use(compression());
         this.app.use(logger("dev"));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({
