@@ -8,7 +8,7 @@ import { DHLog } from "../util/DHLog";
 export class BaseRoute {
     
     protected static FEED_AUTH: string = "Darren Hsu I Love You";
-    protected static FEED_AUTH_PASS: string = "I'm Darren";
+    protected static FEED_AUTH_PASS: string = "imdarren";
     
     protected title: string;
     private scripts: string[];
