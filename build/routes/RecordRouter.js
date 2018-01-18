@@ -29,14 +29,15 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
                 return;
             }
             this.helper.get(req.params.id, (code, result) => {
-                this.index(req, res, next);
+                this.index(req, res, next, result);
             });
         });
     }
-    index(req, res, next) {
+    index(req, res, next, record) {
         this.title = "Home | DHHealthPlatform | record";
         let options = {
-            "message": "Welcome to the Record"
+            "message": "Welcome to the Record",
+            "data": record
         };
         this.render(req, res, "record", options);
     }

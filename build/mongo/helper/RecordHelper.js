@@ -119,7 +119,7 @@ class RecordHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                DHLog_1.DHLog.d("find " + JSON.stringify(res));
+                DHLog_1.DHLog.d("find " + recordId);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
             }

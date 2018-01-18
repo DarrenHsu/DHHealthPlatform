@@ -37,17 +37,18 @@ export class RecordRouter extends BaseRoute {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-
+            
             this.helper.get(req.params.id, (code, result) => {
-                this.index(req, res, next);
+                this.index(req, res, next, result);
             });
         });
     }
 
-    public index(req: Request, res: Response, next: NextFunction) {
+    public index(req: Request, res: Response, next: NextFunction, record: IRecord) {
         this.title = "Home | DHHealthPlatform | record";
         let options: Object = {
-            "message": "Welcome to the Record"
+            "message": "Welcome to the Record",
+            "data": record
         };
         this.render(req, res, "record", options);
     }
