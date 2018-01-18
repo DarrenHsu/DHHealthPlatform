@@ -28,7 +28,9 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            this.index(req, res, next);
+            this.helper.get(req.params.id, (code, result) => {
+                this.index(req, res, next);
+            });
         });
     }
     index(req, res, next) {

@@ -38,7 +38,9 @@ export class RecordRouter extends BaseRoute {
                 return;
             }
 
-            this.index(req, res, next);
+            this.helper.get(req.params.id, (code, result) => {
+                this.index(req, res, next);
+            });
         });
     }
 
