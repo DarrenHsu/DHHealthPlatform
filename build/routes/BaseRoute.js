@@ -53,5 +53,5 @@ class BaseRoute {
     }
 }
 BaseRoute.FEED_AUTH = "Darren Hsu I Love You";
-BaseRoute.FEED_AUTH_PASS = "I'm Darren";
+BaseRoute.FEED_AUTH_PASS = "imdarren";
 exports.BaseRoute = BaseRoute;

@@ -26,11 +26,13 @@ export class RecordRouter extends BaseRoute {
     }
 
     public get(router: Router) {
-        router.get(DHAPI.RECORD_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
-            var recordid = req.params.id;
-            var auth = req.params.auth;
+        router.get(DHAPI.RECORD_PATH + "/:id/:verify/:auth", (req: Request, res: Response, next: NextFunction) => {
+            if (req.params.id == null || req.params.verify == null || req.params.auth == null) {
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+                return;
+            }
 
-            if (!this.checkParam(auth, recordid)) {
+            if (!this.checkParam(req.params.auth, req.params.verify)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
