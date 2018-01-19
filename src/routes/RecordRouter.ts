@@ -26,7 +26,7 @@ export class RecordRouter extends BaseRoute {
     }
 
     public get(router: Router) {
-        router.get(DHAPI.RECORD_PATH + "/:id//:auth", (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
             if (req.params.id == null || req.params.auth == null) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
