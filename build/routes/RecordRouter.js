@@ -18,12 +18,12 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
         app.get(router);
     }
     get(router) {
-        router.get(Path_1.DHAPI.RECORD_PATH + "/:id/:verify/:auth", (req, res, next) => {
-            if (req.params.id == null || req.params.verify == null || req.params.auth == null) {
+        router.get(Path_1.DHAPI.RECORD_PATH + "/:id//:auth", (req, res, next) => {
+            if (req.params.id == null || req.params.auth == null) {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
             }
-            if (!this.checkParam(req.params.auth, req.params.verify)) {
+            if (!this.checkParam(req.params.auth, req.params.id)) {
                 res.statusCode = 403;
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;

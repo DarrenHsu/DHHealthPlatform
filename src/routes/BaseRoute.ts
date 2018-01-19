@@ -29,7 +29,7 @@ export class BaseRoute {
     }
 
     protected checkValue(auth: string, verfy: string): Boolean {
-        if (verfy == BaseRoute.FEED_AUTH_PASS) 
+        if (auth == BaseRoute.FEED_AUTH_PASS) 
             return true;
         
         var str = createHash("SHA256").update(BaseRoute.FEED_AUTH + verfy).digest("base64");
