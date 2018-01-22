@@ -143,7 +143,7 @@ export class LineWebhookAPI extends BaseAPI {
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
                     var message: TextMessage = {
                         type: 'text',
-                        text: record.name
+                        text: "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId)
                     }
                     
                     this.pushMessage(message, chats, () => {
