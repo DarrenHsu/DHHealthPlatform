@@ -146,7 +146,7 @@ export class LineWebhookAPI extends BaseAPI {
                     
                     var message: TextMessage = {
                         type: 'text',
-                        text: text = querystring.stringify(text)
+                        text: text = querystring.escape(text)
                     }
                     
                     this.pushMessage(message, chats, () => {

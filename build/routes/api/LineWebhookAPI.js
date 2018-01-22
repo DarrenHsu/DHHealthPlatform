@@ -115,7 +115,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     let text = "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId);
                     var message = {
                         type: 'text',
-                        text: text = querystring.stringify(text)
+                        text: text = querystring.escape(text)
                     };
                     this.pushMessage(message, chats, () => {
                         res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.LINE_CODE.LL_SUCCESS));
