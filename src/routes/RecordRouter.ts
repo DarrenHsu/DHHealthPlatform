@@ -41,9 +41,7 @@ export class RecordRouter extends BaseRoute {
 
             let recordId = querystring.unescape(req.params.id);
             let auth = querystring.unescape(req.params.auth);
-            DHLog.d("recordid " + recordId);
-            DHLog.d("auth     " + auth);
-
+            
             if (!this.checkParam(auth, recordId)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
@@ -51,7 +49,7 @@ export class RecordRouter extends BaseRoute {
             }
             
             this.recordHelper.get(recordId, (code, record) => {
-                if (code == MONGODB_CODE.MC_SUCCESS) {
+                if (code != MONGODB_CODE.MC_SUCCESS) {
                     res.json(BaseRoute.createResult(null, code));
                     return;
                 }

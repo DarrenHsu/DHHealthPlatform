@@ -1,5 +1,6 @@
 import mongoose = require("mongoose");
 import querystring = require("querystring");
+import os = require("os");
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from "@line/bot-sdk";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from "../ResultCode";
 import { NextFunction, Request, Response, Router } from "express";
@@ -142,7 +143,7 @@ export class LineWebhookAPI extends BaseAPI {
                 }
 
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                    let text = "https://dhhealthplatform.herokuapp.com/record/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
+                    let text = "https://" + os.hostname() + "/record/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
                     
                     var message: TextMessage = {
                         type: 'text',
