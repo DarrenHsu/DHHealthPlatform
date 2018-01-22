@@ -146,14 +146,14 @@ export class LineWebhookAPI extends BaseAPI {
                         client.pushMessage(chat.chatId, {
                             type: 'text',
                             text: record.name
-                        }).then(() => {
-                            DHLog.d("push message success");
+                        }).then((value) => {
+                            DHLog.d("push message success " + JSON.stringify(value));
                         }).catch((err) => {
                             DHLog.d("" + err);
                         });
                     });
 
-                    res.json(LINE_CODE.LL_SUCCESS);
+                    res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
                 });
             });
         });

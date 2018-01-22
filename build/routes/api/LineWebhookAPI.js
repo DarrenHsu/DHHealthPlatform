@@ -117,13 +117,13 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         client.pushMessage(chat.chatId, {
                             type: 'text',
                             text: record.name
-                        }).then(() => {
-                            DHLog_1.DHLog.d("push message success");
+                        }).then((value) => {
+                            DHLog_1.DHLog.d("push message success " + JSON.stringify(value));
                         }).catch((err) => {
                             DHLog_1.DHLog.d("" + err);
                         });
                     });
-                    res.json(ResultCode_1.LINE_CODE.LL_SUCCESS);
+                    res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.LINE_CODE.LL_SUCCESS));
                 });
             });
         });
