@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class DHAPI {
 }
+DHAPI.HOST_NAME = "https://dhhealthplatform.herokuapp.com";
 DHAPI.ROOT_PATH = "/";
 DHAPI.RECORD_PATH = DHAPI.ROOT_PATH + "record";
 DHAPI.API_PATH = DHAPI.ROOT_PATH + "api";

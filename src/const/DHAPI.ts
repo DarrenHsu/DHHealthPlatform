@@ -1,5 +1,6 @@
 export class DHAPI {
 
+    public static HOST_NAME =                       "https://dhhealthplatform.herokuapp.com";
     public static ROOT_PATH =                       "/";
     public static RECORD_PATH =                     DHAPI.ROOT_PATH + "record";
 
