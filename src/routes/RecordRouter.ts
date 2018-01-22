@@ -45,9 +45,11 @@ export class RecordRouter extends BaseRoute {
             }
             
             this.recordHelper.get(req.params.id, (code, record) => {
-                this.userHelper.list(record.lineUserId, (code, user) => {
-                    this.index(req, res, next, user[0], record);
-                })
+                if (code = MONGODB_CODE.MC_SUCCESS) {
+                    this.userHelper.list(record.lineUserId, (code, user) => {
+                        this.index(req, res, next, user[0], record);
+                    });
+                }
             });
         });
     }

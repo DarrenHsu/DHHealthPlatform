@@ -1,3 +1,8 @@
+export enum LINE_CODE {
+    LL_SUCCESS = 0,
+    LL_PUSH_MSG_ERROR = -1
+}
+
 export enum CONNECTION_CODE {
     CC_SUCCESS = 0,
     CC_PARAMETER_ERROR = -1,
@@ -23,6 +28,9 @@ export enum MONGODB_CODE {
 }
 
 class ResultMsg {
+    public static LL_SUCCESS = "執行成功";
+    public static LL_PUSH_MSG_ERROR = "發送訊息失敗";
+
     public static CC_SUCCESS = "執行成功";
     public static CC_PARAMETER_ERROR = "輸入的參數有誤";
     public static CC_REQUEST_BODY_ERROR = "傳入的資料有誤";
@@ -47,6 +55,11 @@ class ResultMsg {
 export class ResultCodeMsg {
     public static getMsg(code: number) {
         switch(code) {
+            case LINE_CODE.LL_SUCCESS:
+                return ResultMsg.LL_SUCCESS;
+            case LINE_CODE.LL_PUSH_MSG_ERROR:
+                return ResultMsg.LL_PUSH_MSG_ERROR;
+
             case CONNECTION_CODE.CC_SUCCESS:
                 return ResultMsg.CC_SUCCESS;
             case CONNECTION_CODE.CC_PARAMETER_ERROR:

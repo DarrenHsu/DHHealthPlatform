@@ -19,10 +19,13 @@ class BaseRoute {
     checkValue(auth, verfy) {
         if (auth == BaseRoute.FEED_AUTH_PASS)
             return true;
-        var str = crypto_1.createHash("SHA256").update(BaseRoute.FEED_AUTH + verfy).digest("base64");
+        var str = this.hashString(verfy);
         DHLog_1.DHLog.d("verfy:" + str);
         DHLog_1.DHLog.d("auth :" + auth);
         return auth == str;
+    }
+    hashString(str) {
+        return crypto_1.createHash("SHA256").update(BaseRoute.FEED_AUTH + str).digest("base64");
     }
     printRequestInfo(req) {
         DHLog_1.DHLog.d("<----------------- " + req.method + " ---------------->");
