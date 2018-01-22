@@ -1,4 +1,5 @@
 import mongoose = require("mongoose");
+import querystring = require("querystring");
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from "@line/bot-sdk";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from "../ResultCode";
 import { NextFunction, Request, Response, Router } from "express";
@@ -141,9 +142,11 @@ export class LineWebhookAPI extends BaseAPI {
                 }
 
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
+                    let text = "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId)
+                    
                     var message: TextMessage = {
                         type: 'text',
-                        text: "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId)
+                        text: text = querystring.stringify(text)
                     }
                     
                     this.pushMessage(message, chats, () => {
@@ -163,6 +166,8 @@ export class LineWebhookAPI extends BaseAPI {
 
         var chat = chats[0];
         DHLog.d("push " + chat.chatId);
+        DHLog.d("message" + JSON.stringify(message));
+
         client.pushMessage(chat.chatId, message).then((value) => {
             DHLog.d("push message success " + JSON.stringify(value));
             var array = chats.splice(0, 1);

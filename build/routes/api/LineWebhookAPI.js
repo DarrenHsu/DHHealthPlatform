@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const querystring = require("querystring");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
@@ -111,9 +112,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     return;
                 }
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
+                    let text = "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId);
                     var message = {
                         type: 'text',
-                        text: "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId)
+                        text: text = querystring.stringify(text)
                     };
                     this.pushMessage(message, chats, () => {
                         res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.LINE_CODE.LL_SUCCESS));
@@ -131,6 +133,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         }
         var chat = chats[0];
         DHLog_1.DHLog.d("push " + chat.chatId);
+        DHLog_1.DHLog.d("message" + JSON.stringify(message));
         client.pushMessage(chat.chatId, message).then((value) => {
             DHLog_1.DHLog.d("push message success " + JSON.stringify(value));
             var array = chats.splice(0, 1);
