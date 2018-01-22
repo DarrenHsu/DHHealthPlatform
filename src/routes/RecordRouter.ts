@@ -1,4 +1,5 @@
 import mongoose = require("mongoose");
+import querystring = require("querystring");
 import { parseIso, format } from "ts-date/locale/en";
 import { NextFunction, Request, Response, Router } from "express";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "./ResultCode";
@@ -38,18 +39,23 @@ export class RecordRouter extends BaseRoute {
                 return;
             }
 
-            if (!this.checkParam(req.params.auth, req.params.id)) {
+            let recordId = querystring.unescape(req.params.id);
+            let auth = querystring.unescape(req.params.auth);
+            DHLog.d("recordid " + recordId);
+            DHLog.d("auth     " + auth);
+
+            if (!this.checkParam(auth, recordId)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
             
-            this.recordHelper.get(req.params.id, (code, record) => {
+            this.recordHelper.get(recordId, (code, record) => {
                 if (code == MONGODB_CODE.MC_SUCCESS) {
                     res.json(BaseRoute.createResult(null, code));
                     return;
                 }
-                
+
                 this.userHelper.list(record.lineUserId, (code, user) => {
                     this.index(req, res, next, user[0], record);
                 });

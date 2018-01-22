@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const querystring = require("querystring");
 const en_1 = require("ts-date/locale/en");
 const ResultCode_1 = require("./ResultCode");
 const BaseRoute_1 = require("./BaseRoute");
@@ -27,12 +28,16 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
                 return;
             }
-            if (!this.checkParam(req.params.auth, req.params.id)) {
+            let recordId = querystring.unescape(req.params.id);
+            let auth = querystring.unescape(req.params.auth);
+            DHLog_1.DHLog.d("recordid " + recordId);
+            DHLog_1.DHLog.d("auth     " + auth);
+            if (!this.checkParam(auth, recordId)) {
                 res.statusCode = 403;
                 res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
                 return;
             }
-            this.recordHelper.get(req.params.id, (code, record) => {
+            this.recordHelper.get(recordId, (code, record) => {
                 if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
                     res.json(BaseRoute_1.BaseRoute.createResult(null, code));
                     return;

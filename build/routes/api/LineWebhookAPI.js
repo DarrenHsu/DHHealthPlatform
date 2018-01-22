@@ -112,10 +112,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     return;
                 }
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                    let text = "https://dhhealthplatform.herokuapp.com/record/" + record.recordId + "/" + this.hashString(record.recordId);
+                    let text = "https://dhhealthplatform.herokuapp.com/record/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
                     var message = {
                         type: 'text',
-                        text: text = querystring.escape(text)
+                        text: text
                     };
                     this.pushMessage(message, chats, () => {
                         res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.LINE_CODE.LL_SUCCESS));
