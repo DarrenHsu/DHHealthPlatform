@@ -5,7 +5,7 @@ import { MONGODB_CODE, CONNECTION_CODE, ResultCodeMsg } from "../ResultCode";
 import { DBHelper } from "../../mongo/helper/DBHelper";
 import { UserHelper } from "../../mongo/helper/UserHelper";
 import { IUser } from "../../mongo/interface/IUser";
-import { DHAPI } from "../../const/Path";
+import { DHAPI } from "../../const/DHAPI";
 import { DHLog } from "../../util/DHLog";
 
 export class UserAPI extends BaseAPI {

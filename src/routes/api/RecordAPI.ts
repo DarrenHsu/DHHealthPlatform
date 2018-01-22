@@ -5,7 +5,7 @@ import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
 import { DBHelper } from "../../mongo/helper/DBHelper";
 import { RecordHelper } from "../../mongo/helper/RecordHelper";
 import { IRecord } from "../../mongo/interface/IRecord";
-import { DHAPI } from "../../const/Path";
+import { DHAPI } from "../../const/DHAPI";
 import { DHLog } from "../../util/DHLog";
 
 export class RecordAPI extends BaseAPI {

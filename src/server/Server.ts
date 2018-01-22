@@ -10,7 +10,7 @@ import mongoose = require("mongoose");
 import { DBHelper } from  "../mongo/helper/DBHelper";
 import { IndexRoute } from "../routes/IndexRoute";
 import { RecordRouter } from "../routes/RecordRouter";
-import { DHAPI } from "../const/Path";
+import { DHAPI } from "../const/DHAPI";
 import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
 import { RouteAPI } from "../routes/api/RouteAPI";

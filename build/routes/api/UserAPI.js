@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BaseAPI_1 = require("./BaseAPI");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const UserHelper_1 = require("../../mongo/helper/UserHelper");
-const Path_1 = require("../../const/Path");
+const DHAPI_1 = require("../../const/DHAPI");
 const DHLog_1 = require("../../util/DHLog");
 class UserAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();
-        this.uri = Path_1.DHAPI.API_USER_PATH;
+        this.uri = DHAPI_1.DHAPI.API_USER_PATH;
         this.helper = new UserHelper_1.UserHelper(connection);
     }
     static create(router) {

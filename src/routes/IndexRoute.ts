@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./BaseRoute";
-import { DHAPI } from "../const/Path";
+import { DHAPI } from "../const/DHAPI";
 import { DHLog } from "../util/DHLog";
 
 export class IndexRoute extends BaseRoute {

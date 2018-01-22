@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Path_1 = require("../../const/Path");
-const BaseAPI_1 = require("./BaseAPI");
-const crypto_1 = require("crypto");
 const bot_sdk_1 = require("@line/bot-sdk");
-const DHLog_1 = require("../../util/DHLog");
+const crypto_1 = require("crypto");
+const BaseAPI_1 = require("./BaseAPI");
 const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
+const DHLog_1 = require("../../util/DHLog");
+const DHAPI_1 = require("../../const/DHAPI");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();
         this.pkgjson = require("../../../package.json");
-        this.uri = Path_1.DHAPI.API_LINEBOT_PATH;
+        this.uri = DHAPI_1.DHAPI.API_LINEBOT_PATH;
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.clientConfig = {
             channelAccessToken: this.pkgjson.linebot.channelAccessToken

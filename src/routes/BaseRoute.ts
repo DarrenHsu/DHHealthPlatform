@@ -32,10 +32,14 @@ export class BaseRoute {
         if (auth == BaseRoute.FEED_AUTH_PASS) 
             return true;
         
-        var str = createHash("SHA256").update(BaseRoute.FEED_AUTH + verfy).digest("base64");
+        var str = this.hashString(verfy);
         DHLog.d("verfy:" + str);
         DHLog.d("auth :" + auth);
         return auth == str;
+    }
+
+    protected hashString(str: string): string {
+        return createHash("SHA256").update(BaseRoute.FEED_AUTH + str).digest("base64");
     }
 
     protected printRequestInfo(req: Request) {

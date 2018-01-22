@@ -36,7 +36,8 @@
     "morgan": "~1.9.0",
     "pug": "^2.0.0-rc.4",
     "q": "^1.5.1",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "ts-date": "^2.1.6"
   },
   "devDependencies": {
     "@line/bot-sdk": "^5.0.1",
@@ -51,6 +52,7 @@
     "@types/mongoose": "^4.7.24",
     "@types/morgan": "^1.7.35",
     "@types/node": "^8.0.47",
+    "ts-date": "^2.1.6",
     "typescript": "^2.6.1"
   }
 }

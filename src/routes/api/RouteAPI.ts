@@ -5,7 +5,7 @@ import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
 import { DBHelper } from "../../mongo/helper/DBHelper";
 import { RouteHelper } from "../../mongo/helper/RouteHelper";
 import { IRoute } from "../../mongo/interface/IRoute";
-import { DHAPI } from "../../const/Path";
+import { DHAPI } from "../../const/DHAPI";
 import { DHLog } from "../../util/DHLog";
 
 export class RouteAPI extends BaseAPI {

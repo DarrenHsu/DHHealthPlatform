@@ -3,19 +3,29 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  p #{message}
+  p 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
   div 
     table
       tr 
-        td 紀錄名稱
-        td #{data.name}
+        td 紀錄名稱：
+        td #{name}
       tr 
-        td 地區
-        td #{data.locality}
+        td 地區：
+        td #{locality}
       tr
-        td 日期
-        td #{data.startTime} ~ #{data.endTime}
+        td 日期：
+        td #{dateStr}
       tr
-        td 時間
-        td #{data.startTime} ~ #{data.endTime}
+        td 時間：
+        td #{startTimeStr} ~ #{endTimeStr}
+      tr
+        td 距離：
+        td #{distance} km
+      tr
+        td 最快速度：
+        td #{maxSpeed} km
+      tr
+        td 平均速度：
+        td #{avgSpeed} km
+
 
