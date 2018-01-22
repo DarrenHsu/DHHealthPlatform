@@ -111,21 +111,34 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     return;
                 }
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                    let client = new bot_sdk_1.Client(this.clientConfig);
-                    chats.forEach((chat, index, array) => {
-                        DHLog_1.DHLog.d("push " + chat.chatId);
-                        client.pushMessage(chat.chatId, {
-                            type: 'text',
-                            text: record.name
-                        }).then((value) => {
-                            DHLog_1.DHLog.d("push message success " + JSON.stringify(value));
-                        }).catch((err) => {
-                            DHLog_1.DHLog.d("" + err);
-                        });
+                    var message = {
+                        type: 'text',
+                        text: record.name
+                    };
+                    this.pushMessage(message, chats, () => {
+                        res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.LINE_CODE.LL_SUCCESS));
                     });
-                    res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.LINE_CODE.LL_SUCCESS));
                 });
             });
+        });
+    }
+    pushMessage(message, chats, callback) {
+        let client = new bot_sdk_1.Client(this.clientConfig);
+        if (chats.length == 0) {
+            if (callback)
+                callback();
+            return;
+        }
+        var chat = chats[0];
+        DHLog_1.DHLog.d("push " + chat.chatId);
+        client.pushMessage(chat.chatId, message).then((value) => {
+            DHLog_1.DHLog.d("push message success " + JSON.stringify(value));
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        }).catch((err) => {
+            DHLog_1.DHLog.d("" + err);
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
         });
     }
 }

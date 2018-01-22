@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature } from "@line/bot-sdk";
+import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from "@line/bot-sdk";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from "../ResultCode";
 import { NextFunction, Request, Response, Router } from "express";
 import { createHmac } from "crypto";
@@ -12,6 +12,7 @@ import { RecordHelper } from "../../mongo/helper/RecordHelper";
 import { error } from "util";
 import { DHLog } from "../../util/DHLog";
 import { DHAPI } from "../../const/DHAPI";
+import { IRecord } from "../../mongo/interface/IRecord";
 
 export class LineWebhookAPI extends BaseAPI {
     
@@ -140,22 +141,37 @@ export class LineWebhookAPI extends BaseAPI {
                 }
 
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                    let client = new Client(this.clientConfig);
-                    chats.forEach((chat, index, array) => {
-                        DHLog.d("push " + chat.chatId);
-                        client.pushMessage(chat.chatId, {
-                            type: 'text',
-                            text: record.name
-                        }).then((value) => {
-                            DHLog.d("push message success " + JSON.stringify(value));
-                        }).catch((err) => {
-                            DHLog.d("" + err);
-                        });
+                    var message: TextMessage = {
+                        type: 'text',
+                        text: record.name
+                    }
+                    
+                    this.pushMessage(message, chats, () => {
+                        res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
                     });
-
-                    res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
                 });
             });
         });
+    }
+
+    private pushMessage(message: TextMessage, chats: IChatroom[], callback?: () => void) {
+        let client = new Client(this.clientConfig);
+        if (chats.length == 0)  {
+            if (callback) callback();
+            return;
+        }
+
+        var chat = chats[0];
+        DHLog.d("push " + chat.chatId);
+        client.pushMessage(chat.chatId, message).then((value) => {
+            DHLog.d("push message success " + JSON.stringify(value));
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        }).catch((err) => {
+            DHLog.d("" + err);
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        });
+                    
     }
 }
