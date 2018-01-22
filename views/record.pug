@@ -4,5 +4,18 @@ block content
   h1= title
   p Welcome to #{title}
   p #{message}
-  div #{data}
+  div 
+    table
+      tr 
+        td 紀錄名稱
+        td #{data.name}
+      tr 
+        td 地區
+        td #{data.locality}
+      tr
+        td 日期
+        td #{data.startTime} ~ #{data.endTime}
+      tr
+        td 時間
+        td #{data.startTime} ~ #{data.endTime}
 
