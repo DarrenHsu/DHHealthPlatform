@@ -106,23 +106,25 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             }
             let recordId = req.params.recordId;
             this.recordHelper.get(recordId, (code, record) => {
-                if (code = ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
-                    this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                        let client = new bot_sdk_1.Client(this.clientConfig);
-                        chats.forEach((chat, index, array) => {
-                            DHLog_1.DHLog.d("push " + chat.chatId);
-                            client.pushMessage(chat.chatId, {
-                                type: 'text',
-                                text: record.name
-                            }).then(() => {
-                                DHLog_1.DHLog.d("push message success");
-                            }).catch((err) => {
-                                DHLog_1.DHLog.d("" + err);
-                            });
-                        });
-                        res.json(ResultCode_1.LINE_CODE.LL_SUCCESS);
-                    });
+                if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
+                    res.json(BaseRoute_1.BaseRoute.createResult(null, code));
+                    return;
                 }
+                this.chatroomHelper.list(record.lineUserId, (code, chats) => {
+                    let client = new bot_sdk_1.Client(this.clientConfig);
+                    chats.forEach((chat, index, array) => {
+                        DHLog_1.DHLog.d("push " + chat.chatId);
+                        client.pushMessage(chat.chatId, {
+                            type: 'text',
+                            text: record.name
+                        }).then(() => {
+                            DHLog_1.DHLog.d("push message success");
+                        }).catch((err) => {
+                            DHLog_1.DHLog.d("" + err);
+                        });
+                    });
+                    res.json(ResultCode_1.LINE_CODE.LL_SUCCESS);
+                });
             });
         });
     }

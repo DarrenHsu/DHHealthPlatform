@@ -134,24 +134,27 @@ export class LineWebhookAPI extends BaseAPI {
 
             let recordId = req.params.recordId;
             this.recordHelper.get(recordId, (code, record) => {
-                if (code = MONGODB_CODE.MC_SUCCESS) {
-                    this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                        let client = new Client(this.clientConfig);
-                        chats.forEach((chat, index, array) => {
-                            DHLog.d("push " + chat.chatId);
-                            client.pushMessage(chat.chatId, {
-                                type: 'text',
-                                text: record.name
-                            }).then(() => {
-                                DHLog.d("push message success");
-                            }).catch((err) => {
-                                DHLog.d("" + err);
-                            });
-                        });
-
-                        res.json(LINE_CODE.LL_SUCCESS);
-                    });
+                if (code != MONGODB_CODE.MC_SUCCESS) {
+                    res.json(BaseRoute.createResult(null, code));
+                    return;
                 }
+
+                this.chatroomHelper.list(record.lineUserId, (code, chats) => {
+                    let client = new Client(this.clientConfig);
+                    chats.forEach((chat, index, array) => {
+                        DHLog.d("push " + chat.chatId);
+                        client.pushMessage(chat.chatId, {
+                            type: 'text',
+                            text: record.name
+                        }).then(() => {
+                            DHLog.d("push message success");
+                        }).catch((err) => {
+                            DHLog.d("" + err);
+                        });
+                    });
+
+                    res.json(LINE_CODE.LL_SUCCESS);
+                });
             });
         });
     }
