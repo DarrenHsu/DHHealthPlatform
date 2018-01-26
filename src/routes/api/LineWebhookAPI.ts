@@ -109,15 +109,16 @@ export class LineWebhookAPI extends BaseAPI {
                 
                 this.saveChat(client, source.userId, chatId, source.type);
             }
+            res.statusCode = 200
+            res.end()
 
-            client.replyMessage(event.replyToken, {
-                type: "text",
-                text: "你好，我是回覆機器人",
-            }).catch((err) => {
-                DHLog.d("replyMessage error " + err);
-            });
-
-            res.end();
+            // client.replyMessage(event.replyToken, {
+            //     type: "text",
+            //     text: "你好，我是回覆機器人",
+            // }).catch((err) => {
+            //     DHLog.d("replyMessage error " + err);
+            // });
+            // res.end();
         });
     }
 
