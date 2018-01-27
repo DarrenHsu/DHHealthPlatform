@@ -32,7 +32,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         let api = new LineWebhookAPI(DBHelper_1.DBHelper.connection);
         DHLog_1.DHLog.d("[" + this.name + ":create] " + api.uri);
         api.post(router);
-        api.pushRecord(router);
+        api.postRecord(router);
+        api.posthMessage(router);
     }
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
@@ -123,7 +124,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             });
         });
     }
-    pushRecord(router) {
+    postRecord(router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             if (!this.checkHeader(req)) {

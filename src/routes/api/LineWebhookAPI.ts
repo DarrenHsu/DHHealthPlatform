@@ -31,7 +31,8 @@ export class LineWebhookAPI extends BaseAPI {
         DHLog.d("[" + this.name + ":create] " + api.uri);
 
         api.post(router);
-        api.pushRecord(router);
+        api.postRecord(router);
+        api.posthMessage(router);
     }
 
     public static getSignature(body: string, screat: string): string {
@@ -154,7 +155,7 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    protected pushRecord(router: Router) {
+    protected postRecord(router: Router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
             res.setHeader("Content-type", "application/json");
 
