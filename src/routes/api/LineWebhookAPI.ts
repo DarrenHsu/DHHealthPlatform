@@ -20,6 +20,7 @@ export class LineWebhookAPI extends BaseAPI {
     private pkgjson = require("../../../package.json");
     protected uri = DHAPI.API_LINEBOT_PATH;
     protected recordUrl = DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
+    protected messageUrl = DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
     protected chatroomHelper: ChatroomHelper;
@@ -123,7 +124,7 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     protected posthMessage(router: Router) {
-        router.post(this.recordUrl + "/message/", (req, res, next) => {
+        router.post(this.messageUrl, (req, res, next) => {
             res.setHeader("Content-type", "application/json");
 
             if (!this.checkHeader(req)) {

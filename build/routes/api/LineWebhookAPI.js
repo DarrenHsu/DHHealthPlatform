@@ -17,6 +17,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.pkgjson = require("../../../package.json");
         this.uri = DHAPI_1.DHAPI.API_LINEBOT_PATH;
         this.recordUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
+        this.messageUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
@@ -97,7 +98,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         });
     }
     posthMessage(router) {
-        router.post(this.recordUrl + "/message/", (req, res, next) => {
+        router.post(this.messageUrl, (req, res, next) => {
             res.setHeader("Content-type", "application/json");
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;

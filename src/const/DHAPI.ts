@@ -11,5 +11,6 @@ export class DHAPI {
     
     public static API_LINEBOT_PATH =                DHAPI.API_PATH + "/linebot";
     public static API_LINEBOT_PUSH_RECORD_PATH =    DHAPI.API_LINEBOT_PATH + "/push/record";
+    public static API_LINEBOT_PUSH_MESSAGE_PATH =   DHAPI.API_LINEBOT_PATH + "/push/message";
     
 }
