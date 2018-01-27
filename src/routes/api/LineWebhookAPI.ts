@@ -10,7 +10,7 @@ import { IChatroom } from  "../../mongo/interface/IChatroom";
 import { ChatroomHelper } from "../../mongo/helper/ChatroomHelper";
 import { DBHelper } from "../../mongo/helper/DBHelper";
 import { RecordHelper } from "../../mongo/helper/RecordHelper";
-import { error } from "util";
+import { error, print } from "util";
 import { DHLog } from "../../util/DHLog";
 import { DHAPI } from "../../const/DHAPI";
 import { IRecord } from "../../mongo/interface/IRecord";
@@ -122,16 +122,51 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    protected pushRecord(router: Router) {
-        router.get(this.recordUrl + "/:recordId", (req, res, next) => {
+    protected posthMessage(router: Router) {
+        router.post(this.recordUrl + "/message/", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
+
             if (!this.checkHeader(req)) {
                 res.statusCode = 403;
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                res.end();
+                return;
+            }
+            
+            if (!req.body) {
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
+                res.end();
+                return;
+            }
+
+            let body = req.body;
+            let lineUserId = body.lineUserId;
+            let message: TextMessage = body.TextMessage;
+            DHLog.d(JSON.stringify(body));
+
+            this.chatroomHelper.list(lineUserId, (code, chats) => {
+                this.pushMessage(message, chats, () => {
+                    res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
+                    res.end();
+                });
+            });
+        });
+    }
+
+    protected pushRecord(router: Router) {
+        router.get(this.recordUrl + "/:recordId", (req, res, next) => {
+            res.setHeader("Content-type", "application/json");
+
+            if (!this.checkHeader(req)) {
+                res.statusCode = 403;
+                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                res.end();
                 return;
             }
             
             if (!req.params.recordId) {
                 res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+                res.end();
                 return;
             }
 
@@ -139,6 +174,7 @@ export class LineWebhookAPI extends BaseAPI {
             this.recordHelper.get(recordId, (code, record) => {
                 if (code != MONGODB_CODE.MC_SUCCESS) {
                     res.json(BaseRoute.createResult(null, code));
+                    res.end();
                     return;
                 }
 
@@ -152,6 +188,7 @@ export class LineWebhookAPI extends BaseAPI {
                     
                     this.pushMessage(message, chats, () => {
                         res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
+                        res.end();
                     });
                 });
             });
