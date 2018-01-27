@@ -143,10 +143,15 @@ export class LineWebhookAPI extends BaseAPI {
 
             let body = req.body;
             let lineUserId = body.lineUserId;
-            let message: TextMessage = body.TextMessage;
+            let msg = body.msg;
             DHLog.d(JSON.stringify(body));
 
             this.chatroomHelper.list(lineUserId, (code, chats) => {
+                var message: TextMessage = {
+                    type: 'text',
+                    text: msg
+                }
+
                 this.pushMessage(message, chats, () => {
                     res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
                     res.end();
