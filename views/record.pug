@@ -1,33 +1,35 @@
 extends layout
 
 block content
-  div.container
-    div.jumbotron.text-center
-      h1 #{title}
-    div.container
-      p.text-center 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
-      table.table
-        tbody
-          tr 
-            td 紀錄名稱：
-            td #{name}
-          tr 
-            td 地區：
-            td #{locality}
-          tr
-            td 日期：
-            td #{dateStr}
-          tr
-            td 時間：
-            td #{startTimeStr} ~ #{endTimeStr}
-          tr
-            td 距離：
-            td #{distance} km
-          tr
-            td 最快速度：
-            td #{maxSpeed} km
-          tr
-            td 平均速度：
-            td #{avgSpeed} km
+  div.jumbotron.text-center
+    h1 #{title}
+  div.container.row
+    p.text-center 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
+    table.table
+      thead
+        th 項目
+        th 數值
+      tbody
+        tr 
+          td 紀錄名稱：
+          td #{name}
+        tr 
+          td 地區：
+          td #{locality}
+        tr
+          td 日期：
+          td #{dateStr}
+        tr
+          td 時間：
+          td #{startTimeStr} ~ #{endTimeStr}
+        tr
+          td 距離：
+          td #{distance} km
+        tr
+          td 最快速度：
+          td #{maxSpeed} km
+        tr
+          td 平均速度：
+          td #{avgSpeed} km
 
 
