@@ -48,6 +48,14 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
     }
     index(req, res, next, user, record) {
         this.title = "DHHealthPlatform";
+        // var locations: Array<Location> = [];
+        // for(let location in record.locations) {
+        //     var l = {
+        //         lat: location[0], 
+        //         lng: location[1]
+        //     };
+        //     locations.push(l);
+        // }
         var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
         var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
         var endTimeStr = en_1.format(record.endTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
@@ -60,7 +68,8 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
             "endTimeStr": endTimeStr,
             "distance": record.distance.toFixed(1),
             "maxSpeed": record.maxSpeed.toFixed(1),
-            "avgSpeed": record.avgSpeed.toFixed(1)
+            "avgSpeed": record.avgSpeed.toFixed(1),
+            "locations": record.locations
         };
         this.render(req, res, "record", options);
     }

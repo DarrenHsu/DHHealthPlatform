@@ -1,7 +1,18 @@
-/* body {
+body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-} */
+}
 
 a {
   color: #00B7FF;
+}
+
+#map {
+  height: 400px;
+  width: 100%;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }

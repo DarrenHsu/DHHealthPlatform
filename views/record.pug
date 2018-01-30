@@ -1,9 +1,6 @@
 extends layout
 
 block content
-  div.jumbotron
-    img(width="50px", src="/images/icon.png", style="margin-right:10px;float:left;")
-    h1 #{title}
   div.container
     h3 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
     table.table
@@ -32,5 +29,41 @@ block content
         tr
           td 平均速度：
           td #{avgSpeed} km
+    div#map
+    - var lat = locations[0][0]
+    - var lng = locations[0][1]
+    - var j = ""
+    - var ls = locations
+        each location in ls
+          - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
+    script.
+      function initMap() {
+        var flightPlanCoordinates = [
+          #{j}
+        ];
+
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#000000',
+          strokeOpacity: 1.0,
+          strokeWeight: 4
+        });
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          mapTypeId: 'terrain'
+        });
+        
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0 ; i < flightPlanCoordinates.length ; i++) {
+          var path = flightPlanCoordinates[i];
+          bounds.extend(path);
+        }
+        map.fitBounds(bounds);
+        
+        flightPath.setMap(map);
+      }
+    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap")
+
 
 
