@@ -47,7 +47,7 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
         });
     }
     index(req, res, next, user, record) {
-        this.title = "Home | DHHealthPlatform | record";
+        this.title = "DHHealthPlatform";
         var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
         var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
         var endTimeStr = en_1.format(record.endTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);

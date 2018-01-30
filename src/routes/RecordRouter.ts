@@ -62,7 +62,7 @@ export class RecordRouter extends BaseRoute {
     }
 
     public index(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
-        this.title = "Home | DHHealthPlatform | record";
+        this.title = "DHHealthPlatform";
         var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
         var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
         var endTimeStr = format(record.endTime, DHDateFormat.TIME_FORMAT);
