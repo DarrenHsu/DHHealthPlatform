@@ -15,6 +15,7 @@ import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
 import { RouteAPI } from "../routes/api/RouteAPI";
 import { LineWebhookAPI } from "../routes/api/LineWebhookAPI"
+import { DHLog } from "../util/DHLog";
 
 export class Server {
     private pkgjson = require("../../package.json");
@@ -35,10 +36,11 @@ export class Server {
     public config() {
         this.app.use(express.static(path.join(__dirname, "../../public")));
         this.app.set("views", path.join(__dirname, "../../views"));
-        this.app.set("/scripts", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/js/")));
-        this.app.set("/scripts", express.static(path.join(__dirname, "../../node_modules/jquery/dist/")));
-        this.app.set("/scripts", express.static(path.join(__dirname, "../../node_modules/popper.js/dist/")));
         this.app.set("view engine", "pug");
+        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/js/")));
+        this.app.use("/styles", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/css/")));
+        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/jquery/dist/")));
+        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/popper.js/dist/")));
         this.app.use(compression());
         this.app.use(logger("dev"));
         this.app.use(bodyParser.json());
