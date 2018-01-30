@@ -29,12 +29,12 @@ class Server {
     }
     config() {
         this.app.use(express.static(path.join(__dirname, "../../public")));
-        this.app.set("views", path.join(__dirname, "../../views"));
-        this.app.set("view engine", "pug");
         this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/js/")));
         this.app.use("/styles", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/css/")));
         this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/jquery/dist/")));
         this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/popper.js/dist/")));
+        this.app.set("views", path.join(__dirname, "../../views"));
+        this.app.set("view engine", "pug");
         this.app.use(compression());
         this.app.use(logger("dev"));
         this.app.use(bodyParser.json());

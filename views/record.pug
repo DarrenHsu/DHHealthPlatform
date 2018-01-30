@@ -1,10 +1,11 @@
 extends layout
 
 block content
-  div.jumbotron.text-center
+  div.jumbotron
+    img(width="50px", src="/images/icon.png", style="margin-right:10px;float:left;")
     h1 #{title}
-  div.container.row
-    p.text-center 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
+  div.container
+    h3.text-center 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
     table.table
       thead
         th 項目
