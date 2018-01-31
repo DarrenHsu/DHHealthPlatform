@@ -19,6 +19,11 @@ html, body {
   padding: 0;
 }
 
+.headerIcon {
+  width: 50px;
+  border-radius: 50%;
+}
+
 .userPicture {
   width: 50px;
   border-radius: 50%;
