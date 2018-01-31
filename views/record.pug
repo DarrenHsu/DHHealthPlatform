@@ -9,7 +9,7 @@ block content
     each location in ls
       - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
     
-  div.container
+  div.container-fluid
     h3 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
     table.table.table-condensed
       thead
