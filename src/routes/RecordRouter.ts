@@ -68,21 +68,12 @@ export class RecordRouter extends BaseRoute {
 
     public index(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
         this.title = "DHHealthPlatform";
-
-        // var locations: Array<Location> = [];
-        // for(let location in record.locations) {
-        //     var l = {
-        //         lat: location[0], 
-        //         lng: location[1]
-        //     };
-        //     locations.push(l);
-        // }
-
         var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
         var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
         var endTimeStr = format(record.endTime, DHDateFormat.TIME_FORMAT);
         let options: Object = {
             "user": user.name,
+            "pictureUrl": user.pictureUrl,
             "name": record.name,
             "locality": record.locality,
             "dateStr": dateStr,

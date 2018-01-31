@@ -13,8 +13,24 @@ a {
   width: 100%;
 }
 
-  html, body {
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
 }
+
+.userPicture {
+  width: 80px;
+  border-radius: 50%;
+}
+
+h3 {
+  padding: 25px 0;
+  line-height: 80px;
+}
+
+.float {
+  margin-right:10px;
+  float:left;
+}
+  
