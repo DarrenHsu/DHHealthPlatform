@@ -2,6 +2,15 @@ table {
   font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+h5 {
+  vertical-align: middle
+}
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
 a {
   color: #00B7FF;
 }
@@ -11,6 +20,18 @@ a {
   min-height: 500px;
   height: 100%;
   width: 100%;
+  border-color: #43ad43;
+  border-style: solid;
+  border-width: 1px 1px;
+  border-radius: 15px;
+  z-index: 0;
+}
+
+.recordHeader {
+  text-align: left;
+  vertical-align: middle;
+  line-height: 50px;
+  height: 50px;
 }
 
 html, body {
@@ -27,10 +48,10 @@ html, body {
 .userPicture {
   width: 50px;
   border-radius: 50%;
+  padding: 5px;
 }
 
 .float {
   margin-right:10px;
   float:left;
-}
-  
+}  

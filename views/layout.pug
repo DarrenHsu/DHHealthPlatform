@@ -6,11 +6,13 @@ html
     script(src="/scripts/bootstrap.min.js" )
     script(src="/scripts/jquery.min.js" )
     script(src="/scripts/popper.min.js" )
-    link(rel="stylesheet", href="/stylesheets/style.css")
     link(rel='stylesheet', href="/styles/bootstrap.min.css")
+    link(rel="stylesheet", href="/stylesheets/style.css")
   body
     div.jumbotron
       img.headerIcon.float.image(src="/images/icon.png")
       h2 #{title}
-    
+
     block content
+
+    div.jumbotron

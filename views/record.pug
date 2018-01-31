@@ -1,7 +1,6 @@
 extends layout
 
 block content
-
   - var sLat = locations[0][0]
   - var sLng = locations[0][1]
   - var eLat = locations[locations.length - 1][0]
@@ -10,10 +9,9 @@ block content
   - var ls = locations
     each location in ls
       - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
-    
   div.container-fluid
     img.userPicture.float.image(src=pictureUrl)
-    h5 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
+    h5.recordHeader 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
     table.table.table-condensed
       thead
         th 項目
