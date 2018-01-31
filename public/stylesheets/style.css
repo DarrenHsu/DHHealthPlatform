@@ -24,11 +24,6 @@ html, body {
   border-radius: 50%;
 }
 
-h3 {
-  padding: 25px 0;
-  line-height: 80px;
-}
-
 .float {
   margin-right:10px;
   float:left;
