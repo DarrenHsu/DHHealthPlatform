@@ -17,90 +17,109 @@ export class BaseAPI extends BaseRoute {
 
     protected get(router: Router) {
         router.get(this.uri + "/:id", (req, res, next) => {
-            res.setHeader("Content-type", "application/json");
-
             if (!this.checkHeader(req)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                this.sendAuthFaild(res);
                 return;
             }
             
             if (!req.params.id) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+                this.sendParamsFaild(res);
                 return;
             }
 
             this.helper.list(req.params.id, (code, results) => {
-                res.json(BaseRoute.createResult(results, code));
+                this.sendSuccess(res, code);
             });
         });
     }
 
     protected put(router: Router) {
         router.put(this.uri + "/:id", (req, res, next) => {
-            res.setHeader("Content-type", "application/json");
-
             if (!this.checkHeader(req)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                this.sendAuthFaild(res);
                 return;
             }
 
             if (!req.params.id) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+                this.sendParamsFaild(res);
                 return;
             }
 
             if (!(req.body)) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
+                this.sendBodyFaild(res);
                 return;
             }
 
             this.helper.save(req.params.id, req.body, (code, result) => {
-                res.json(BaseRoute.createResult(result, code));
+                this.sendSuccess(res, code);
             });
         });
     }
 
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
-            res.setHeader("Content-type", "application/json");
-
             if (!this.checkHeader(req)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                this.sendAuthFaild(res);
                 return;
             }
             
             if (!req.body) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
+                this.sendBodyFaild(res);
                 return;
             }
 
             this.helper.add(req.body, (code, result) => {
-                res.json(BaseRoute.createResult(result, code));
+                this.sendSuccess(res, code);
             });
         });
     }
 
     protected delete(router: Router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
-            res.setHeader("Content-type", "application/json");
-
             if (!this.checkHeader(req)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+                this.sendAuthFaild(res);
                 return;
             }
 
             if (!req.params.id) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+                this.sendParamsFaild(res);
                 return;
             }
 
             this.helper.remove(req.params.id, (code) => {
-                res.json(BaseRoute.createResult(null, code));
+                this.sendSuccess(res, code);
             });
         });
+    }
+
+    protected sendSuccess(res: Response, code: number) {
+        res.setHeader("Content-type", "application/json");
+        res.json(BaseRoute.createResult(null, code));
+        res.end();
+    }
+
+    protected sendFaild(res: Response, code: number) {
+        res.setHeader("Content-type", "application/json");
+        res.json(BaseRoute.createResult(null, code));
+        res.end();
+    }
+
+    protected sendAuthFaild(res: Response) {
+        res.setHeader("Content-type", "application/json");
+        res.statusCode = 403;
+        res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+        res.end();
+    }
+
+    protected sendParamsFaild(res: Response) {
+        res.setHeader("Content-type", "application/json");
+        res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+        res.end();
+    }
+
+    protected sendBodyFaild(res: Response) {
+        res.setHeader("Content-type", "application/json");
+        res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
+        res.end();
     }
 }

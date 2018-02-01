@@ -17,14 +17,15 @@ import { IRecord } from "../../mongo/interface/IRecord";
 
 export class LineWebhookAPI extends BaseAPI {
     
-    private pkgjson = require("../../../package.json");
     protected uri = DHAPI.API_LINEBOT_PATH;
-    protected recordUrl = DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
-    protected messageUrl = DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
+
+    private pkgjson = require("../../../package.json");
+    private recordUrl = DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
+    private messageUrl = DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
-    protected chatroomHelper: ChatroomHelper;
-    protected recordHelper: RecordHelper;
+    private chatroomHelper: ChatroomHelper;
+    private recordHelper: RecordHelper;
 
     public static create(router: Router) {
         let api = new LineWebhookAPI(DBHelper.connection);
@@ -60,26 +61,10 @@ export class LineWebhookAPI extends BaseAPI {
         if (validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString())) {
             return true;
         }else {
-            DHLog.d("x-line-signature = " + req.headers["x-line-signature"]);
-            DHLog.d("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+            DHLog.ld("x-line-signature = " + req.headers["x-line-signature"]);
+            DHLog.ld("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
             return false;
         }
-    }
-
-    private saveChat(client: Client, lineUserId: string, chatId: string, type:string) {
-        var source = {
-            chatId: chatId,
-            lineUserId: lineUserId,
-            type: type
-        };
-
-        this.helper.add(source, null);
-        
-        client.getProfile(source.lineUserId).then((profile) => {
-            DHLog.d("profile " + JSON.stringify(profile));
-        }).catch((err) => {
-            DHLog.d("err " + err);
-        });
     }
 
     private getChatId(source: any): string {
@@ -96,12 +81,28 @@ export class LineWebhookAPI extends BaseAPI {
 
         return null;
     }
+    
+    private saveChat(lineUserId: string, chatId: string, type:string) {
+        var source = {
+            chatId: chatId,
+            lineUserId: lineUserId,
+            type: type
+        };
+
+        this.helper.add(source, null);
+        
+        let client = new Client(this.clientConfig);
+        client.getProfile(source.lineUserId).then((profile) => {
+            DHLog.ld("profile " + JSON.stringify(profile));
+        }).catch((err) => {
+            DHLog.ld("err " + err);
+        });
+    }
 
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req)) return;
             
-            let client = new Client(this.clientConfig);
             this.printRequestInfo(req);
             
             let event = req.body.events[0];
@@ -109,42 +110,29 @@ export class LineWebhookAPI extends BaseAPI {
                 var source = event.source;
                 var chatId = this.getChatId(source);
                 
-                this.saveChat(client, source.userId, chatId, source.type);
+                this.saveChat(source.userId, chatId, source.type);
             }
             res.statusCode = 200
             res.end()
-
-            // client.replyMessage(event.replyToken, {
-            //     type: "text",
-            //     text: "你好，我是回覆機器人",
-            // }).catch((err) => {
-            //     DHLog.d("replyMessage error " + err);
-            // });
-            // res.end();
         });
     }
 
     protected posthMessage(router: Router) {
         router.post(this.messageUrl, (req, res, next) => {
-            res.setHeader("Content-type", "application/json");
-
             if (!this.checkHeader(req)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
-                res.end();
+                this.sendAuthFaild(res);
                 return;
             }
             
             if (!req.body) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
-                res.end();
+                this.sendBodyFaild(res);
                 return;
             }
 
             let body = req.body;
             let lineUserId = body.lineUserId;
             let msg = body.msg;
-            DHLog.d(JSON.stringify(body));
+            DHLog.ld(JSON.stringify(body));
 
             this.chatroomHelper.list(lineUserId, (code, chats) => {
                 var message: TextMessage = {
@@ -153,8 +141,7 @@ export class LineWebhookAPI extends BaseAPI {
                 }
 
                 this.pushMessage(message, chats, () => {
-                    res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
-                    res.end();
+                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
                 });
             });
         });
@@ -162,26 +149,20 @@ export class LineWebhookAPI extends BaseAPI {
 
     protected postRecord(router: Router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
-            res.setHeader("Content-type", "application/json");
-
             if (!this.checkHeader(req)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
-                res.end();
+                this.sendAuthFaild(res);
                 return;
             }
             
             if (!req.params.recordId) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
-                res.end();
+                this.sendParamsFaild(res);
                 return;
             }
 
             let recordId = req.params.recordId;
             this.recordHelper.get(recordId, (code, record) => {
                 if (code != MONGODB_CODE.MC_SUCCESS) {
-                    res.json(BaseRoute.createResult(null, code));
-                    res.end();
+                    this.sendFaild(res, code);
                     return;
                 }
 
@@ -194,11 +175,21 @@ export class LineWebhookAPI extends BaseAPI {
                     }
                     
                     this.pushMessage(message, chats, () => {
-                        res.json(BaseRoute.createResult(null, LINE_CODE.LL_SUCCESS));
-                        res.end();
+                        this.sendSuccess(res, code);
                     });
                 });
             });
+        });
+    }
+
+    /* send message proces */
+    private replyMessageWithToken(token: string) {
+        let client = new Client(this.clientConfig);
+        client.replyMessage(token, {
+            type: "text",
+            text: "你好，我是回覆機器人",
+        }).catch((err) => {
+            DHLog.ld("replyMessage error " + err);
         });
     }
 
@@ -210,15 +201,15 @@ export class LineWebhookAPI extends BaseAPI {
         }
 
         var chat = chats[0];
-        DHLog.d("push " + chat.chatId);
-        DHLog.d("message" + JSON.stringify(message));
+        DHLog.ld("push " + chat.chatId);
+        DHLog.ld("message" + JSON.stringify(message));
 
         client.pushMessage(chat.chatId, message).then((value) => {
-            DHLog.d("push message success " + JSON.stringify(value));
+            DHLog.ld("push message success " + JSON.stringify(value));
             var array = chats.splice(0, 1);
             this.pushMessage(message, chats, callback);
         }).catch((err) => {
-            DHLog.d("" + err);
+            DHLog.ld("" + err);
             var array = chats.splice(0, 1);
             this.pushMessage(message, chats, callback);
         });
