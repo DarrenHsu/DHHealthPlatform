@@ -28,7 +28,7 @@ export class BaseAPI extends BaseRoute {
             }
 
             this.helper.list(req.params.id, (code, results) => {
-                this.sendSuccess(res, code);
+                this.sendSuccess(res, code, results);
             });
         });
     }
@@ -51,7 +51,7 @@ export class BaseAPI extends BaseRoute {
             }
 
             this.helper.save(req.params.id, req.body, (code, result) => {
-                this.sendSuccess(res, code);
+                this.sendSuccess(res, code, result);
             });
         });
     }
@@ -69,7 +69,7 @@ export class BaseAPI extends BaseRoute {
             }
 
             this.helper.add(req.body, (code, result) => {
-                this.sendSuccess(res, code);
+                this.sendSuccess(res, code, result);
             });
         });
     }
@@ -92,9 +92,11 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
-    protected sendSuccess(res: Response, code: number) {
+    protected sendSuccess(res: Response, code: number)
+    protected sendSuccess(res: Response, code: number, result: IBase)
+    protected sendSuccess(res: Response, code: number, result?: IBase) {
         res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute.createResult(null, code));
+        res.json(BaseRoute.createResult(result, code));
         res.end();
     }
 
