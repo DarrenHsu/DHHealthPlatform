@@ -37,9 +37,11 @@ class Server {
         this.app.set("view engine", "pug");
         this.app.use(compression());
         this.app.use(logger("dev"));
-        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.json({ limit: "50mb" }));
         this.app.use(bodyParser.urlencoded({
-            extended: true
+            limit: "50mb",
+            extended: true,
+            parameterLimit: 50000
         }));
         this.app.use(cookieParser("SECRET_GOES_HERE"));
         this.app.use(methodOverride());
