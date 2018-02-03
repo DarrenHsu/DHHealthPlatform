@@ -43,9 +43,9 @@ export class Server {
         this.app.set("view engine", "pug");
         this.app.use(compression());
         this.app.use(logger("dev"));
-        this.app.use(bodyParser.json({limit: "50mb"}) );
+        this.app.use(bodyParser.json({limit: "10mb"}) );
         this.app.use(bodyParser.urlencoded({
-            limit: "50mb",
+            limit: "10mb",
             extended: true,
             parameterLimit: 50000
         }));
