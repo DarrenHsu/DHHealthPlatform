@@ -8,7 +8,13 @@ export class LoginRoute extends BaseRoute {
     public static create(router: Router) {
         DHLog.d("[" + this.name + ":create] " + DHAPI.ROOT_PATH);
         router.get(DHAPI.LOGIN_PATH, (req: Request, res: Response, next: NextFunction) => {
+            var lineAuth = req.session["LINE-AUTH"];
+            DHLog.ld("lineAuth: " + lineAuth);
             new LoginRoute().index(req, res, next);
+        });
+
+        router.post(DHAPI.LOGIN_PROCESS_PATH, (req: Request, res: Response, next: NextFunction) => {
+            req.session["LINE-AUTH"] = "ThisIsALineTestAuthKey";
         });
     }
 

@@ -1,6 +1,7 @@
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
+import * as expressSession from "express-session";
 import * as compression from "compression";
 import * as logger from "morgan";
 import * as path from "path";
@@ -57,6 +58,11 @@ export class Server {
             next(err);
         });
         this.app.use(errorHandler());
+        this.app.use(expressSession({
+            secret: "DHLineLoginKey",
+            resave: false,
+            saveUninitialized: true
+        }));
     }
 
     private routes() {

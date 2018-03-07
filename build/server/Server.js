@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const expressSession = require("express-session");
 const compression = require("compression");
 const logger = require("morgan");
 const path = require("path");
@@ -51,6 +52,11 @@ class Server {
             next(err);
         });
         this.app.use(errorHandler());
+        this.app.use(expressSession({
+            secret: "DHLineLoginKey",
+            resave: false,
+            saveUninitialized: true
+        }));
     }
     routes() {
         let router = express.Router();

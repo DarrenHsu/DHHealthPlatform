@@ -5,6 +5,7 @@ class DHAPI {
 DHAPI.HOST_NAME = "https://dhhealthplatform.herokuapp.com";
 DHAPI.ROOT_PATH = "/";
 DHAPI.LOGIN_PATH = DHAPI.ROOT_PATH + "login";
+DHAPI.LOGIN_PROCESS_PATH = DHAPI.ROOT_PATH + "loginProcess";
 DHAPI.RECORD_PATH = DHAPI.ROOT_PATH + "record";
 DHAPI.API_PATH = DHAPI.ROOT_PATH + "api";
 DHAPI.API_RECORD_PATH = DHAPI.API_PATH + "/record";

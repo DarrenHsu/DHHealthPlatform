@@ -49,6 +49,7 @@
     "@types/cookie-parser": "^1.4.1",
     "@types/crypto-js": "^3.1.37",
     "@types/errorhandler": "0.0.30",
+    "@types/express-session": "^1.15.8",
     "@types/method-override": "0.0.31",
     "@types/mocha": "^2.2.44",
     "@types/mongodb": "^2.2.15",
