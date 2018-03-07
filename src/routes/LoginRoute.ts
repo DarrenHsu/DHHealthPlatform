@@ -7,7 +7,7 @@ export class LoginRoute extends BaseRoute {
     
     public static create(router: Router) {
         DHLog.d("[" + this.name + ":create] " + DHAPI.ROOT_PATH);
-        router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.LOGIN_PATH, (req: Request, res: Response, next: NextFunction) => {
             new LoginRoute().index(req, res, next);
         });
     }

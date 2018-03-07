@@ -6,7 +6,7 @@ const DHLog_1 = require("../util/DHLog");
 class LoginRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.ROOT_PATH);
-        router.get(DHAPI_1.DHAPI.ROOT_PATH, (req, res, next) => {
+        router.get(DHAPI_1.DHAPI.LOGIN_PATH, (req, res, next) => {
             new LoginRoute().index(req, res, next);
         });
     }
