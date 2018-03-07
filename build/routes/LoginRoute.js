@@ -15,6 +15,7 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             req.session["LINE-AUTH"] = "ThisIsALineTestAuthKey";
             var lineAuth = req.session["LINE-AUTH"];
             DHLog_1.DHLog.ld("set lineAuth: " + lineAuth);
+            new LoginRoute().index(req, res, next);
         });
     }
     constructor() {

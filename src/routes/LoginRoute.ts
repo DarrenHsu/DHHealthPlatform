@@ -17,6 +17,7 @@ export class LoginRoute extends BaseRoute {
             req.session["LINE-AUTH"] = "ThisIsALineTestAuthKey";
             var lineAuth = req.session["LINE-AUTH"];
             DHLog.ld("set lineAuth: " + lineAuth);
+            new LoginRoute().index(req, res, next);
         });
     }
 

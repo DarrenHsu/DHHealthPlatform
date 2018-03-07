@@ -1,7 +1,8 @@
 import * as bodyParser from "body-parser";
 import * as cookieParser from "cookie-parser";
 import * as express from "express";
-import * as expressSession from "express-session";
+import * as session from "express-session";
+import * as connectMongo from "connect-mongo";
 import * as compression from "compression";
 import * as logger from "morgan";
 import * as path from "path";
@@ -18,6 +19,8 @@ import { UserAPI } from "../routes/api/UserAPI";
 import { RouteAPI } from "../routes/api/RouteAPI";
 import { LineWebhookAPI } from "../routes/api/LineWebhookAPI"
 import { DHLog } from "../util/DHLog";
+
+var MongoStore = connectMongo(session);
 
 export class Server {
     private pkgjson = require("../../package.json");
@@ -58,10 +61,10 @@ export class Server {
             next(err);
         });
         this.app.use(errorHandler());
-        this.app.use(expressSession({
-            secret: "DHLineLoginKey",
-            resave: false,
-            saveUninitialized: true
+        this.app.use(session({
+            secret: "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567",
+            store: new MongoStore({url: "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9"}),
+            cookie: {maxAge: 60 * 1000}
         }));
     }
 

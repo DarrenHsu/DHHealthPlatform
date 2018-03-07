@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const express = require("express");
-const expressSession = require("express-session");
+const session = require("express-session");
+const connectMongo = require("connect-mongo");
 const compression = require("compression");
 const logger = require("morgan");
 const path = require("path");
@@ -17,6 +18,7 @@ const RecordAPI_1 = require("../routes/api/RecordAPI");
 const UserAPI_1 = require("../routes/api/UserAPI");
 const RouteAPI_1 = require("../routes/api/RouteAPI");
 const LineWebhookAPI_1 = require("../routes/api/LineWebhookAPI");
+var MongoStore = connectMongo(session);
 class Server {
     constructor() {
         this.pkgjson = require("../../package.json");
@@ -52,10 +54,10 @@ class Server {
             next(err);
         });
         this.app.use(errorHandler());
-        this.app.use(expressSession({
-            secret: "DHLineLoginKey",
-            resave: false,
-            saveUninitialized: true
+        this.app.use(session({
+            secret: "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567",
+            store: new MongoStore({ url: "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9" }),
+            cookie: { maxAge: 60 * 1000 }
         }));
     }
     routes() {
