@@ -11,8 +11,10 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             DHLog_1.DHLog.ld("lineAuth: " + lineAuth);
             new LoginRoute().index(req, res, next);
         });
-        router.post(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
+        router.get(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
             req.session["LINE-AUTH"] = "ThisIsALineTestAuthKey";
+            var lineAuth = req.session["LINE-AUTH"];
+            DHLog_1.DHLog.ld("set lineAuth: " + lineAuth);
         });
     }
     constructor() {
