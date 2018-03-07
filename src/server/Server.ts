@@ -9,6 +9,7 @@ import methodOverride = require("method-override");
 import mongoose = require("mongoose");
 import { DBHelper } from  "../mongo/helper/DBHelper";
 import { IndexRoute } from "../routes/IndexRoute";
+import { LoginRoute } from "../routes/LoginRoute";
 import { RecordRouter } from "../routes/RecordRouter";
 import { DHAPI } from "../const/DHAPI";
 import { RecordAPI } from "../routes/api/RecordAPI";
@@ -62,6 +63,7 @@ export class Server {
         let router: express.Router = express.Router();
 
         IndexRoute.create(router);
+        LoginRoute.create(router);
         RecordRouter.create(router);
         
         this.app.use(router);

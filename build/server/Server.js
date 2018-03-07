@@ -10,6 +10,7 @@ const errorHandler = require("errorhandler");
 const methodOverride = require("method-override");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
 const IndexRoute_1 = require("../routes/IndexRoute");
+const LoginRoute_1 = require("../routes/LoginRoute");
 const RecordRouter_1 = require("../routes/RecordRouter");
 const RecordAPI_1 = require("../routes/api/RecordAPI");
 const UserAPI_1 = require("../routes/api/UserAPI");
@@ -54,6 +55,7 @@ class Server {
     routes() {
         let router = express.Router();
         IndexRoute_1.IndexRoute.create(router);
+        LoginRoute_1.LoginRoute.create(router);
         RecordRouter_1.RecordRouter.create(router);
         this.app.use(router);
     }
