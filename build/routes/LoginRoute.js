@@ -27,6 +27,11 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
                 return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
             }
         });
+        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_KILL_PATH);
+        router.post(DHAPI_1.DHAPI.LOGIN_KILL_PATH, (req, res, next) => {
+            req.session.destroy;
+            return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
+        });
     }
     constructor() {
         super();
