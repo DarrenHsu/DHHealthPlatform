@@ -7,7 +7,16 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.ROOT_PATH);
         router.get(DHAPI_1.DHAPI.ROOT_PATH, (req, res, next) => {
-            new IndexRoute().index(req, res, next);
+            var isLogin = false;
+            if (req.session.account) {
+                isLogin = true;
+            }
+            if (isLogin) {
+                new IndexRoute().index(req, res, next);
+            }
+            else {
+                return res.redirect(DHAPI_1.DHAPI.LOGIN_INPUT_PATH);
+            }
         });
     }
     constructor() {
@@ -16,7 +25,9 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
     index(req, res, next) {
         this.title = "Home | DHHealthPlatform | index";
         let options = {
-            "message": "Welcome to the Index"
+            "message": "Welcome to the Index",
+            "account": req.session.account,
+            "loginTime": req.session.time
         };
         this.render(req, res, "index", options);
     }

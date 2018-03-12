@@ -57,6 +57,8 @@ class Server {
         this.app.use(session({
             secret: "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567",
             store: new MongoStore({ url: "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9" }),
+            resave: false,
+            saveUninitialized: true,
             cookie: { maxAge: 60 * 1000 }
         }));
     }

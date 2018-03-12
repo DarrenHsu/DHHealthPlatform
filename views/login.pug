@@ -1,10 +1,12 @@
 extends layout
 
 block content
-    from(action="/loginProcess" method="post")
-        p
+    form(class="form-inline", action="/login/process", method="post")
+        div
             | 帳號：
-            input(type="text", name="account", value="")
+            input(type="text", name="user[account]", value="", placeholder="請輸入帳號")
+            br
             | 密碼：
-            input(type="text", name="password", value="")
-        input(type='submit', value="登入")
+            input(type="text", name="user[password]", value="", placeholder="請輸入密碼")
+            input(type="submit", value="登入", class="btn btn-default")
+        
