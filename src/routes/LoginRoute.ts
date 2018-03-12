@@ -33,9 +33,13 @@ export class LoginRoute extends BaseRoute {
         DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_KILL_PATH);
         router.get(DHAPI.LOGIN_KILL_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (req.session.account) {
-                DHLog.d(req.session.account + "logout");
+                DHLog.d(req.session.account + " logout");
             }
-            req.session.destroy;
+            req.session.destroy((err) => {
+                if (err) {
+                    DHLog.d("session destroy error:" + err);
+                }
+            });
             return res.redirect(DHAPI.ROOT_PATH);
         });
     }
