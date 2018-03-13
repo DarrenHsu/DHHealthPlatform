@@ -32,7 +32,7 @@ export class IndexRoute extends BaseRoute {
                 "client_id=" + channelId + "&" +
                 "redirect_uri=" + authUrl + "&" +
                 "state=" + "2018031300001" + "&"
-                "scope=openid";;
+                "scope=profile";;
 
                 DHLog.d("lineApi " + lineApi);
                 
