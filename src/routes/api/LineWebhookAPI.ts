@@ -131,6 +131,7 @@ export class LineWebhookAPI extends BaseAPI {
         router.get(this.authorizationUrl, (req, res, next) => {
             DHLog.d("getAuthorization");
             DHLog.d("req.params " + req.params);
+            res.end();
         });
     }
 

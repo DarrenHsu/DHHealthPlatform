@@ -31,8 +31,8 @@ export class IndexRoute extends BaseRoute {
                 lineApi += "?response_type=code" + "&" +
                 "client_id=" + channelId + "&" +
                 "redirect_uri=" + authUrl + "&" +
-                "state=" + "2018031300001" + "&"
-                "scope=profile";;
+                "state=" + "2018031300001" + "&" +
+                "scope=profile";
 
                 DHLog.d("lineApi " + lineApi);
                 

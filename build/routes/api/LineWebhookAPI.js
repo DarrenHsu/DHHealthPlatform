@@ -103,6 +103,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         router.get(this.authorizationUrl, (req, res, next) => {
             DHLog_1.DHLog.d("getAuthorization");
             DHLog_1.DHLog.d("req.params " + req.params);
+            res.end();
         });
     }
     /*
