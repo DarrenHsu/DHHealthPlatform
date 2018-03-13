@@ -13,10 +13,11 @@ const DHAPI_1 = require("../../const/DHAPI");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();
-        this.uri = DHAPI_1.DHAPI.API_LINEBOT_PATH;
         this.pkgjson = require("../../../package.json");
+        this.uri = DHAPI_1.DHAPI.API_LINEBOT_PATH;
         this.recordUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
         this.messageUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
+        this.authorizationUrl = DHAPI_1.DHAPI.API_LINELAUTH_PATH;
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
@@ -75,6 +76,36 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             DHLog_1.DHLog.ld("err " + err);
         });
     }
+    pushMessage(message, chats, callback) {
+        let client = new bot_sdk_1.Client(this.clientConfig);
+        if (chats.length == 0) {
+            if (callback)
+                callback();
+            return;
+        }
+        var chat = chats[0];
+        DHLog_1.DHLog.ld("push " + chat.chatId);
+        DHLog_1.DHLog.ld("message" + JSON.stringify(message));
+        client.pushMessage(chat.chatId, message).then((value) => {
+            DHLog_1.DHLog.ld("push message success " + JSON.stringify(value));
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        }).catch((err) => {
+            DHLog_1.DHLog.ld("" + err);
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        });
+    }
+    /*
+    * @description 取得line web login 授權
+    */
+    getAuthorization(router) {
+        router.get(this.authorizationUrl, (req, res, next) => {
+        });
+    }
+    /*
+    * @description 取得line message 回呼程式
+    */
     post(router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req))
@@ -90,6 +121,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             res.end();
         });
     }
+    /*
+    * @description 發送line message
+    */
     posthMessage(router) {
         router.post(this.messageUrl, (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -115,6 +149,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             });
         });
     }
+    /*
+    * @description 發送紀錄至line
+    */
     postRecord(router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -144,7 +181,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             });
         });
     }
-    /* send message proces */
+    /*
+    * @description 回覆訊息處理
+    */
     replyMessageWithToken(token) {
         let client = new bot_sdk_1.Client(this.clientConfig);
         client.replyMessage(token, {
@@ -152,26 +191,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             text: "你好，我是回覆機器人",
         }).catch((err) => {
             DHLog_1.DHLog.ld("replyMessage error " + err);
-        });
-    }
-    pushMessage(message, chats, callback) {
-        let client = new bot_sdk_1.Client(this.clientConfig);
-        if (chats.length == 0) {
-            if (callback)
-                callback();
-            return;
-        }
-        var chat = chats[0];
-        DHLog_1.DHLog.ld("push " + chat.chatId);
-        DHLog_1.DHLog.ld("message" + JSON.stringify(message));
-        client.pushMessage(chat.chatId, message).then((value) => {
-            DHLog_1.DHLog.ld("push message success " + JSON.stringify(value));
-            var array = chats.splice(0, 1);
-            this.pushMessage(message, chats, callback);
-        }).catch((err) => {
-            DHLog_1.DHLog.ld("" + err);
-            var array = chats.splice(0, 1);
-            this.pushMessage(message, chats, callback);
         });
     }
 }

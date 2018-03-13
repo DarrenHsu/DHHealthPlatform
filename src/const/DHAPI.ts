@@ -13,11 +13,9 @@ export class DHAPI {
     public static API_USER_PATH =                   DHAPI.API_PATH + "/user";
     public static API_ROUTE_PATH =                  DHAPI.API_PATH + "/route";
     
-    public static API_LINELAUTH_PATH =                DHAPI.API_PATH + "/lineauth";
+    public static API_LINELAUTH_PATH =              DHAPI.API_PATH + "/lineauth";
 
     public static API_LINEBOT_PATH =                DHAPI.API_PATH + "/linebot";
     public static API_LINEBOT_PUSH_RECORD_PATH =    DHAPI.API_LINEBOT_PATH + "/push/record";
     public static API_LINEBOT_PUSH_MESSAGE_PATH =   DHAPI.API_LINEBOT_PATH + "/push/message";
-
-    
 }

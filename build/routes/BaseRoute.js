@@ -8,14 +8,23 @@ class BaseRoute {
         this.title = "DHHealthPlatform";
         this.scripts = [];
     }
+    /*
+    * @description 確認參數是否處合授權要求
+    */
     checkParam(auth, value) {
         return this.checkValue(auth, value);
     }
+    /*
+    * @description 確認header是否符合授權要求
+    */
     checkHeader(req) {
         var auth = req.get("Authorization");
         var verfy = req.get("verfy");
         return this.checkValue(auth, verfy);
     }
+    /*
+    * @description 確認授權要求
+    */
     checkValue(auth, verfy) {
         if (auth == BaseRoute.FEED_AUTH_PASS)
             return true;

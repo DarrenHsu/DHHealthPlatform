@@ -15,6 +15,9 @@ export class BaseAPI extends BaseRoute {
 
     public static create(router: Router) {}
 
+    /*
+    * @description 取得資料處理程序
+    */
     protected get(router: Router) {
         router.get(this.uri + "/:id", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -33,6 +36,9 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
+    /*
+    * @description 修改資料處理程序
+    */
     protected put(router: Router) {
         router.put(this.uri + "/:id", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -56,6 +62,9 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
+    /*
+    * @description 儲存資料處理程序
+    */
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -74,6 +83,9 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
+    /*
+    * @description 刪除資料處理程序
+    */
     protected delete(router: Router) {
         router.delete(this.uri + "/:id", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -92,6 +104,9 @@ export class BaseAPI extends BaseRoute {
         });
     }
 
+    /*
+    * @description 回傳成功處理程序
+    */
     protected sendSuccess(res: Response, code: number)
     protected sendSuccess(res: Response, code: number, result: IBase)
     protected sendSuccess(res: Response, code: number, result?: IBase) {
@@ -100,12 +115,18 @@ export class BaseAPI extends BaseRoute {
         res.end();
     }
 
+    /*
+    * @description 回傳失敗處理程序
+    */
     protected sendFaild(res: Response, code: number) {
         res.setHeader("Content-type", "application/json");
         res.json(BaseRoute.createResult(null, code));
         res.end();
     }
 
+    /*
+    * @description 回傳授權失敗處理程序
+    */
     protected sendAuthFaild(res: Response) {
         res.setHeader("Content-type", "application/json");
         res.statusCode = 403;
@@ -113,12 +134,18 @@ export class BaseAPI extends BaseRoute {
         res.end();
     }
 
+    /*
+    * @description 回傳參數錯誤處理程序
+    */
     protected sendParamsFaild(res: Response) {
         res.setHeader("Content-type", "application/json");
         res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
         res.end();
     }
 
+    /*
+    * @description 回傳接收資料錯誤處理程序
+    */
     protected sendBodyFaild(res: Response) {
         res.setHeader("Content-type", "application/json");
         res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));

@@ -18,16 +18,25 @@ export class BaseRoute {
         this.scripts = [];
     }
 
+    /*
+    * @description 確認參數是否處合授權要求
+    */
     protected checkParam(auth: string, value: string): Boolean {
         return this.checkValue(auth, value);
     }
 
+    /*
+    * @description 確認header是否符合授權要求
+    */
     protected checkHeader(req: Request): Boolean {
         var auth: string = req.get("Authorization");
         var verfy: string = req.get("verfy");
         return this.checkValue(auth, verfy);
     }
 
+    /*
+    * @description 確認授權要求
+    */
     protected checkValue(auth: string, verfy: string): Boolean {
         if (auth == BaseRoute.FEED_AUTH_PASS) 
             return true;

@@ -17,13 +17,16 @@ import { IRecord } from "../../mongo/interface/IRecord";
 
 export class LineWebhookAPI extends BaseAPI {
     
-    protected uri = DHAPI.API_LINEBOT_PATH;
-
     private pkgjson = require("../../../package.json");
+    
+    protected uri = DHAPI.API_LINEBOT_PATH;
     private recordUrl = DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
     private messageUrl = DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
+    private authorizationUrl = DHAPI.API_LINELAUTH_PATH;
+
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
+
     private chatroomHelper: ChatroomHelper;
     private recordHelper: RecordHelper;
 
@@ -36,7 +39,7 @@ export class LineWebhookAPI extends BaseAPI {
         api.posthMessage(router);
     }
 
-    public static getSignature(body: string, screat: string): string {
+    private static getSignature(body: string, screat: string): string {
         let signature = createHmac('SHA256', screat).update(body).digest('base64');
         return signature;
     }
@@ -99,6 +102,42 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
+    private pushMessage(message: TextMessage, chats: IChatroom[], callback?: () => void) {
+        let client = new Client(this.clientConfig);
+        if (chats.length == 0)  {
+            if (callback) callback();
+            return;
+        }
+
+        var chat = chats[0];
+        DHLog.ld("push " + chat.chatId);
+        DHLog.ld("message" + JSON.stringify(message));
+
+        client.pushMessage(chat.chatId, message).then((value) => {
+            DHLog.ld("push message success " + JSON.stringify(value));
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        }).catch((err) => {
+            DHLog.ld("" + err);
+            var array = chats.splice(0, 1);
+            this.pushMessage(message, chats, callback);
+        });
+                    
+    }
+
+    /*
+    * @description 取得line web login 授權
+    */
+    protected getAuthorization(router: Router) {
+        router.get(this.authorizationUrl, (req, res, next) => {
+            
+
+        });
+    }
+
+    /*
+    * @description 取得line message 回呼程式
+    */
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req)) return;
@@ -117,6 +156,9 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
+    /*
+    * @description 發送line message 
+    */
     protected posthMessage(router: Router) {
         router.post(this.messageUrl, (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -147,6 +189,9 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
+    /*
+    * @description 發送紀錄至line
+    */
     protected postRecord(router: Router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -182,7 +227,9 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    /* send message proces */
+    /*
+    * @description 回覆訊息處理
+    */
     private replyMessageWithToken(token: string) {
         let client = new Client(this.clientConfig);
         client.replyMessage(token, {
@@ -191,28 +238,5 @@ export class LineWebhookAPI extends BaseAPI {
         }).catch((err) => {
             DHLog.ld("replyMessage error " + err);
         });
-    }
-
-    private pushMessage(message: TextMessage, chats: IChatroom[], callback?: () => void) {
-        let client = new Client(this.clientConfig);
-        if (chats.length == 0)  {
-            if (callback) callback();
-            return;
-        }
-
-        var chat = chats[0];
-        DHLog.ld("push " + chat.chatId);
-        DHLog.ld("message" + JSON.stringify(message));
-
-        client.pushMessage(chat.chatId, message).then((value) => {
-            DHLog.ld("push message success " + JSON.stringify(value));
-            var array = chats.splice(0, 1);
-            this.pushMessage(message, chats, callback);
-        }).catch((err) => {
-            DHLog.ld("" + err);
-            var array = chats.splice(0, 1);
-            this.pushMessage(message, chats, callback);
-        });
-                    
     }
 }
