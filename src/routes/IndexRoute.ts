@@ -18,7 +18,9 @@ export class IndexRoute extends BaseRoute {
                 new IndexRoute().index(req, res, next);
             }else {
                 var hostname = os.hostname;
+                var host = req.host
                 DHLog.d("hostname " + hostname);
+                DHLog.d("host " + host);
                 return res.redirect(DHAPI.LOGIN_INPUT_PATH);
             }
         });
