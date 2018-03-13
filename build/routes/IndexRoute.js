@@ -24,10 +24,11 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
                 var lineApi = LINEAPI_1.LINEAPI.API_AUTH;
                 var channelId = DHAPI_1.DHAPI.pkgjson.linebot.channelId;
                 var channelSecret = DHAPI_1.DHAPI.pkgjson.linebot.channelSecret;
-                lineApi += "?response_type=dhhealthplatform" + "&" +
+                lineApi += "?response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
-                    "scope=openid%20profile";
+                    "scope=openid%20profile" + "&" +
+                    "nonce=0953116641";
                 DHLog_1.DHLog.d("lineApi " + lineApi);
                 return res.redirect(lineApi);
             }

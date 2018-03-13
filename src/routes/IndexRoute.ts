@@ -28,10 +28,11 @@ export class IndexRoute extends BaseRoute {
                 var channelId = DHAPI.pkgjson.linebot.channelId;
                 var channelSecret = DHAPI.pkgjson.linebot.channelSecret;
 
-                lineApi += "?response_type=dhhealthplatform" + "&" +
+                lineApi += "?response_type=code" + "&" +
                 "client_id=" + channelId + "&" +
                 "redirect_uri=" + authUrl + "&" +
-                "scope=openid%20profile";
+                "scope=openid%20profile" + "&" +
+                "nonce=0953116641";
 
                 DHLog.d("lineApi " + lineApi);
                 
