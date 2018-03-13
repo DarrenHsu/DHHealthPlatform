@@ -27,8 +27,9 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
                 lineApi += "?response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
-                    "scope=openid%20profile" + "&" +
-                    "nonce=0953116641";
+                    "state=" + "2018031300001" + "&";
+                "scope=openid%20profile";
+                ;
                 DHLog_1.DHLog.d("lineApi " + lineApi);
                 return res.redirect(lineApi);
             }
