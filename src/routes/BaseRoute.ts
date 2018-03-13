@@ -19,6 +19,13 @@ export class BaseRoute {
     }
 
     /*
+    * @description 取得 full hostname
+    */
+    protected static getFullHostUrl(req: Request): String {
+        return req.protocol + "://" + req.host; 
+    }
+
+    /*
     * @description 確認參數是否處合授權要求
     */
     protected checkParam(auth: string, value: string): Boolean {

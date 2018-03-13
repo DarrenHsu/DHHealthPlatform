@@ -3,6 +3,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/DHAPI";
 import { DHLog } from "../util/DHLog";
+import { LoginRoute } from "./LoginRoute";
 
 export class IndexRoute extends BaseRoute {
     
@@ -17,10 +18,10 @@ export class IndexRoute extends BaseRoute {
             if (isLogin) {
                 new IndexRoute().index(req, res, next);
             }else {
-                var hostname = os.hostname;
-                var host = req.host
-                DHLog.d("hostname " + hostname);
-                DHLog.d("host " + host);
+                var fullUrl = this.getFullHostUrl(req);
+                DHLog.d("fullUrl " + fullUrl);
+                var authUrl = fullUrl + DHAPI.API_LINELAUTH_PATH;
+                DHLog.d("authUrl " + authUrl);
                 return res.redirect(DHAPI.LOGIN_INPUT_PATH);
             }
         });

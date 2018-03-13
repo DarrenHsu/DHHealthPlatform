@@ -9,6 +9,12 @@ class BaseRoute {
         this.scripts = [];
     }
     /*
+    * @description 取得 full hostname
+    */
+    static getFullHostUrl(req) {
+        return req.protocol + "://" + req.host;
+    }
+    /*
     * @description 確認參數是否處合授權要求
     */
     checkParam(auth, value) {
