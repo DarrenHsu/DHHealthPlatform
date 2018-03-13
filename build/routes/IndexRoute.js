@@ -22,8 +22,8 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
                 authUrl = encodeURIComponent(authUrl);
                 DHLog_1.DHLog.d("authUrl " + authUrl);
                 var lineApi = LINEAPI_1.LINEAPI.API_AUTH;
-                var channelId = DHAPI_1.DHAPI.pkgjson.linebot.channelId;
-                var channelSecret = DHAPI_1.DHAPI.pkgjson.linebot.channelSecret;
+                var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
+                var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
                 lineApi += "?response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +

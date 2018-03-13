@@ -16,6 +16,10 @@
       "server": "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9"
     }
   ],
+  "linelogin": {
+    "channelId": "1549556007",
+    "channelSecret": "e74ea29dce8783f0ef3b8b9ed2a7338f",
+  },
   "linebot": {
     "channelId": "1548932553",
     "channelSecret": "8df80d78f3d160f7f79c610e42f50208",

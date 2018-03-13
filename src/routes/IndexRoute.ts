@@ -25,8 +25,8 @@ export class IndexRoute extends BaseRoute {
                 authUrl =  encodeURIComponent(authUrl);
                 DHLog.d("authUrl " + authUrl);
                 var lineApi = LINEAPI.API_AUTH;
-                var channelId = DHAPI.pkgjson.linebot.channelId;
-                var channelSecret = DHAPI.pkgjson.linebot.channelSecret;
+                var channelId = DHAPI.pkgjson.linelogin.channelId;
+                var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
 
                 lineApi += "?response_type=code" + "&" +
                 "client_id=" + channelId + "&" +
