@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
+const LINEAPI_1 = require("../const/LINEAPI");
 const DHLog_1 = require("../util/DHLog");
 class IndexRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
@@ -20,7 +21,14 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
                 var authUrl = fullUrl + DHAPI_1.DHAPI.API_LINELAUTH_PATH;
                 authUrl = encodeURIComponent(authUrl);
                 DHLog_1.DHLog.d("authUrl " + authUrl);
-                return res.redirect(DHAPI_1.DHAPI.LOGIN_INPUT_PATH);
+                var lineApi = LINEAPI_1.LINEAPI.API_AUTH;
+                var channelAccessToken = DHAPI_1.DHAPI.pkgjson.linebot.channelAccessToken;
+                var channelSecret = DHAPI_1.DHAPI.pkgjson.linebot.channelSecret;
+                lineApi += "response_type=dhhealthplatform" + "&" +
+                    "client_id=" + channelAccessToken + "&" +
+                    "redirect_uri=" + authUrl + "&" +
+                    "scope=openid%20profile";
+                return res.redirect(lineApi);
             }
         });
     }

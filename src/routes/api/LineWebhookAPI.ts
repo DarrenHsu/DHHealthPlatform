@@ -17,8 +17,6 @@ import { IRecord } from "../../mongo/interface/IRecord";
 
 export class LineWebhookAPI extends BaseAPI {
     
-    private pkgjson = require("../../../package.json");
-    
     protected uri = DHAPI.API_LINEBOT_PATH;
     private recordUrl = DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
     private messageUrl = DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
@@ -33,10 +31,11 @@ export class LineWebhookAPI extends BaseAPI {
     public static create(router: Router) {
         let api = new LineWebhookAPI(DBHelper.connection);
         DHLog.d("[" + this.name + ":create] " + api.uri);
-
+        
         api.post(router);
         api.postRecord(router);
         api.posthMessage(router);
+        api.getAuthorization(router);
     }
 
     private static getSignature(body: string, screat: string): string {
@@ -52,11 +51,11 @@ export class LineWebhookAPI extends BaseAPI {
         this.chatroomHelper = new ChatroomHelper(connection);
 
         this.clientConfig = {
-            channelAccessToken: this.pkgjson.linebot.channelAccessToken
+            channelAccessToken: DHAPI.pkgjson.linebot.channelAccessToken
         }
 
         this.middlewareConfig = {
-            channelSecret: this.pkgjson.linebot.channelSecret
+            channelSecret: DHAPI.pkgjson.linebot.channelSecret
         }
     }
 
@@ -130,8 +129,8 @@ export class LineWebhookAPI extends BaseAPI {
     */
     protected getAuthorization(router: Router) {
         router.get(this.authorizationUrl, (req, res, next) => {
-            
-
+            DHLog.d("getAuthorization");
+            DHLog.d("req.params " + req.params);
         });
     }
 

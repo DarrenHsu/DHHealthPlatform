@@ -13,7 +13,6 @@ const DHAPI_1 = require("../../const/DHAPI");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();
-        this.pkgjson = require("../../../package.json");
         this.uri = DHAPI_1.DHAPI.API_LINEBOT_PATH;
         this.recordUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
         this.messageUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
@@ -22,10 +21,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.clientConfig = {
-            channelAccessToken: this.pkgjson.linebot.channelAccessToken
+            channelAccessToken: DHAPI_1.DHAPI.pkgjson.linebot.channelAccessToken
         };
         this.middlewareConfig = {
-            channelSecret: this.pkgjson.linebot.channelSecret
+            channelSecret: DHAPI_1.DHAPI.pkgjson.linebot.channelSecret
         };
     }
     static create(router) {
@@ -34,6 +33,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.post(router);
         api.postRecord(router);
         api.posthMessage(router);
+        api.getAuthorization(router);
     }
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
@@ -101,6 +101,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     */
     getAuthorization(router) {
         router.get(this.authorizationUrl, (req, res, next) => {
+            DHLog_1.DHLog.d("getAuthorization");
+            DHLog_1.DHLog.d("req.params " + req.params);
         });
     }
     /*

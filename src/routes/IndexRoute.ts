@@ -2,6 +2,7 @@ import os = require("os");
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/DHAPI";
+import { LINEAPI } from "../const/LINEAPI";
 import { DHLog } from "../util/DHLog";
 import { LoginRoute } from "./LoginRoute";
 
@@ -23,8 +24,16 @@ export class IndexRoute extends BaseRoute {
                 var authUrl = fullUrl + DHAPI.API_LINELAUTH_PATH;
                 authUrl =  encodeURIComponent(authUrl);
                 DHLog.d("authUrl " + authUrl);
+                var lineApi = LINEAPI.API_AUTH;
+                var channelAccessToken = DHAPI.pkgjson.linebot.channelAccessToken;
+                var channelSecret = DHAPI.pkgjson.linebot.channelSecret;
+
+                lineApi += "response_type=dhhealthplatform" + "&" +
+                "client_id=" + channelAccessToken + "&" +
+                "redirect_uri=" + authUrl + "&" +
+                "scope=openid%20profile";
                 
-                return res.redirect(DHAPI.LOGIN_INPUT_PATH);
+                return res.redirect(lineApi);
             }
         });
     }
