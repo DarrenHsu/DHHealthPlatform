@@ -21,7 +21,9 @@ export class IndexRoute extends BaseRoute {
                 var fullUrl = this.getFullHostUrl(req);
                 DHLog.d("fullUrl " + fullUrl);
                 var authUrl = fullUrl + DHAPI.API_LINELAUTH_PATH;
+                authUrl =  encodeURIComponent(authUrl);
                 DHLog.d("authUrl " + authUrl);
+                
                 return res.redirect(DHAPI.LOGIN_INPUT_PATH);
             }
         });
