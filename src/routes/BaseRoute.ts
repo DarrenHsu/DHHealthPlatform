@@ -22,7 +22,7 @@ export class BaseRoute {
     * @description 取得 full hostname
     */
     protected static getFullHostUrl(req: Request): String {
-        return req.protocol + "://" + req.host; 
+        return req.protocol + "s://" + req.host; 
     }
 
     /*

@@ -12,7 +12,7 @@ class BaseRoute {
     * @description 取得 full hostname
     */
     static getFullHostUrl(req) {
-        return req.protocol + "://" + req.host;
+        return req.protocol + "s://" + req.host;
     }
     /*
     * @description 確認參數是否處合授權要求
