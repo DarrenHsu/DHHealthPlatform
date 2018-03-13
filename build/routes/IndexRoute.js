@@ -17,18 +17,15 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
             }
             else {
                 var fullUrl = this.getFullHostUrl(req);
-                DHLog_1.DHLog.d("fullUrl " + fullUrl);
-                var authUrl = fullUrl + DHAPI_1.DHAPI.API_LINELAUTH_PATH;
-                authUrl = encodeURIComponent(authUrl);
-                DHLog_1.DHLog.d("authUrl " + authUrl);
-                var lineApi = LINEAPI_1.LINEAPI.API_AUTH;
+                var authUrl = encodeURIComponent(fullUrl + DHAPI_1.DHAPI.API_LINELAUTH_PATH);
                 var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
                 var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
-                lineApi += "?response_type=code" + "&" +
+                var lineApi = LINEAPI_1.LINEAPI.API_AUTH + "?" +
+                    "response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
                     "state=" + "2018031300001" + "&" +
-                    "scope=profile";
+                    "scope=openid";
                 DHLog_1.DHLog.d("lineApi " + lineApi);
                 return res.redirect(lineApi);
             }
