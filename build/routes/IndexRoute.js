@@ -22,10 +22,10 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
                 authUrl = encodeURIComponent(authUrl);
                 DHLog_1.DHLog.d("authUrl " + authUrl);
                 var lineApi = LINEAPI_1.LINEAPI.API_AUTH;
-                var channelAccessToken = DHAPI_1.DHAPI.pkgjson.linebot.channelAccessToken;
+                var channelId = DHAPI_1.DHAPI.pkgjson.linebot.channelId;
                 var channelSecret = DHAPI_1.DHAPI.pkgjson.linebot.channelSecret;
                 lineApi += "response_type=dhhealthplatform" + "&" +
-                    "client_id=" + channelAccessToken + "&" +
+                    "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
                     "scope=openid%20profile";
                 DHLog_1.DHLog.d("lineApi " + lineApi);
