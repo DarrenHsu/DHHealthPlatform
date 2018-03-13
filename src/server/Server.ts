@@ -6,7 +6,6 @@ import * as connectMongo from "connect-mongo";
 import * as compression from "compression";
 import * as logger from "morgan";
 import * as path from "path";
-import os = require("os");
 import errorHandler = require("errorhandler");
 import methodOverride = require("method-override");
 import mongoose = require("mongoose");
@@ -40,9 +39,6 @@ export class Server {
     }
 
     public config() {
-        var hostname = os.hostname();
-        DHLog.d("domain " + hostname);
-
         this.app.use(express.static(path.join(__dirname, "../../public")));
         this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/js/")));
         this.app.use("/styles", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/css/")));

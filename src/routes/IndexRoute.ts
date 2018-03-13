@@ -1,3 +1,4 @@
+import os = require("os");
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/DHAPI";
@@ -16,6 +17,8 @@ export class IndexRoute extends BaseRoute {
             if (isLogin) {
                 new IndexRoute().index(req, res, next);
             }else {
+                var hostname = os.hostname;
+                DHLog.d("hostname " + hostname);
                 return res.redirect(DHAPI.LOGIN_INPUT_PATH);
             }
         });

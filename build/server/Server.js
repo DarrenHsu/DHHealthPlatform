@@ -8,7 +8,6 @@ const connectMongo = require("connect-mongo");
 const compression = require("compression");
 const logger = require("morgan");
 const path = require("path");
-const os = require("os");
 const errorHandler = require("errorhandler");
 const methodOverride = require("method-override");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
@@ -19,7 +18,6 @@ const RecordAPI_1 = require("../routes/api/RecordAPI");
 const UserAPI_1 = require("../routes/api/UserAPI");
 const RouteAPI_1 = require("../routes/api/RouteAPI");
 const LineWebhookAPI_1 = require("../routes/api/LineWebhookAPI");
-const DHLog_1 = require("../util/DHLog");
 var MongoStore = connectMongo(session);
 class Server {
     constructor() {
@@ -34,8 +32,6 @@ class Server {
         return new Server();
     }
     config() {
-        var hostname = os.hostname();
-        DHLog_1.DHLog.d("domain " + hostname);
         this.app.use(express.static(path.join(__dirname, "../../public")));
         this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/js/")));
         this.app.use("/styles", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/css/")));
