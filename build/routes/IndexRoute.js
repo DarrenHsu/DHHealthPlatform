@@ -24,7 +24,7 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
                 var lineApi = LINEAPI_1.LINEAPI.API_AUTH;
                 var channelId = DHAPI_1.DHAPI.pkgjson.linebot.channelId;
                 var channelSecret = DHAPI_1.DHAPI.pkgjson.linebot.channelSecret;
-                lineApi += "response_type=dhhealthplatform" + "&" +
+                lineApi += "?response_type=dhhealthplatform" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
                     "scope=openid%20profile";
