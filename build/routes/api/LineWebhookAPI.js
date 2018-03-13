@@ -102,14 +102,14 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     getAuthorization(router) {
         router.get(this.authorizationUrl, (req, res, next) => {
             DHLog_1.DHLog.ld("LINE AUTH getAuthorization");
-            var error = req.param("error");
+            var error = req.query("error");
             if (error) {
                 DHLog_1.DHLog.ld("error " + error);
                 res.end();
                 return;
             }
-            var state = req.param("state");
-            var code = req.param("code");
+            var state = req.query["state"];
+            var code = req.query("code");
             if (state && code) {
                 DHLog_1.DHLog.ld("state " + state);
                 DHLog_1.DHLog.ld("code " + code);
