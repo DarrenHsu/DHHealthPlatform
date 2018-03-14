@@ -38,7 +38,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.getAuthorization(router);
-        api.postAuthorization(router);
     }
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
@@ -102,23 +101,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         });
     }
     /*
-    * @description 取得line access token
-    */
-    postAuthorization(router) {
-        router.post(this.authorizationUrl, (req, res, next) => {
-            DHLog_1.DHLog.ld("Post Access Token");
-            res.end();
-            // /* Get Profile Data */
-            // request.get("", (error, response, body) => {
-            //     if (error) {
-            //         res.end();
-            //         return;
-            //     }
-            //     res.end();
-            // });
-        });
-    }
-    /*
     * @description 取得line web login 授權
     */
     getAuthorization(router) {
@@ -160,7 +142,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
             };
-            DHLog_1.DHLog.ld("Call Get Access Token " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
+            DHLog_1.DHLog.ld("call Get Access Token " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
             DHLog_1.DHLog.ld("option " + JSON.stringify(option));
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
@@ -168,6 +150,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 }
                 else {
                     DHLog_1.DHLog.ld("callback success " + body);
+                    DHLog_1.DHLog.ld("header alg " + res.header("alg"));
                 }
                 res.end();
             });

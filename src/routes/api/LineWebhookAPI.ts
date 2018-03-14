@@ -39,7 +39,6 @@ export class LineWebhookAPI extends BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.getAuthorization(router);
-        api.postAuthorization(router);
     }
 
     private static getSignature(body: string, screat: string): string {
@@ -128,27 +127,6 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     /*
-    * @description 取得line access token 
-    */
-    protected postAuthorization(router: Router) {
-        router.post(this.authorizationUrl, (req, res, next) => {
-            DHLog.ld("Post Access Token");
-
-            res.end();
-
-            // /* Get Profile Data */
-            // request.get("", (error, response, body) => {
-            //     if (error) {
-            //         res.end();
-            //         return;
-            //     }
-
-            //     res.end();
-            // });
-        });
-    }
-
-    /*
     * @description 取得line web login 授權
     */
     protected getAuthorization(router: Router) {
@@ -193,7 +171,7 @@ export class LineWebhookAPI extends BaseAPI {
                 }
             };
 
-            DHLog.ld("Call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
+            DHLog.ld("call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
             DHLog.ld("option " + JSON.stringify(option));
 
             request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
@@ -201,6 +179,7 @@ export class LineWebhookAPI extends BaseAPI {
                     DHLog.ld("callback error " + error);
                 }else {
                     DHLog.ld("callback success " + body);
+                    DHLog.ld("header alg " + res.header("alg"));
                 }
                 
                 res.end();
