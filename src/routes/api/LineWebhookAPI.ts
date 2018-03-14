@@ -184,8 +184,7 @@ export class LineWebhookAPI extends BaseAPI {
                     if (json.id_token) {
                         DHLog.ld("id_token " + json.id_token);
                         let jwt = JwtDecode(json.id_token);
-                        DHLog.ld("token " + jwt["payload"]);
-                        
+                        console.log(jwt);
                     }
                 }
                 
