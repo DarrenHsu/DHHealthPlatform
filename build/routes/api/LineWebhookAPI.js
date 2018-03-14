@@ -151,6 +151,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 }
                 else {
                     DHLog_1.DHLog.ld("callback success " + body);
+                    DHLog_1.DHLog.ld("type " + Object.getPrototypeOf(body));
                     if (body.id_token) {
                         var decode = jwtDecode(body.id_token);
                         DHLog_1.DHLog.ld("decode " + decode);

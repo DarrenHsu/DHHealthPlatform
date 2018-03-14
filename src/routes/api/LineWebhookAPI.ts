@@ -180,6 +180,7 @@ export class LineWebhookAPI extends BaseAPI {
                     DHLog.ld("callback error " + error);
                 }else {
                     DHLog.ld("callback success " + body);
+                    DHLog.ld("type " + Object.getPrototypeOf(body));
                     if (body.id_token) {
                         var decode = jwtDecode(body.id_token);
                         DHLog.ld("decode " + decode);
