@@ -11,7 +11,7 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             new LoginRoute().loginPage(req, res, next);
         });
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_PROCESS_PATH);
-        router.post(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
+        router.get(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
             var act = req.session.account;
             if (!act) {
                 var fullUrl = this.getFullHostUrl(req);

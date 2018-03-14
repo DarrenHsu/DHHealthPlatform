@@ -13,7 +13,7 @@ export class LoginRoute extends BaseRoute {
         });
 
         DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_PROCESS_PATH);
-        router.post(DHAPI.LOGIN_PROCESS_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.LOGIN_PROCESS_PATH, (req: Request, res: Response, next: NextFunction) => {
             var act = req.session.account;
             
             if (!act) {
