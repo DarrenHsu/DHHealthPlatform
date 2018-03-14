@@ -146,15 +146,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             }
             var state = req.query.state;
             var code = req.query.code;
-            if (state && code) {
-                DHLog_1.DHLog.ld("state " + state);
-                DHLog_1.DHLog.ld("code " + code);
-                res.end();
-            }
-            else {
+            if (!code) {
                 res.end();
                 return;
             }
+            DHLog_1.DHLog.ld("state " + state);
+            DHLog_1.DHLog.ld("code " + code);
             var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
             var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
@@ -174,14 +171,14 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             };
             DHLog_1.DHLog.ld("call Get Access Token " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
             DHLog_1.DHLog.ld("option " + JSON.stringify(option));
-            request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option).on("data", (body) => {
-                DHLog_1.DHLog.ld("callback success " + body);
-                var json = JSON.parse("" + body);
-                if (!json.id_token) {
-                    return res.end();
-                }
-                return res.redirect(LINEAPI_1.LINEAPI.API_LINE_PROFILE_PATH + "?token" + json.id_token);
-            });
+            // request.post(LINEAPI.API_ACCESS_TOKEN, option).on("data", (body) => {
+            //     DHLog.ld("callback success " + body);
+            //     var json = JSON.parse("" + body)
+            //     if (!json.id_token) {
+            //         return res.end();
+            //     }
+            //     return res.redirect(LINEAPI.API_LINE_PROFILE_PATH + "?token" + json.id_token);
+            // });
             // const getToken = async () => {
             //     const body = await request.post(LINEAPI.API_ACCESS_TOKEN, option);
             //     DHLog.ld("callback success " + body);
@@ -210,38 +207,40 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             //         }
             //     });
             // }
-            // request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
-            //     if (error) {
-            //         DHLog.ld("callback error " + error);
-            //         return res.end();
-            //     }else {
-            //         DHLog.ld("callback success " + body);
-            //         var json = JSON.parse("" + body)
-            //         if (!json.id_token) {
-            //             return res.end();
-            //         }
-            //         let jwt = JwtDecode(json.id_token);
-            //         var sub = jwt["sub"];
-            //         var name = jwt["name"];
-            //         var picture = jwt["picture"];
-            //         if (!sub || !name || !picture) {
-            //             return res.end();
-            //         }
-            //         this.userHelper.list(sub, (code, result) => {
-            //             if (code == MONGODB_CODE.MC_SUCCESS) {
-            //                 if (req.session.account) {
-            //                     req.session.time++;
-            //                 }else {
-            //                     req.session.account = sub;
-            //                     req.session.name = name;
-            //                     req.session.picture = picture;
-            //                     req.session.time = 1;
-            //                 }
-            //                 return res.redirect(DHAPI.ROOT_PATH);
-            //             }
-            //         });
-            //     }
-            // });
+            request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
+                if (error) {
+                    DHLog_1.DHLog.ld("callback error " + error);
+                    return res.end();
+                }
+                else {
+                    DHLog_1.DHLog.ld("callback success " + body);
+                    var json = JSON.parse("" + body);
+                    if (!json.id_token) {
+                        return res.end();
+                    }
+                    let jwt = JwtDecode(json.id_token);
+                    var sub = jwt["sub"];
+                    var name = jwt["name"];
+                    var picture = jwt["picture"];
+                    if (!sub || !name || !picture) {
+                        return res.end();
+                    }
+                    this.userHelper.list(sub, (code, result) => {
+                        if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
+                            if (req.session.account) {
+                                req.session.time++;
+                            }
+                            else {
+                                req.session.account = sub;
+                                req.session.name = name;
+                                req.session.picture = picture;
+                                req.session.time = 1;
+                            }
+                            return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
+                        }
+                    });
+                }
+            });
         });
     }
     /*

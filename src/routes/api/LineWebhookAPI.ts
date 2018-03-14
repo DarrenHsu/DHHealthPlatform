@@ -178,14 +178,13 @@ export class LineWebhookAPI extends BaseAPI {
 
             var state = req.query.state;
             var code = req.query.code;
-            if (state && code) {
-                DHLog.ld("state " + state);
-                DHLog.ld("code " + code);
-                res.end();
-            }else {
+            if (!code) {
                 res.end();
                 return;
             }
+
+            DHLog.ld("state " + state);
+            DHLog.ld("code " + code);
 
             var fullUrl = BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI.API_LINE_AUTH_PATH;
@@ -209,15 +208,15 @@ export class LineWebhookAPI extends BaseAPI {
             DHLog.ld("call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
             DHLog.ld("option " + JSON.stringify(option));
 
-            request.post(LINEAPI.API_ACCESS_TOKEN, option).on("data", (body) => {
-                DHLog.ld("callback success " + body);
-                var json = JSON.parse("" + body)
-                if (!json.id_token) {
-                    return res.end();
-                }
+            // request.post(LINEAPI.API_ACCESS_TOKEN, option).on("data", (body) => {
+            //     DHLog.ld("callback success " + body);
+            //     var json = JSON.parse("" + body)
+            //     if (!json.id_token) {
+            //         return res.end();
+            //     }
 
-                return res.redirect(LINEAPI.API_LINE_PROFILE_PATH + "?token" + json.id_token);
-            });
+            //     return res.redirect(LINEAPI.API_LINE_PROFILE_PATH + "?token" + json.id_token);
+            // });
 
             // const getToken = async () => {
             //     const body = await request.post(LINEAPI.API_ACCESS_TOKEN, option);
@@ -253,42 +252,42 @@ export class LineWebhookAPI extends BaseAPI {
             //     });
             // }
 
-            // request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
-            //     if (error) {
-            //         DHLog.ld("callback error " + error);
-            //         return res.end();
-            //     }else {
-            //         DHLog.ld("callback success " + body);
-            //         var json = JSON.parse("" + body)
-            //         if (!json.id_token) {
-            //             return res.end();
-            //         }
+            request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
+                if (error) {
+                    DHLog.ld("callback error " + error);
+                    return res.end();
+                }else {
+                    DHLog.ld("callback success " + body);
+                    var json = JSON.parse("" + body)
+                    if (!json.id_token) {
+                        return res.end();
+                    }
 
-            //         let jwt = JwtDecode(json.id_token);
-            //         var sub = jwt["sub"];
-            //         var name = jwt["name"];
-            //         var picture = jwt["picture"];
+                    let jwt = JwtDecode(json.id_token);
+                    var sub = jwt["sub"];
+                    var name = jwt["name"];
+                    var picture = jwt["picture"];
 
-            //         if (!sub || !name || !picture) {
-            //             return res.end();
-            //         }
+                    if (!sub || !name || !picture) {
+                        return res.end();
+                    }
 
-            //         this.userHelper.list(sub, (code, result) => {
-            //             if (code == MONGODB_CODE.MC_SUCCESS) {
-            //                 if (req.session.account) {
-            //                     req.session.time++;
-            //                 }else {
-            //                     req.session.account = sub;
-            //                     req.session.name = name;
-            //                     req.session.picture = picture;
-            //                     req.session.time = 1;
-            //                 }
+                    this.userHelper.list(sub, (code, result) => {
+                        if (code == MONGODB_CODE.MC_SUCCESS) {
+                            if (req.session.account) {
+                                req.session.time++;
+                            }else {
+                                req.session.account = sub;
+                                req.session.name = name;
+                                req.session.picture = picture;
+                                req.session.time = 1;
+                            }
 
-            //                 return res.redirect(DHAPI.ROOT_PATH);
-            //             }
-            //         });
-            //     }
-            // });
+                            return res.redirect(DHAPI.ROOT_PATH);
+                        }
+                    });
+                }
+            });
         });
     }
 
