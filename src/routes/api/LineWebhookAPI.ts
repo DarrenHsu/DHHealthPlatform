@@ -192,7 +192,8 @@ export class LineWebhookAPI extends BaseAPI {
                 }
             };
 
-            DHLog.ld("call " + authUrl);
+            DHLog.ld("call " + LINEAPI.API_ACCESS_TOKEN);
+            DHLog.ld("option " + JSON.stringify(Option));
 
             request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {

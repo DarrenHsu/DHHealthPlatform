@@ -159,7 +159,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
             };
-            DHLog_1.DHLog.ld("call " + authUrl);
+            DHLog_1.DHLog.ld("call " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
+            DHLog_1.DHLog.ld("option " + JSON.stringify(Option));
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
                     DHLog_1.DHLog.ld("call get token error " + error);
