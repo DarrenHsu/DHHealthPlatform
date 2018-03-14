@@ -1,22 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
+const request = require("request");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
 const BaseAPI_1 = require("./BaseAPI");
+const BaseRoute_1 = require("./../BaseRoute");
 const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
 const DHLog_1 = require("../../util/DHLog");
 const DHAPI_1 = require("../../const/DHAPI");
+const LINEAPI_1 = require("../../const/LINEAPI");
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();
-        this.uri = DHAPI_1.DHAPI.API_LINEBOT_PATH;
-        this.recordUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_RECORD_PATH;
-        this.messageUrl = DHAPI_1.DHAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
-        this.authorizationUrl = DHAPI_1.DHAPI.API_LINELAUTH_PATH;
+        this.uri = LINEAPI_1.LINEAPI.API_LINEBOT_PATH;
+        this.recordUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_RECORD_PATH;
+        this.messageUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
+        this.authorizationUrl = LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
+        this.accessTokenUrl = LINEAPI_1.LINEAPI.API_LINE_TOKEN_PATH;
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
@@ -97,14 +101,33 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         });
     }
     /*
+    * @description 取得line access token
+    */
+    getAccessToken(router) {
+        router.post(this.authorizationUrl, (req, res, next) => {
+            DHLog_1.DHLog.ld("get access toekn");
+            res.end();
+            // /* Get Profile Data */
+            // request.get("", (error, response, body) => {
+            //     if (error) {
+            //         res.end();
+            //         return;
+            //     }
+            //     res.end();
+            // });
+        });
+    }
+    /*
     * @description 取得line web login 授權
     */
     getAuthorization(router) {
         router.get(this.authorizationUrl, (req, res, next) => {
-            DHLog_1.DHLog.ld("LINE AUTH getAuthorization");
+            DHLog_1.DHLog.ld("get authorization");
             var error = req.query.error;
+            var error_description = req.query.error_description;
             if (error) {
                 DHLog_1.DHLog.ld("error " + error);
+                DHLog_1.DHLog.ld("error " + error_description);
                 res.end();
                 return;
             }
@@ -114,7 +137,33 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 DHLog_1.DHLog.ld("state " + state);
                 DHLog_1.DHLog.ld("code " + code);
             }
-            res.end();
+            else {
+                res.end();
+                return;
+            }
+            var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
+            var authUrl = encodeURIComponent(fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH);
+            var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
+            var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
+            /* Get Access Token */
+            var option = {
+                formData: {
+                    "grant_type": "authorization_code",
+                    "code": code,
+                    "redirect_uri": authUrl,
+                    "client_id": channelId,
+                    "client_secret": channelSecret
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            };
+            request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
+                if (error) {
+                    res.end();
+                    return;
+                }
+            });
         });
     }
     /*
@@ -183,7 +232,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     return;
                 }
                 this.chatroomHelper.list(record.lineUserId, (code, chats) => {
-                    let text = DHAPI_1.DHAPI.HOST_NAME + DHAPI_1.DHAPI.RECORD_PATH + "/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
+                    let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + "/" + DHAPI_1.DHAPI.RECORD_PATH + "/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
                     var message = {
                         type: 'text',
                         text: text

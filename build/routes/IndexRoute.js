@@ -17,10 +17,10 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
             }
             else {
                 var fullUrl = this.getFullHostUrl(req);
-                var authUrl = encodeURIComponent(fullUrl + DHAPI_1.DHAPI.API_LINELAUTH_PATH);
+                var authUrl = encodeURIComponent(fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH);
                 var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
                 var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
-                var lineApi = LINEAPI_1.LINEAPI.API_AUTH + "?" +
+                var lineApi = LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH + "?" +
                     "response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +

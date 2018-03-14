@@ -20,10 +20,10 @@ export class IndexRoute extends BaseRoute {
                 new IndexRoute().index(req, res, next);
             }else {
                 var fullUrl = this.getFullHostUrl(req);
-                var authUrl = encodeURIComponent(fullUrl + DHAPI.API_LINELAUTH_PATH);
+                var authUrl = encodeURIComponent(fullUrl + LINEAPI.API_LINE_AUTH_PATH);
                 var channelId = DHAPI.pkgjson.linelogin.channelId;
                 var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
-                var lineApi = LINEAPI.API_AUTH + "?" +
+                var lineApi = LINEAPI.API_LINE_AUTH_PATH + "?" +
                     "response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
