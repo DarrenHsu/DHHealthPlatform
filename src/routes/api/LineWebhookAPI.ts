@@ -9,8 +9,9 @@ import { createHmac } from "crypto";
 import { BaseAPI } from "./BaseAPI";
 import { BaseRoute } from "./../BaseRoute";
 import { IChatroom } from  "../../mongo/interface/IChatroom";
-import { ChatroomHelper } from "../../mongo/helper/ChatroomHelper";
 import { DBHelper } from "../../mongo/helper/DBHelper";
+import { ChatroomHelper } from "../../mongo/helper/ChatroomHelper";
+import { UserHelper } from "../../mongo/helper/UserHelper";
 import { RecordHelper } from "../../mongo/helper/RecordHelper";
 import { error, print } from "util";
 import { DHLog } from "../../util/DHLog";
@@ -29,6 +30,7 @@ export class LineWebhookAPI extends BaseAPI {
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
 
+    private userHelper: UserHelper;
     private chatroomHelper: ChatroomHelper;
     private recordHelper: RecordHelper;
 
@@ -53,6 +55,7 @@ export class LineWebhookAPI extends BaseAPI {
         this.helper = new ChatroomHelper(connection);
         this.recordHelper = new RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper(connection);
+        this.userHelper = new UserHelper(connection);
 
         this.clientConfig = {
             channelAccessToken: DHAPI.pkgjson.linebot.channelAccessToken
@@ -178,21 +181,38 @@ export class LineWebhookAPI extends BaseAPI {
             request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
                     DHLog.ld("callback error " + error);
+                    return res.end();
                 }else {
                     DHLog.ld("callback success " + body);
                     var json = JSON.parse("" + body)
-                    if (json.id_token) {
-                        DHLog.ld("id_token " + json.id_token);
-                        let jwt = JwtDecode(json.id_token);
-                        let sub = jwt["sub"];
-                        let picture = jwt["picture"];
-                        DHLog.ld("jwt " + jwt);
-                        DHLog.ld("sub " + sub);
-                        DHLog.ld("picture " + picture);
+                    if (!json.id_token) {
+                        return res.end();
                     }
+
+                    let jwt = JwtDecode(json.id_token);
+                    var sub = jwt["sub"];
+                    var name = jwt["name"];
+                    var picture = jwt["picture"];
+
+                    if (!sub || !name || !picture) {
+                        return res.end();
+                    }
+
+                    this.userHelper.list(sub, (code, result) => {
+                        if (code == MONGODB_CODE.MC_SUCCESS) {
+                            if (req.session.account) {
+                                req.session.time++;
+                            }else {
+                                req.session.account = sub;
+                                req.session.name = name;
+                                req.session.picture = picture;
+                                req.session.time = 1;
+                            }
+
+                            return res.redirect(DHAPI.ROOT_PATH);
+                        }
+                    });
                 }
-                
-                res.end();
             });
         });
     }

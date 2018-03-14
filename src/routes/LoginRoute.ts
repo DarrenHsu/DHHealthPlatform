@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
+import { DHLog } from "../util/DHLog";
 import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/DHAPI";
-import { DHLog } from "../util/DHLog";
+import { LINEAPI } from "../const/LINEAPI";
 
 export class LoginRoute extends BaseRoute {
     
@@ -13,19 +14,29 @@ export class LoginRoute extends BaseRoute {
 
         DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_PROCESS_PATH);
         router.post(DHAPI.LOGIN_PROCESS_PATH, (req: Request, res: Response, next: NextFunction) => {
-            var act = req.body.user.account;
-            var pwd = req.body.user.password;
+            var act = req.session.account;
+            
+            if (!act) {
+                var fullUrl = this.getFullHostUrl(req);
+                var authUrl = encodeURIComponent(fullUrl + LINEAPI.API_LINE_AUTH_PATH);
+                var channelId = DHAPI.pkgjson.linelogin.channelId;
+                var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
+                var lineApi = LINEAPI.API_AUTHORIZE + "?" +
+                    "response_type=code" + "&" +
+                    "client_id=" + channelId + "&" +
+                    "redirect_uri=" + authUrl + "&" +
+                    "state=" + "2018031300001" + "&" +
+                    "scope=openid%20profile%20email";
 
-            DHLog.ld("act:" + act + " pwd:" + pwd);
+                DHLog.d("lineApi " + lineApi);
+                
+                return res.redirect(lineApi);
+            } else {
+                var name = req.session.name;
+                var picture = req.session.picture;
+            
+                DHLog.ld("act:" + act + " name:" + name);
 
-            if (act == null || pwd == null) {
-                new LoginRoute().loginPage(req, res, next);
-            }else if (act == req.session.account) {
-                req.session.time++;
-                return res.redirect(DHAPI.ROOT_PATH);
-            }else {
-                req.session.account = act;
-                req.session.time = 1;
                 return res.redirect(DHAPI.ROOT_PATH);
             }
         });

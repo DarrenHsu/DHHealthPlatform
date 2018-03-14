@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const DHLog_1 = require("../util/DHLog");
 const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
-const DHLog_1 = require("../util/DHLog");
+const LINEAPI_1 = require("../const/LINEAPI");
 class LoginRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_INPUT_PATH);
@@ -11,19 +12,25 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
         });
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_PROCESS_PATH);
         router.post(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
-            var act = req.body.user.account;
-            var pwd = req.body.user.password;
-            DHLog_1.DHLog.ld("act:" + act + " pwd:" + pwd);
-            if (act == null || pwd == null) {
-                new LoginRoute().loginPage(req, res, next);
-            }
-            else if (act == req.session.account) {
-                req.session.time++;
-                return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
+            var act = req.session.account;
+            if (!act) {
+                var fullUrl = this.getFullHostUrl(req);
+                var authUrl = encodeURIComponent(fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH);
+                var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
+                var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
+                var lineApi = LINEAPI_1.LINEAPI.API_AUTHORIZE + "?" +
+                    "response_type=code" + "&" +
+                    "client_id=" + channelId + "&" +
+                    "redirect_uri=" + authUrl + "&" +
+                    "state=" + "2018031300001" + "&" +
+                    "scope=openid%20profile%20email";
+                DHLog_1.DHLog.d("lineApi " + lineApi);
+                return res.redirect(lineApi);
             }
             else {
-                req.session.account = act;
-                req.session.time = 1;
+                var name = req.session.name;
+                var picture = req.session.picture;
+                DHLog_1.DHLog.ld("act:" + act + " name:" + name);
                 return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
             }
         });

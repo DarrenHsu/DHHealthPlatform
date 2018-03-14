@@ -12,27 +12,14 @@ export class IndexRoute extends BaseRoute {
         DHLog.d("[" + this.name + ":create] " + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
             var isLogin = false;
-            if (req.session.account) {
+            if (req.session.account && req.session.name && req.session.picture) {
                 isLogin = true;
             }
             
             if (isLogin) {
                 new IndexRoute().index(req, res, next);
             }else {
-                var fullUrl = this.getFullHostUrl(req);
-                var authUrl = encodeURIComponent(fullUrl + LINEAPI.API_LINE_AUTH_PATH);
-                var channelId = DHAPI.pkgjson.linelogin.channelId;
-                var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
-                var lineApi = LINEAPI.API_AUTHORIZE + "?" +
-                    "response_type=code" + "&" +
-                    "client_id=" + channelId + "&" +
-                    "redirect_uri=" + authUrl + "&" +
-                    "state=" + "2018031300001" + "&" +
-                    "scope=openid%20profile%20email";
-
-                DHLog.d("lineApi " + lineApi);
-                
-                return res.redirect(lineApi);
+                return res.redirect(DHAPI.LOGIN_PROCESS_PATH);
             }
         });
     }
@@ -46,6 +33,8 @@ export class IndexRoute extends BaseRoute {
         let options: Object = {
             "message": "Welcome to the Index",
             "account": req.session.account,
+            "name": req.session.name,
+            "picture": req.session.picture, 
             "loginTime": req.session.time
         };
         this.render(req, res, "index", options);

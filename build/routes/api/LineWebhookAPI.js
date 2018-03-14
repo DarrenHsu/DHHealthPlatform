@@ -8,8 +8,9 @@ const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
 const BaseAPI_1 = require("./BaseAPI");
 const BaseRoute_1 = require("./../BaseRoute");
-const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
+const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
+const UserHelper_1 = require("../../mongo/helper/UserHelper");
 const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
 const DHLog_1 = require("../../util/DHLog");
 const DHAPI_1 = require("../../const/DHAPI");
@@ -25,6 +26,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
+        this.userHelper = new UserHelper_1.UserHelper(connection);
         this.clientConfig = {
             channelAccessToken: DHAPI_1.DHAPI.pkgjson.linebot.channelAccessToken
         };
@@ -148,21 +150,36 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
                     DHLog_1.DHLog.ld("callback error " + error);
+                    return res.end();
                 }
                 else {
                     DHLog_1.DHLog.ld("callback success " + body);
                     var json = JSON.parse("" + body);
-                    if (json.id_token) {
-                        DHLog_1.DHLog.ld("id_token " + json.id_token);
-                        let jwt = JwtDecode(json.id_token);
-                        let sub = jwt["sub"];
-                        let picture = jwt["picture"];
-                        DHLog_1.DHLog.ld("jwt " + jwt);
-                        DHLog_1.DHLog.ld("sub " + sub);
-                        DHLog_1.DHLog.ld("picture " + picture);
+                    if (!json.id_token) {
+                        return res.end();
                     }
+                    let jwt = JwtDecode(json.id_token);
+                    var sub = jwt["sub"];
+                    var name = jwt["name"];
+                    var picture = jwt["picture"];
+                    if (!sub || !name || !picture) {
+                        return res.end();
+                    }
+                    this.userHelper.list(sub, (code, result) => {
+                        if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
+                            if (req.session.account) {
+                                req.session.time++;
+                            }
+                            else {
+                                req.session.account = sub;
+                                req.session.name = name;
+                                req.session.picture = picture;
+                                req.session.time = 1;
+                            }
+                            return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
+                        }
+                    });
                 }
-                res.end();
             });
         });
     }
