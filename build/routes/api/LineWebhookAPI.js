@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
 const JwtDecode = require("jwt-decode");
@@ -155,8 +147,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             };
             DHLog_1.DHLog.ld("call Get Access Token " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
             DHLog_1.DHLog.ld("option " + JSON.stringify(option));
-            const getToken = () => __awaiter(this, void 0, void 0, function* () {
-                const body = yield request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option);
+            request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option).on("complete", (response, body) => {
                 DHLog_1.DHLog.ld("callback success " + body);
                 var json = JSON.parse("" + body);
                 if (!json.id_token) {
@@ -184,6 +175,34 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     }
                 });
             });
+            // const getToken = async () => {
+            //     const body = await request.post(LINEAPI.API_ACCESS_TOKEN, option);
+            //     DHLog.ld("callback success " + body);
+            //     var json = JSON.parse("" + body)
+            //     if (!json.id_token) {
+            //         return res.end();
+            //     }
+            //     let jwt = JwtDecode(json.id_token);
+            //     var sub = jwt["sub"];
+            //     var name = jwt["name"];
+            //     var picture = jwt["picture"];
+            //     if (!sub || !name || !picture) {
+            //         return res.end();
+            //     }
+            //     this.userHelper.list(sub, (code, result) => {
+            //         if (code == MONGODB_CODE.MC_SUCCESS) {
+            //             if (req.session.account) {
+            //                 req.session.time++;
+            //             }else {
+            //                 req.session.account = sub;
+            //                 req.session.name = name;
+            //                 req.session.picture = picture;
+            //                 req.session.time = 1;
+            //             }
+            //             return res.redirect(DHAPI.ROOT_PATH);
+            //         }
+            //     });
+            // }
             // request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
             //     if (error) {
             //         DHLog.ld("callback error " + error);
