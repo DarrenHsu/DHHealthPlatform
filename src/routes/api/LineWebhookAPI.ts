@@ -1,5 +1,6 @@
 import mongoose = require("mongoose");
 import querystring = require("querystring");
+import * as jwtDecode from "jwt-decode";
 import * as request from "request";
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from "@line/bot-sdk";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from "../ResultCode";
@@ -179,7 +180,10 @@ export class LineWebhookAPI extends BaseAPI {
                     DHLog.ld("callback error " + error);
                 }else {
                     DHLog.ld("callback success " + body);
-                    DHLog.ld("header alg " + res.getHeader("alg"));
+                    if (body.id_token) {
+                        var decode = jwtDecode(body.id_token);
+                        DHLog.ld("decode " + decode);
+                    }
                 }
                 
                 res.end();
