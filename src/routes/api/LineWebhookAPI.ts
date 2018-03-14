@@ -174,7 +174,7 @@ export class LineWebhookAPI extends BaseAPI {
             }
 
             var fullUrl = BaseRoute.getFullHostUrl(req);
-            var authUrl = encodeURIComponent(fullUrl + LINEAPI.API_LINE_AUTH_PATH);
+            var authUrl = fullUrl + LINEAPI.API_LINE_AUTH_PATH;
             var channelId = DHAPI.pkgjson.linelogin.channelId;
             var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
 
