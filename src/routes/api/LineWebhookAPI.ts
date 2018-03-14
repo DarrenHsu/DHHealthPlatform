@@ -178,42 +178,76 @@ export class LineWebhookAPI extends BaseAPI {
             DHLog.ld("call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
             DHLog.ld("option " + JSON.stringify(option));
 
-            request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
-                if (error) {
-                    DHLog.ld("callback error " + error);
+            const getToken = async () => {
+                const body = await request.post(LINEAPI.API_ACCESS_TOKEN, option);
+
+                DHLog.ld("callback success " + body);
+                var json = JSON.parse("" + body)
+                if (!json.id_token) {
                     return res.end();
-                }else {
-                    DHLog.ld("callback success " + body);
-                    var json = JSON.parse("" + body)
-                    if (!json.id_token) {
-                        return res.end();
-                    }
-
-                    let jwt = JwtDecode(json.id_token);
-                    var sub = jwt["sub"];
-                    var name = jwt["name"];
-                    var picture = jwt["picture"];
-
-                    if (!sub || !name || !picture) {
-                        return res.end();
-                    }
-
-                    this.userHelper.list(sub, (code, result) => {
-                        if (code == MONGODB_CODE.MC_SUCCESS) {
-                            if (req.session.account) {
-                                req.session.time++;
-                            }else {
-                                req.session.account = sub;
-                                req.session.name = name;
-                                req.session.picture = picture;
-                                req.session.time = 1;
-                            }
-
-                            return res.redirect(DHAPI.ROOT_PATH);
-                        }
-                    });
                 }
-            });
+
+                let jwt = JwtDecode(json.id_token);
+                var sub = jwt["sub"];
+                var name = jwt["name"];
+                var picture = jwt["picture"];
+
+                if (!sub || !name || !picture) {
+                    return res.end();
+                }
+
+                this.userHelper.list(sub, (code, result) => {
+                    if (code == MONGODB_CODE.MC_SUCCESS) {
+                        if (req.session.account) {
+                            req.session.time++;
+                        }else {
+                            req.session.account = sub;
+                            req.session.name = name;
+                            req.session.picture = picture;
+                            req.session.time = 1;
+                        }
+
+                        return res.redirect(DHAPI.ROOT_PATH);
+                    }
+                });
+            }
+
+            // request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
+            //     if (error) {
+            //         DHLog.ld("callback error " + error);
+            //         return res.end();
+            //     }else {
+            //         DHLog.ld("callback success " + body);
+            //         var json = JSON.parse("" + body)
+            //         if (!json.id_token) {
+            //             return res.end();
+            //         }
+
+            //         let jwt = JwtDecode(json.id_token);
+            //         var sub = jwt["sub"];
+            //         var name = jwt["name"];
+            //         var picture = jwt["picture"];
+
+            //         if (!sub || !name || !picture) {
+            //             return res.end();
+            //         }
+
+            //         this.userHelper.list(sub, (code, result) => {
+            //             if (code == MONGODB_CODE.MC_SUCCESS) {
+            //                 if (req.session.account) {
+            //                     req.session.time++;
+            //                 }else {
+            //                     req.session.account = sub;
+            //                     req.session.name = name;
+            //                     req.session.picture = picture;
+            //                     req.session.time = 1;
+            //                 }
+
+            //                 return res.redirect(DHAPI.ROOT_PATH);
+            //             }
+            //         });
+            //     }
+            // });
         });
     }
 
