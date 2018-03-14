@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
-const jwtDecode = require("jwt-decode");
+const JwtDecode = require("jwt-decode");
 const request = require("request");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
@@ -153,7 +153,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     DHLog_1.DHLog.ld("callback success " + body);
                     var json = JSON.parse("" + body);
                     if (json.id_token) {
-                        var decode = jwtDecode(json.id_token);
+                        DHLog_1.DHLog.ld("callback success " + json.id_token);
+                        var decode = JwtDecode(json.id_token);
                         DHLog_1.DHLog.ld("decode " + decode);
                     }
                 }
