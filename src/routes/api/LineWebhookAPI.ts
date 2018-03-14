@@ -178,7 +178,7 @@ export class LineWebhookAPI extends BaseAPI {
             DHLog.ld("call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
             DHLog.ld("option " + JSON.stringify(option));
 
-            request.post(LINEAPI.API_ACCESS_TOKEN, option).on("complete", (response, body) => {
+            request.post(LINEAPI.API_ACCESS_TOKEN, option).on("data", (body) => {
                 DHLog.ld("callback success " + body);
                 var json = JSON.parse("" + body)
                 if (!json.id_token) {
