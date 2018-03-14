@@ -180,7 +180,7 @@ export class LineWebhookAPI extends BaseAPI {
 
             /* Get Access Token */
             var option = {
-                formData: {
+                form: {
                     "grant_type": "authorization_code",
                     "code": code,
                     "redirect_uri": authUrl,

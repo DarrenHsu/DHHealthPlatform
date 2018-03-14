@@ -148,7 +148,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
             /* Get Access Token */
             var option = {
-                formData: {
+                form: {
                     "grant_type": "authorization_code",
                     "code": code,
                     "redirect_uri": authUrl,
