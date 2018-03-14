@@ -39,6 +39,7 @@ export class LineWebhookAPI extends BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.getAuthorization(router);
+        api.postAuthorization(router);
     }
 
     private static getSignature(body: string, screat: string): string {
@@ -129,9 +130,9 @@ export class LineWebhookAPI extends BaseAPI {
     /*
     * @description 取得line access token 
     */
-    protected getAccessToken(router: Router) {
+    protected postAuthorization(router: Router) {
         router.post(this.authorizationUrl, (req, res, next) => {
-            DHLog.ld("get access toekn");
+            DHLog.ld("Post Access Token");
 
             res.end();
 
@@ -152,7 +153,7 @@ export class LineWebhookAPI extends BaseAPI {
     */
     protected getAuthorization(router: Router) {
         router.get(this.authorizationUrl, (req, res, next) => {
-            DHLog.ld("get authorization");
+            DHLog.ld("Get Authorization");
             var error = req.query.error;
             var error_description = req.query.error_description;
             if (error) {
@@ -192,14 +193,14 @@ export class LineWebhookAPI extends BaseAPI {
                 }
             };
 
-            DHLog.ld("call " + LINEAPI.API_ACCESS_TOKEN);
+            DHLog.ld("Call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
             DHLog.ld("option " + JSON.stringify(option));
 
             request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
-                    DHLog.ld("call get token error " + error);
+                    DHLog.ld("callback error " + error);
                 }else {
-                    DHLog.ld("call get toekn success " + body);
+                    DHLog.ld("callback success " + body);
                 }
                 
                 res.end();

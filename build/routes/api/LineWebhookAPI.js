@@ -38,6 +38,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.getAuthorization(router);
+        api.postAuthorization(router);
     }
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
@@ -103,9 +104,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     /*
     * @description 取得line access token
     */
-    getAccessToken(router) {
+    postAuthorization(router) {
         router.post(this.authorizationUrl, (req, res, next) => {
-            DHLog_1.DHLog.ld("get access toekn");
+            DHLog_1.DHLog.ld("Post Access Token");
             res.end();
             // /* Get Profile Data */
             // request.get("", (error, response, body) => {
@@ -122,7 +123,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     */
     getAuthorization(router) {
         router.get(this.authorizationUrl, (req, res, next) => {
-            DHLog_1.DHLog.ld("get authorization");
+            DHLog_1.DHLog.ld("Get Authorization");
             var error = req.query.error;
             var error_description = req.query.error_description;
             if (error) {
@@ -159,14 +160,14 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
             };
-            DHLog_1.DHLog.ld("call " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
+            DHLog_1.DHLog.ld("Call Get Access Token " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
             DHLog_1.DHLog.ld("option " + JSON.stringify(option));
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
-                    DHLog_1.DHLog.ld("call get token error " + error);
+                    DHLog_1.DHLog.ld("callback error " + error);
                 }
                 else {
-                    DHLog_1.DHLog.ld("call get toekn success " + body);
+                    DHLog_1.DHLog.ld("callback success " + body);
                 }
                 res.end();
             });
