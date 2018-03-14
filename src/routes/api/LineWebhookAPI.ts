@@ -186,6 +186,7 @@ export class LineWebhookAPI extends BaseAPI {
                         let jwt = JwtDecode(json.id_token);
                         let sub = jwt["sub"];
                         let picture = jwt["picture"];
+                        DHLog.ld("jwt " + jwt);
                         DHLog.ld("sub " + sub);
                         DHLog.ld("picture " + picture);
                     }
