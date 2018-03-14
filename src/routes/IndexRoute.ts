@@ -23,7 +23,7 @@ export class IndexRoute extends BaseRoute {
                 var authUrl = encodeURIComponent(fullUrl + LINEAPI.API_LINE_AUTH_PATH);
                 var channelId = DHAPI.pkgjson.linelogin.channelId;
                 var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
-                var lineApi = LINEAPI.API_LINE_AUTH_PATH + "?" +
+                var lineApi = LINEAPI.API_AUTHORIZE + "?" +
                     "response_type=code" + "&" +
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
