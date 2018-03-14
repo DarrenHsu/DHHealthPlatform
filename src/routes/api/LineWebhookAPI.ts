@@ -182,9 +182,9 @@ export class LineWebhookAPI extends BaseAPI {
                     DHLog.ld("callback success " + body);
                     var json = JSON.parse("" + body)
                     if (json.id_token) {
-                        DHLog.ld("callback success " + json.id_token);
-                        var decode = JwtDecode(json.id_token);
-                        DHLog.ld("decode " + decode);
+                        DHLog.ld("id_token " + json.id_token);
+                        var decode = JwtDecode(json.id_token, {header: true});
+                        DHLog.ld("decode " + decode.toString);
                     }
                 }
                 
