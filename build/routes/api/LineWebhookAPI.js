@@ -136,6 +136,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             if (state && code) {
                 DHLog_1.DHLog.ld("state " + state);
                 DHLog_1.DHLog.ld("code " + code);
+                res.end();
             }
             else {
                 res.end();
@@ -158,11 +159,15 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
             };
+            DHLog_1.DHLog.ld("call " + authUrl);
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
-                    res.end();
-                    return;
+                    DHLog_1.DHLog.ld("call get token error " + error);
                 }
+                else {
+                    DHLog_1.DHLog.ld("call get toekn success " + body);
+                }
+                res.end();
             });
         });
     }
