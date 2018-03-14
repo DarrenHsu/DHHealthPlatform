@@ -150,7 +150,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 }
                 else {
                     DHLog_1.DHLog.ld("callback success " + body);
-                    DHLog_1.DHLog.ld("header alg " + res.header("alg"));
+                    DHLog_1.DHLog.ld("header alg " + res.getHeader("alg"));
                 }
                 res.end();
             });

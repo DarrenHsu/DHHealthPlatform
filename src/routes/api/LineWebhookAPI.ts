@@ -179,7 +179,7 @@ export class LineWebhookAPI extends BaseAPI {
                     DHLog.ld("callback error " + error);
                 }else {
                     DHLog.ld("callback success " + body);
-                    DHLog.ld("header alg " + res.header("alg"));
+                    DHLog.ld("header alg " + res.getHeader("alg"));
                 }
                 
                 res.end();
