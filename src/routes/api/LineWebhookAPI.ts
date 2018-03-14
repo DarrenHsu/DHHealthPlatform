@@ -25,7 +25,7 @@ export class LineWebhookAPI extends BaseAPI {
     private recordUrl = LINEAPI.API_LINEBOT_PUSH_RECORD_PATH;
     private messageUrl = LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
     private authorizationUrl = LINEAPI.API_LINE_AUTH_PATH;
-    private accessTokenUrl = LINEAPI.API_LINE_TOKEN_PATH;
+    private profileUrl = LINEAPI.API_LINE_PROFILE_PATH;
 
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
@@ -42,6 +42,7 @@ export class LineWebhookAPI extends BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.getAuthorization(router);
+        api.getProfile(router);
     }
 
     private static getSignature(body: string, screat: string): string {
@@ -130,6 +131,36 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
+    protected getProfile(router: Router) {
+        router.get(this.profileUrl, (req, res, next) => {
+            var token = req.query.token;
+            let jwt = JwtDecode(token);
+            var sub = jwt["sub"];
+            var name = jwt["name"];
+            var picture = jwt["picture"];
+
+            if (!sub || !name || !picture) {
+                return res.end();
+            }
+
+            this.userHelper.list(sub, (code, result) => {
+                if (code == MONGODB_CODE.MC_SUCCESS) {
+                    if (req.session.account) {
+                        req.session.time++;
+                    }else {
+                        req.session.account = sub;
+                        req.session.name = name;
+                        req.session.picture = picture;
+                        req.session.time = 1;
+                    }
+
+                    return res.redirect(DHAPI.ROOT_PATH);
+                }
+            });
+        });
+    }
+
+
     /*
     * @description 取得line web login 授權
     */
@@ -185,29 +216,7 @@ export class LineWebhookAPI extends BaseAPI {
                     return res.end();
                 }
 
-                let jwt = JwtDecode(json.id_token);
-                var sub = jwt["sub"];
-                var name = jwt["name"];
-                var picture = jwt["picture"];
-
-                if (!sub || !name || !picture) {
-                    return res.end();
-                }
-
-                this.userHelper.list(sub, (code, result) => {
-                    if (code == MONGODB_CODE.MC_SUCCESS) {
-                        if (req.session.account) {
-                            req.session.time++;
-                        }else {
-                            req.session.account = sub;
-                            req.session.name = name;
-                            req.session.picture = picture;
-                            req.session.time = 1;
-                        }
-
-                        return res.redirect(DHAPI.ROOT_PATH);
-                    }
-                });
+                return res.redirect(LINEAPI.API_LINE_PROFILE_PATH + "?token" + json.id_token);
             });
 
             // const getToken = async () => {

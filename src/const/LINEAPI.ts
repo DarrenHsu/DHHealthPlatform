@@ -6,7 +6,7 @@ export class LINEAPI {
     public static API_PROFILE       = "https://api.line.me/v2/profile";
 
     public static API_LINE_AUTH_PATH =              DHAPI.API_PATH + "/lineauth";
-    public static API_LINE_TOKEN_PATH =             DHAPI.API_PATH + "/lineacctoken";
+    public static API_LINE_PROFILE_PATH =           DHAPI.API_PATH + "/lineprofile";
 
     public static API_LINEBOT_PATH =                DHAPI.API_PATH + "/linebot";
     public static API_LINEBOT_PUSH_RECORD_PATH =    LINEAPI.API_LINEBOT_PATH + "/push/record";
