@@ -4,12 +4,12 @@ const DHLog_1 = require("../util/DHLog");
 const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
 const LINEAPI_1 = require("../const/LINEAPI");
+const ResultCode_1 = require("../routes/ResultCode");
 class LoginRoute extends BaseRoute_1.BaseRoute {
+    constructor() {
+        super();
+    }
     static create(router) {
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_INPUT_PATH);
-        router.get(DHAPI_1.DHAPI.LOGIN_INPUT_PATH, (req, res, next) => {
-            new LoginRoute().loginPage(req, res, next);
-        });
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_PROCESS_PATH);
         router.get(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
             var act = req.session.account;
@@ -46,28 +46,23 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             });
             return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
         });
+        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_ERROR);
+        router.get(DHAPI_1.DHAPI.LOGIN_ERROR, (req, res, next) => {
+            var resultCode = req.query.code;
+            switch (resultCode) {
+                case ResultCode_1.LINE_CODE.LL_LOGIN_ERROR:
+                    return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
+                case ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR:
+                    return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
+                default:
+                    break;
+            }
+        });
     }
-    constructor() {
-        super();
-    }
-    loginPage(req, res, next) {
-        this.title = "Home | DHHealthPlatform | Login Success";
+    loginError(req, res, next, msg) {
+        this.title = "Home | DHHealthPlatform | Login Error";
         let options = {
-            "message": "Welcome to the login"
-        };
-        this.render(req, res, "login", options);
-    }
-    loginSuccess(req, res, next) {
-        this.title = "Home | DHHealthPlatform | Login Success";
-        let options = {
-            "message": "Welcome to the login"
-        };
-        this.render(req, res, "loginResult", options);
-    }
-    loginError(req, res, next) {
-        this.title = "Home | DHHealthPlatform | Login Faild";
-        let options = {
-            "message": "Welcome to the login"
+            "message": msg
         };
         this.render(req, res, "loginResult", options);
     }

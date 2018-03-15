@@ -7,6 +7,7 @@ export class DHAPI {
     public static LOGIN_INPUT_PATH =                DHAPI.LOGIN_PATH + "/input";
     public static LOGIN_PROCESS_PATH =              DHAPI.LOGIN_PATH + "/process";
     public static LOGIN_KILL_PATH =                 DHAPI.LOGIN_PATH + "/kill";
+    public static LOGIN_ERROR =                     DHAPI.LOGIN_PATH + "/error";
     public static RECORD_PATH =                     DHAPI.ROOT_PATH + "record";
 
     public static API_PATH =                        DHAPI.ROOT_PATH + "api";

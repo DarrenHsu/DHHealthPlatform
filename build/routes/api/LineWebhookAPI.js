@@ -163,18 +163,20 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         return res.end();
                     }
                     this.userHelper.list(sub, (code, result) => {
-                        if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
-                            if (req.session.account) {
-                                req.session.time++;
-                            }
-                            else {
-                                req.session.account = sub;
-                                req.session.name = name;
-                                req.session.picture = picture;
-                                req.session.time = 1;
-                            }
-                            return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
-                        }
+                        return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "?code=" + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                        // if (code == MONGODB_CODE.MC_SUCCESS) {
+                        //     if (req.session.account) {
+                        //         req.session.time++;
+                        //     }else {
+                        //         req.session.account = sub;
+                        //         req.session.name = name;
+                        //         req.session.picture = picture;
+                        //         req.session.time = 1;
+                        //     }
+                        //     return res.redirect(DHAPI.ROOT_PATH);
+                        // }else {
+                        //     return res.redirect(DHAPI.LOGIN_ERROR + "?code=" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                        // }
                     });
                 }
             });
