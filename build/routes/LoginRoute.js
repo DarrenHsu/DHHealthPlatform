@@ -56,7 +56,7 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
                 case ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR:
                     return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
                 default:
-                    break;
+                    return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.LINE_CODE.LL_SUCCESS));
             }
         });
     }
