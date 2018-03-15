@@ -41,7 +41,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.getAuthorization(router);
-        api.getProfile(router);
     }
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
@@ -104,32 +103,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             this.pushMessage(message, chats, callback);
         });
     }
-    getProfile(router) {
-        router.get(this.profileUrl, (req, res, next) => {
-            var token = req.query.token;
-            let jwt = JwtDecode(token);
-            var sub = jwt["sub"];
-            var name = jwt["name"];
-            var picture = jwt["picture"];
-            if (!sub || !name || !picture) {
-                return res.end();
-            }
-            this.userHelper.list(sub, (code, result) => {
-                if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
-                    if (req.session.account) {
-                        req.session.time++;
-                    }
-                    else {
-                        req.session.account = sub;
-                        req.session.name = name;
-                        req.session.picture = picture;
-                        req.session.time = 1;
-                    }
-                    return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
-                }
-            });
-        });
-    }
     /*
     * @description 取得line web login 授權
     */
@@ -171,42 +144,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             };
             DHLog_1.DHLog.ld("call Get Access Token " + LINEAPI_1.LINEAPI.API_ACCESS_TOKEN);
             DHLog_1.DHLog.ld("option " + JSON.stringify(option));
-            // request.post(LINEAPI.API_ACCESS_TOKEN, option).on("data", (body) => {
-            //     DHLog.ld("callback success " + body);
-            //     var json = JSON.parse("" + body)
-            //     if (!json.id_token) {
-            //         return res.end();
-            //     }
-            //     return res.redirect(LINEAPI.API_LINE_PROFILE_PATH + "?token" + json.id_token);
-            // });
-            // const getToken = async () => {
-            //     const body = await request.post(LINEAPI.API_ACCESS_TOKEN, option);
-            //     DHLog.ld("callback success " + body);
-            //     var json = JSON.parse("" + body)
-            //     if (!json.id_token) {
-            //         return res.end();
-            //     }
-            //     let jwt = JwtDecode(json.id_token);
-            //     var sub = jwt["sub"];
-            //     var name = jwt["name"];
-            //     var picture = jwt["picture"];
-            //     if (!sub || !name || !picture) {
-            //         return res.end();
-            //     }
-            //     this.userHelper.list(sub, (code, result) => {
-            //         if (code == MONGODB_CODE.MC_SUCCESS) {
-            //             if (req.session.account) {
-            //                 req.session.time++;
-            //             }else {
-            //                 req.session.account = sub;
-            //                 req.session.name = name;
-            //                 req.session.picture = picture;
-            //                 req.session.time = 1;
-            //             }
-            //             return res.redirect(DHAPI.ROOT_PATH);
-            //         }
-            //     });
-            // }
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
                     DHLog_1.DHLog.ld("callback error " + error);
