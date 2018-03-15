@@ -198,23 +198,20 @@ export class LineWebhookAPI extends BaseAPI {
                     }
 
                     this.userHelper.list(sub, (code, result) => {
-                        DHLog.ld("TEST ERROR");
-                        return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                        if (code == MONGODB_CODE.MC_SUCCESS) {
+                            if (req.session.account) {
+                                req.session.time++;
+                            }else {
+                                req.session.account = sub;
+                                req.session.name = name;
+                                req.session.picture = picture;
+                                req.session.time = 1;
+                            }
 
-                        // if (code == MONGODB_CODE.MC_SUCCESS) {
-                        //     if (req.session.account) {
-                        //         req.session.time++;
-                        //     }else {
-                        //         req.session.account = sub;
-                        //         req.session.name = name;
-                        //         req.session.picture = picture;
-                        //         req.session.time = 1;
-                        //     }
-
-                        //     return res.redirect(DHAPI.ROOT_PATH);
-                        // }else {
-                        //     return res.redirect(DHAPI.LOGIN_ERROR + "?code=" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
-                        // }
+                            return res.redirect(DHAPI.ROOT_PATH);
+                        }else {
+                            return res.redirect(DHAPI.LOGIN_ERROR + "?code=" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                        }
                     });
                 }
             });
