@@ -57,6 +57,7 @@ export class LoginRoute extends BaseRoute {
         DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_ERROR);
         router.get(DHAPI.LOGIN_ERROR + "/:code" , (req: Request, res: Response, next: NextFunction) => {
             var resultCode = req.params.code;
+            DHLog.d("login error " + resultCode);
             switch (resultCode) {
                 case LINE_CODE.LL_LOGIN_ERROR:
                     return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
@@ -73,6 +74,7 @@ export class LoginRoute extends BaseRoute {
         let options: Object = {
             "message": msg
         };
+        DHLog.d("login msg " + msg);
         this.render(req, res, "loginResult", options);
     }
 }
