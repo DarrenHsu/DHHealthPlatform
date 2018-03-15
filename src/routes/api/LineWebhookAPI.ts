@@ -135,25 +135,20 @@ export class LineWebhookAPI extends BaseAPI {
     */
     protected getAuthorization(router: Router) {
         router.get(this.authorizationUrl, (req, res, next) => {
-            DHLog.ld("Get Authorization");
+            DHLog.ld("step 1 Get Authorization start");
             var error = req.query.error;
             var error_description = req.query.error_description;
             if (error) {
                 DHLog.ld("error " + error);
                 DHLog.ld("error " + error_description);
-                res.end();
-                return;
+                return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
             }
 
             var state = req.query.state;
             var code = req.query.code;
             if (!code) {
-                res.end();
-                return;
+                return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
             }
-
-            DHLog.ld("state " + state);
-            DHLog.ld("code " + code);
 
             var fullUrl = BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI.API_LINE_AUTH_PATH;
@@ -174,18 +169,14 @@ export class LineWebhookAPI extends BaseAPI {
                 }
             };
 
-            DHLog.ld("call Get Access Token " + LINEAPI.API_ACCESS_TOKEN);
-            DHLog.ld("option " + JSON.stringify(option));
-
+            DHLog.ld("step 2 Get accesstoken start " + JSON.stringify(option));
             request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
-                    DHLog.ld("callback error " + error);
-                    return res.end();
+                    return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
                 }else {
-                    DHLog.ld("callback success " + body);
                     var json = JSON.parse("" + body)
                     if (!json.id_token) {
-                        return res.end();
+                        return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
                     }
 
                     let jwt = JwtDecode(json.id_token);
@@ -194,11 +185,13 @@ export class LineWebhookAPI extends BaseAPI {
                     var picture = jwt["picture"];
 
                     if (!sub || !name || !picture) {
-                        return res.end();
+                        return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
                     }
 
+                    DHLog.ld("step 3  callback and check user " + sub);
                     this.userHelper.list(sub, (code, result) => {
                         if (code == MONGODB_CODE.MC_SUCCESS) {
+                            DHLog.ld("step 4  result " + sub);
                             if (req.session.account) {
                                 req.session.time++;
                             }else {
@@ -210,7 +203,7 @@ export class LineWebhookAPI extends BaseAPI {
 
                             return res.redirect(DHAPI.ROOT_PATH);
                         }else {
-                            return res.redirect(DHAPI.LOGIN_ERROR + "?code=" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                            return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
                         }
                     });
                 }
