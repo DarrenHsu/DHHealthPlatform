@@ -26,7 +26,7 @@ export class LoginRoute extends BaseRoute {
                     "client_id=" + channelId + "&" +
                     "redirect_uri=" + authUrl + "&" +
                     "state=" + "2018031300001" + "&" +
-                    "scope=profile";
+                    "scope=openid%20profile";
 
                 DHLog.d("lineApi " + lineApi);
                 
