@@ -57,8 +57,12 @@ export class LoginRoute extends BaseRoute {
         DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_ERROR);
         router.get(DHAPI.LOGIN_ERROR + "/:code" , (req: Request, res: Response, next: NextFunction) => {
             var resultCode = req.params.code;
+            if (!resultCode) {
+                return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(LINE_CODE.LL_LOGIN_ERROR));
+            }
+
             DHLog.d("login error " + resultCode);
-            switch (resultCode) {
+            switch (parseInt(resultCode)) {
                 case LINE_CODE.LL_LOGIN_ERROR:
                     return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
                 case LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR:
