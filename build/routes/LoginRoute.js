@@ -47,8 +47,8 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
         });
         DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_ERROR);
-        router.get(DHAPI_1.DHAPI.LOGIN_ERROR, (req, res, next) => {
-            var resultCode = req.query.code;
+        router.get(DHAPI_1.DHAPI.LOGIN_ERROR + "/:code", (req, res, next) => {
+            var resultCode = req.params.code;
             switch (resultCode) {
                 case ResultCode_1.LINE_CODE.LL_LOGIN_ERROR:
                     return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));

@@ -163,7 +163,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         return res.end();
                     }
                     this.userHelper.list(sub, (code, result) => {
-                        return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "?code=" + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                        DHLog_1.DHLog.ld("TEST ERROR");
+                        return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
                         // if (code == MONGODB_CODE.MC_SUCCESS) {
                         //     if (req.session.account) {
                         //         req.session.time++;
