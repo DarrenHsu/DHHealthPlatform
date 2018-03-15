@@ -63,14 +63,6 @@ export class LoginRoute extends BaseRoute {
             
             DHLog.d("login error " + resultCode);
             return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(parseInt(resultCode)));
-            // switch (parseInt(resultCode)) {
-            //     case LINE_CODE.LL_LOGIN_ERROR:
-            //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
-            //     case LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR:
-            //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
-            //     default:
-            //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(LINE_CODE.LL_SUCCESS));
-            // }
         });
     }
 

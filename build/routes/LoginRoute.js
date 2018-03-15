@@ -53,7 +53,7 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
                 return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.LINE_CODE.LL_LOGIN_ERROR));
             }
             DHLog_1.DHLog.d("login error " + resultCode);
-            return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
+            return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(parseInt(resultCode)));
             // switch (parseInt(resultCode)) {
             //     case LINE_CODE.LL_LOGIN_ERROR:
             //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
