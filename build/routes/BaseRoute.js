@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto_1 = require("crypto");
 const ResultCode_1 = require("./ResultCode");
+const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
 class BaseRoute {
     constructor() {
@@ -52,6 +53,16 @@ class BaseRoute {
     addScript(src) {
         this.scripts.push(src);
         return this;
+    }
+    static checkLogin(req, res, next) {
+        var isLogin = false;
+        if (req.session.account && req.session.name && req.session.picture) {
+            isLogin = true;
+        }
+        if (!isLogin) {
+            res.redirect(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH);
+        }
+        return isLogin;
     }
     render(req, res, view, options) {
         res.locals.BASE_URL = "/";

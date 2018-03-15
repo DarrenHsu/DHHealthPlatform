@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { IResult } from "./interface/IResult";
 import { IRecord } from "../mongo/interface/IRecord";
 import { ResultCodeMsg } from  "./ResultCode";
+import { DHAPI } from "../const/DHAPI";
 import { DHLog } from "../util/DHLog";
 
 export class BaseRoute {
@@ -69,6 +70,19 @@ export class BaseRoute {
     public addScript(src: string): BaseRoute {
         this.scripts.push(src);
         return this;
+    }
+
+    public static checkLogin(req: Request, res: Response, next: NextFunction): boolean {
+        var isLogin = false;
+        if (req.session.account && req.session.name && req.session.picture) {
+            isLogin = true;
+        }
+        
+        if (!isLogin) {
+            res.redirect(DHAPI.LOGIN_PROCESS_PATH);
+        }
+
+        return isLogin;
     }
 
     public render(req: Request, res: Response, view: string, options?: Object) {

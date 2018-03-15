@@ -8,24 +8,24 @@ import { LoginRoute } from "./LoginRoute";
 
 export class IndexRoute extends BaseRoute {
     
+    constructor() {
+        super();
+    }
+
     public static create(router: Router) {
         DHLog.d("[" + this.name + ":create] " + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
-            var isLogin = false;
-            if (req.session.account && req.session.name && req.session.picture) {
-                isLogin = true;
+            if (!this.checkLogin(req, res, next)) {
+                return;
             }
             
-            if (isLogin) {
-                new IndexRoute().index(req, res, next);
-            }else {
-                return res.redirect(DHAPI.LOGIN_PROCESS_PATH);
-            }
+            new IndexRoute().index(req, res, next);
         });
-    }
 
-    constructor() {
-        super();
+        DHLog.d("[" + this.name + ":create] " + DHAPI.CALENDAR_INDEX_PATH);
+        router.get(DHAPI.CALENDAR_INDEX_PATH, (req: Request, res: Response, next: NextFunction) => {
+            new IndexRoute().calendarIndex(req, res, next);
+        });
     }
 
     public index(req: Request, res: Response, next: NextFunction) {
@@ -38,5 +38,13 @@ export class IndexRoute extends BaseRoute {
             "loginTime": req.session.time
         };
         this.render(req, res, "index", options);
+    }
+
+    public calendarIndex(req: Request, res: Response, next: NextFunction) {
+        this.title = "Home | DHHealthPlatform | calendar | index";
+        let options: Object = {
+            "message": "Welcome to the Index",
+        };
+        this.render(req, res, "calendar/index", options);
     }
 }

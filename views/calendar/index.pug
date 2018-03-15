@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    title= title
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', href="/styles/bootstrap.min.css")
+    link(rel='stylesheet', href="/styles/fullcalendar.min.css")
+    link(rel='stylesheet', href="/styles/fullcalendar.print.min.css", media="print")
+    link(rel="stylesheet", href="/stylesheets/style.css")
+    script(src="/scripts/bootstrap.min.js" )
+    script(src="/scripts/jquery.min.js" )
+    script(src="/scripts/popper.min.js" )
+    script(src="/scripts/moment.min.js" )
+    script(src="/scripts/fullcalendar.min.js" )
+    script.
+      $(document).ready(function() {
+        $('#calendar').fullCalendar({
+          header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay,listWeek'
+        },
+        defaultDate: '2018-03-12',
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        events: [
+          {
+            title: 'All Day Event',
+            start: '2018-03-01',
+          },
+          {
+            title: 'Long Event',
+            start: '2018-03-07',
+            end: '2018-03-10'
+          }]
+        });
+      });
+    style(type='text/css').
+      body {
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14px;
+      }
+      #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+  body
+    div.jumbotron
+      img.headerIcon.float.image(src="/images/icon.png")
+      h2 #{title}
+
+    div
+      div(id="calendar")
+      br
+
+    div.jumbotron
