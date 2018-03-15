@@ -53,14 +53,15 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
                 return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.LINE_CODE.LL_LOGIN_ERROR));
             }
             DHLog_1.DHLog.d("login error " + resultCode);
-            switch (parseInt(resultCode)) {
-                case ResultCode_1.LINE_CODE.LL_LOGIN_ERROR:
-                    return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
-                case ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR:
-                    return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
-                default:
-                    return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.LINE_CODE.LL_SUCCESS));
-            }
+            return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(resultCode));
+            // switch (parseInt(resultCode)) {
+            //     case LINE_CODE.LL_LOGIN_ERROR:
+            //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
+            //     case LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR:
+            //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(resultCode));
+            //     default:
+            //         return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(LINE_CODE.LL_SUCCESS));
+            // }
         });
     }
     loginError(req, res, next, msg) {
