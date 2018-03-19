@@ -88,6 +88,6 @@ export class RecordRouter extends BaseRoute {
             "avgSpeed": record.avgSpeed.toFixed(1),
             "locations": record.locations
         };
-        this.render(req, res, "record", options);
+        this.render(req, res, "record/index", options);
     }
 }
