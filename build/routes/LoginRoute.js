@@ -62,7 +62,7 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             "message": msg
         };
         DHLog_1.DHLog.d("login msg " + msg);
-        this.render(req, res, "loginResult", options);
+        this.render(req, res, "login/result", options);
     }
 }
 exports.LoginRoute = LoginRoute;
