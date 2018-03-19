@@ -42,10 +42,19 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.posthMessage(router);
         api.getAuthorization(router);
     }
+    /**
+     * @description 取得 line Signature
+     * @param body
+     * @param screat
+     */
     static getSignature(body, screat) {
         let signature = crypto_1.createHmac('SHA256', screat).update(body).digest('base64');
         return signature;
     }
+    /**
+     * @description 驗證line Signature機制
+     * @param req
+     */
     isValidateSignature(req) {
         if (bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString())) {
             return true;
@@ -56,6 +65,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             return false;
         }
     }
+    /**
+     * @description 取得 chat 類型id
+     * @param source
+     */
     getChatId(source) {
         if (source && source.type) {
             switch (source.type) {
@@ -69,6 +82,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         }
         return null;
     }
+    /**
+     * @description 儲存 chat 相關資訊
+     * @param lineUserId
+     * @param chatId
+     * @param type
+     */
     saveChat(lineUserId, chatId, type) {
         var source = {
             chatId: chatId,
@@ -83,6 +102,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             DHLog_1.DHLog.ld("err " + err);
         });
     }
+    /**
+     * @description 內部呼叫發送機制
+     * @param message
+     * @param chats
+     * @param callback
+     */
     pushMessage(message, chats, callback) {
         let client = new bot_sdk_1.Client(this.clientConfig);
         if (chats.length == 0) {
@@ -103,9 +128,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             this.pushMessage(message, chats, callback);
         });
     }
-    /*
-    * @description 取得line web login 授權
-    */
+    /**
+     * @description 取得line web login 授權
+     * @param router
+     */
     getAuthorization(router) {
         router.get(this.authorizationUrl, (req, res, next) => {
             DHLog_1.DHLog.ld("step 1 Get Authorization start");
@@ -178,9 +204,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             });
         });
     }
-    /*
-    * @description 取得line message 回呼程式
-    */
+    /**
+     * @description 取得line message 回呼程式
+     * @param router
+     */
     post(router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req))
@@ -196,9 +223,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             res.end();
         });
     }
-    /*
-    * @description 發送line message
-    */
+    /**
+     * @description 發送line message
+     * @param router
+     */
     posthMessage(router) {
         router.post(this.messageUrl, (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -224,9 +252,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             });
         });
     }
-    /*
-    * @description 發送紀錄至line
-    */
+    /**
+     * @description 發送紀錄至line
+     * @param router
+     */
     postRecord(router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -256,9 +285,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             });
         });
     }
-    /*
-    * @description 回覆訊息處理
-    */
+    /**
+     * @description 回覆訊息處理
+     * @param token 回覆訊息的token
+     */
     replyMessageWithToken(token) {
         let client = new bot_sdk_1.Client(this.clientConfig);
         client.replyMessage(token, {

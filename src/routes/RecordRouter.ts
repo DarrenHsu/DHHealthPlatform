@@ -24,6 +24,12 @@ export class RecordRouter extends BaseRoute {
     protected recordHelper: RecordHelper;
     protected uri = DHAPI.RECORD_PATH;
     
+    constructor(connection: mongoose.Connection) {
+        super();
+        this.recordHelper = new RecordHelper(connection);
+        this.userHelper = new UserHelper(connection);
+    }
+    
     public static create(router: Router) {
         var app = new RecordRouter(DBHelper.connection);
         DHLog.d("[" + this.name + ":create] " + app.uri);
@@ -31,15 +37,10 @@ export class RecordRouter extends BaseRoute {
         app.get(router);
     }
 
-    constructor(connection: mongoose.Connection) {
-        super();
-        this.recordHelper = new RecordHelper(connection);
-        this.userHelper = new UserHelper(connection);
-    }
-
-    /*
-    * @description 取得紀錄並顯示單筆紀錄祥細內容
-    */
+    /**
+     * @description 取得紀錄並顯示單筆紀錄祥細內容
+     * @param router 
+     */
     public get(router: Router) {
         router.get(DHAPI.RECORD_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
             if (req.params.id == null || req.params.auth == null) {

@@ -34,21 +34,6 @@ export class LineWebhookAPI extends BaseAPI {
     private chatroomHelper: ChatroomHelper;
     private recordHelper: RecordHelper;
 
-    public static create(router: Router) {
-        let api = new LineWebhookAPI(DBHelper.connection);
-        DHLog.d("[" + this.name + ":create] " + api.uri);
-        
-        api.post(router);
-        api.postRecord(router);
-        api.posthMessage(router);
-        api.getAuthorization(router);
-    }
-
-    private static getSignature(body: string, screat: string): string {
-        let signature = createHmac('SHA256', screat).update(body).digest('base64');
-        return signature;
-    }
-
     constructor(connection: mongoose.Connection) {
         super();
         
@@ -66,6 +51,30 @@ export class LineWebhookAPI extends BaseAPI {
         }
     }
 
+    public static create(router: Router) {
+        let api = new LineWebhookAPI(DBHelper.connection);
+        DHLog.d("[" + this.name + ":create] " + api.uri);
+        
+        api.post(router);
+        api.postRecord(router);
+        api.posthMessage(router);
+        api.getAuthorization(router);
+    }
+
+    /**
+     * @description 取得 line Signature
+     * @param body 
+     * @param screat 
+     */
+    private static getSignature(body: string, screat: string): string {
+        let signature = createHmac('SHA256', screat).update(body).digest('base64');
+        return signature;
+    }
+
+    /**
+     * @description 驗證line Signature機制
+     * @param req 
+     */
     private isValidateSignature(req: Request): boolean{
         if (validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString())) {
             return true;
@@ -76,6 +85,10 @@ export class LineWebhookAPI extends BaseAPI {
         }
     }
 
+    /**
+     * @description 取得 chat 類型id
+     * @param source 
+     */
     private getChatId(source: any): string {
         if (source && source.type) {
             switch(source.type) {
@@ -91,6 +104,12 @@ export class LineWebhookAPI extends BaseAPI {
         return null;
     }
     
+    /**
+     * @description 儲存 chat 相關資訊
+     * @param lineUserId 
+     * @param chatId 
+     * @param type 
+     */
     private saveChat(lineUserId: string, chatId: string, type:string) {
         var source = {
             chatId: chatId,
@@ -108,6 +127,12 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
+    /**
+     * @description 內部呼叫發送機制
+     * @param message 
+     * @param chats 
+     * @param callback 
+     */
     private pushMessage(message: TextMessage, chats: IChatroom[], callback?: () => void) {
         let client = new Client(this.clientConfig);
         if (chats.length == 0)  {
@@ -130,9 +155,10 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    /*
-    * @description 取得line web login 授權
-    */
+    /**
+     * @description 取得line web login 授權
+     * @param router 
+     */
     protected getAuthorization(router: Router) {
         router.get(this.authorizationUrl, (req, res, next) => {
             DHLog.ld("step 1 Get Authorization start");
@@ -211,9 +237,10 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    /*
-    * @description 取得line message 回呼程式
-    */
+    /**
+     * @description 取得line message 回呼程式 
+     * @param router 
+     */
     protected post(router: Router) {
         router.post(this.uri, (req, res, next) => {
             if (!this.isValidateSignature(req)) return;
@@ -232,9 +259,10 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    /*
-    * @description 發送line message 
-    */
+    /**
+     * @description 發送line message 
+     * @param router 
+     */
     protected posthMessage(router: Router) {
         router.post(this.messageUrl, (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -265,9 +293,10 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    /*
-    * @description 發送紀錄至line
-    */
+    /**
+     * @description 發送紀錄至line
+     * @param router 
+     */
     protected postRecord(router: Router) {
         router.get(this.recordUrl + "/:recordId", (req, res, next) => {
             if (!this.checkHeader(req)) {
@@ -303,9 +332,10 @@ export class LineWebhookAPI extends BaseAPI {
         });
     }
 
-    /*
-    * @description 回覆訊息處理
-    */
+    /**
+     * @description 回覆訊息處理
+     * @param token 回覆訊息的token
+     */
     private replyMessageWithToken(token: string) {
         let client = new Client(this.clientConfig);
         client.replyMessage(token, {
