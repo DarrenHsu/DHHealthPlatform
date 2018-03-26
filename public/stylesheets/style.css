@@ -34,8 +34,14 @@ html, body {
 }
 
 .headerIcon {
-  width: 50px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
+}
+
+.headerTitle{
+  padding-left: 10px;
+  color: white;
 }
 
 .userPicture {
@@ -45,6 +51,5 @@ html, body {
 }
 
 .float {
-  margin-right:10px;
   float:left;
-}  
+}

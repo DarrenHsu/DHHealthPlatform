@@ -109,6 +109,7 @@ class BaseRoute {
         return result;
     }
 }
+BaseRoute.AP_TITLE = "DHHealthPlatform";
 BaseRoute.FEED_AUTH = "Darren Hsu I Love You";
 BaseRoute.FEED_AUTH_PASS = "imdarren";
 exports.BaseRoute = BaseRoute;

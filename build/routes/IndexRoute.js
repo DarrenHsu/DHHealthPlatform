@@ -21,7 +21,7 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
         });
     }
     index(req, res, next) {
-        this.title = "Home | DHHealthPlatform | index";
+        this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             "message": "Welcome to the Index",
             "account": req.session.account,
@@ -32,7 +32,7 @@ class IndexRoute extends BaseRoute_1.BaseRoute {
         this.render(req, res, "index", options);
     }
     calendarIndex(req, res, next) {
-        this.title = "Home | DHHealthPlatform | calendar | index";
+        this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             "message": "Welcome to the Index",
         };

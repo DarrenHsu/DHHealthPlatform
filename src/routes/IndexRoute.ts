@@ -29,7 +29,7 @@ export class IndexRoute extends BaseRoute {
     }
 
     public index(req: Request, res: Response, next: NextFunction) {
-        this.title = "Home | DHHealthPlatform | index";
+        this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             "message": "Welcome to the Index",
             "account": req.session.account,
@@ -41,7 +41,7 @@ export class IndexRoute extends BaseRoute {
     }
 
     public calendarIndex(req: Request, res: Response, next: NextFunction) {
-        this.title = "Home | DHHealthPlatform | calendar | index";
+        this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             "message": "Welcome to the Index",
         };

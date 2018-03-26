@@ -67,7 +67,7 @@ export class LoginRoute extends BaseRoute {
     }
 
     public loginError(req: Request, res: Response, next: NextFunction, msg: String) {
-        this.title = "Home | DHHealthPlatform | Login Error";
+        this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             "message": msg
         };
