@@ -14,7 +14,7 @@ class BaseRoute {
      * @param req
      */
     static getFullHostUrl(req) {
-        return req.protocol + "s://" + req.host;
+        return req.protocol + "s://" + req.hostname;
     }
     /**
      * @description 確認參數是否處合授權要求

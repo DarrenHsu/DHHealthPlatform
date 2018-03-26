@@ -26,7 +26,7 @@ export class BaseRoute {
      * @param req 
      */
     protected static getFullHostUrl(req: Request): String {
-        return req.protocol + "s://" + req.host; 
+        return req.protocol + "s://" + req.hostname; 
     }
 
     /**
