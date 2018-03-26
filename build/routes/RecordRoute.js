@@ -10,7 +10,7 @@ const UserHelper_1 = require("../mongo/helper/UserHelper");
 const DHAPI_1 = require("../const/DHAPI");
 const DHDateFormat_1 = require("../const/DHDateFormat");
 const DHLog_1 = require("../util/DHLog");
-class RecordRouter extends BaseRoute_1.BaseRoute {
+class RecordRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();
         this.uri = DHAPI_1.DHAPI.RECORD_PATH;
@@ -18,7 +18,7 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
         this.userHelper = new UserHelper_1.UserHelper(connection);
     }
     static create(router) {
-        var app = new RecordRouter(DBHelper_1.DBHelper.connection);
+        var app = new RecordRoute(DBHelper_1.DBHelper.connection);
         DHLog_1.DHLog.d("[" + this.name + ":create] " + app.uri);
         app.get(router);
     }
@@ -67,4 +67,4 @@ class RecordRouter extends BaseRoute_1.BaseRoute {
         this.render(req, res, "record/index", options);
     }
 }
-exports.RecordRouter = RecordRouter;
+exports.RecordRoute = RecordRoute;

@@ -18,7 +18,7 @@ declare type Location = {
     lng: string;
 };
 
-export class RecordRouter extends BaseRoute {
+export class RecordRoute extends BaseRoute {
 
     protected userHelper: UserHelper;
     protected recordHelper: RecordHelper;
@@ -31,7 +31,7 @@ export class RecordRouter extends BaseRoute {
     }
     
     public static create(router: Router) {
-        var app = new RecordRouter(DBHelper.connection);
+        var app = new RecordRoute(DBHelper.connection);
         DHLog.d("[" + this.name + ":create] " + app.uri);
         
         app.get(router);
@@ -44,23 +44,19 @@ export class RecordRouter extends BaseRoute {
     public get(router: Router) {
         router.get(DHAPI.RECORD_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
             if (req.params.id == null || req.params.auth == null) {
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
-                return;
+                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
 
             let recordId = querystring.unescape(req.params.id);
             let auth = querystring.unescape(req.params.auth);
             
             if (!this.checkParam(auth, recordId)) {
-                res.statusCode = 403;
-                res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
-                return;
+                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_AUTH_ERROR);
             }
             
             this.recordHelper.get(recordId, (code, record) => {
                 if (code != MONGODB_CODE.MC_SUCCESS) {
-                    res.json(BaseRoute.createResult(null, code));
-                    return;
+                    return res.redirect(DHAPI.ERROR_PATH + "/" + code);
                 }
 
                 this.userHelper.list(record.lineUserId, (code, user) => {

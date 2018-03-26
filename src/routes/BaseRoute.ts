@@ -121,7 +121,7 @@ export class BaseRoute {
      * @param obj 
      * @param code 
      */
-    public static createResult(obj: any, code: number) {
+    public static createResult(obj: any, code: number): IResult {
         var result: IResult = {
             code: code,
             message: ResultCodeMsg.getMsg(code)

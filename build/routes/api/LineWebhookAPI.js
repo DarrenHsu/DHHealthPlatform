@@ -140,12 +140,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             if (error) {
                 DHLog_1.DHLog.ld("error " + error);
                 DHLog_1.DHLog.ld("error " + error_description);
-                return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
             }
             var state = req.query.state;
             var code = req.query.code;
             if (!code) {
-                return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
             }
             var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
@@ -167,19 +167,19 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             DHLog_1.DHLog.ld("step 2 Get accesstoken start " + JSON.stringify(option));
             request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
-                    return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
                 }
                 else {
                     var json = JSON.parse("" + body);
                     if (!json.id_token) {
-                        return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
                     }
                     let jwt = JwtDecode(json.id_token);
                     var sub = jwt["sub"];
                     var name = jwt["name"];
                     var picture = jwt["picture"];
                     if (!sub || !name || !picture) {
-                        return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
                     }
                     DHLog_1.DHLog.ld("step 3  callback and check user " + sub);
                     this.userHelper.list(sub, (code, result) => {
@@ -197,7 +197,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                             return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
                         }
                         else {
-                            return res.redirect(DHAPI_1.DHAPI.LOGIN_ERROR + "/" + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                            return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
                         }
                     });
                 }

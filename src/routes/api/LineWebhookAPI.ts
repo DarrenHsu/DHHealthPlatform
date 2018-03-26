@@ -167,13 +167,13 @@ export class LineWebhookAPI extends BaseAPI {
             if (error) {
                 DHLog.ld("error " + error);
                 DHLog.ld("error " + error_description);
-                return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
+                return res.redirect(DHAPI.ERROR_PATH + "/" + LINE_CODE.LL_LOGIN_ERROR);
             }
 
             var state = req.query.state;
             var code = req.query.code;
             if (!code) {
-                return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
+                return res.redirect(DHAPI.ERROR_PATH + "/" + LINE_CODE.LL_LOGIN_ERROR);
             }
 
             var fullUrl = BaseRoute.getFullHostUrl(req);
@@ -198,11 +198,11 @@ export class LineWebhookAPI extends BaseAPI {
             DHLog.ld("step 2 Get accesstoken start " + JSON.stringify(option));
             request.post(LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
                 if (error) {
-                    return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
+                    return res.redirect(DHAPI.ERROR_PATH + "/" + LINE_CODE.LL_LOGIN_ERROR);
                 }else {
                     var json = JSON.parse("" + body)
                     if (!json.id_token) {
-                        return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
+                        return res.redirect(DHAPI.ERROR_PATH + "/" + LINE_CODE.LL_LOGIN_ERROR);
                     }
 
                     let jwt = JwtDecode(json.id_token);
@@ -211,7 +211,7 @@ export class LineWebhookAPI extends BaseAPI {
                     var picture = jwt["picture"];
 
                     if (!sub || !name || !picture) {
-                        return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_LOGIN_ERROR);
+                        return res.redirect(DHAPI.ERROR_PATH + "/" + LINE_CODE.LL_LOGIN_ERROR);
                     }
 
                     DHLog.ld("step 3  callback and check user " + sub);
@@ -229,7 +229,7 @@ export class LineWebhookAPI extends BaseAPI {
 
                             return res.redirect(DHAPI.ROOT_PATH);
                         }else {
-                            return res.redirect(DHAPI.LOGIN_ERROR + "/" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                            return res.redirect(DHAPI.ERROR_PATH + "/" + LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
                         }
                     });
                 }

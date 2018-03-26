@@ -4,7 +4,6 @@ const DHLog_1 = require("../util/DHLog");
 const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
 const LINEAPI_1 = require("../const/LINEAPI");
-const ResultCode_1 = require("../routes/ResultCode");
 class LoginRoute extends BaseRoute_1.BaseRoute {
     constructor() {
         super();
@@ -46,23 +45,6 @@ class LoginRoute extends BaseRoute_1.BaseRoute {
             });
             return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
         });
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.LOGIN_ERROR);
-        router.get(DHAPI_1.DHAPI.LOGIN_ERROR + "/:code", (req, res, next) => {
-            var resultCode = req.params.code;
-            if (!resultCode) {
-                return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.LINE_CODE.LL_LOGIN_ERROR));
-            }
-            DHLog_1.DHLog.d("login error " + resultCode);
-            return new LoginRoute().loginError(req, res, next, ResultCode_1.ResultCodeMsg.getMsg(parseInt(resultCode)));
-        });
-    }
-    loginError(req, res, next, msg) {
-        this.title = BaseRoute_1.BaseRoute.AP_TITLE;
-        let options = {
-            "message": msg
-        };
-        DHLog_1.DHLog.d("login msg " + msg);
-        this.render(req, res, "login/result", options);
     }
 }
 exports.LoginRoute = LoginRoute;

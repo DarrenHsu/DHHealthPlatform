@@ -53,25 +53,5 @@ export class LoginRoute extends BaseRoute {
             });
             return res.redirect(DHAPI.ROOT_PATH);
         });
-
-        DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_ERROR);
-        router.get(DHAPI.LOGIN_ERROR + "/:code" , (req: Request, res: Response, next: NextFunction) => {
-            var resultCode = req.params.code;
-            if (!resultCode) {
-                return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(LINE_CODE.LL_LOGIN_ERROR));
-            }
-            
-            DHLog.d("login error " + resultCode);
-            return new LoginRoute().loginError(req, res, next, ResultCodeMsg.getMsg(parseInt(resultCode)));
-        });
-    }
-
-    public loginError(req: Request, res: Response, next: NextFunction, msg: String) {
-        this.title = BaseRoute.AP_TITLE;
-        let options: Object = {
-            "message": msg
-        };
-        DHLog.d("login msg " + msg);
-        this.render(req, res, "login/result", options);
     }
 }

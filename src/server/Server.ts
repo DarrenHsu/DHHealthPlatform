@@ -12,7 +12,8 @@ import mongoose = require("mongoose");
 import { DBHelper } from  "../mongo/helper/DBHelper";
 import { IndexRoute } from "../routes/IndexRoute";
 import { LoginRoute } from "../routes/LoginRoute";
-import { RecordRouter } from "../routes/RecordRouter";
+import { RecordRoute } from "../routes/RecordRoute";
+import { ErrorRoute } from "../routes/ErrorRoute";
 import { DHAPI } from "../const/DHAPI";
 import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
@@ -82,7 +83,8 @@ export class Server {
 
         IndexRoute.create(router);
         LoginRoute.create(router);
-        RecordRouter.create(router);
+        RecordRoute.create(router);
+        ErrorRoute.create(router);
         
         this.app.use(router);
     }
