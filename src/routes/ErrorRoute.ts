@@ -4,7 +4,6 @@ import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/DHAPI";
 import { LINEAPI } from "../const/LINEAPI";
 import { DHLog } from "../util/DHLog";
-import { LoginRoute } from "./LoginRoute";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "./ResultCode";
 import { IResult } from "./interface/IResult";
 
