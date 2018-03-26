@@ -23,7 +23,7 @@ export class ErrorRoute extends BaseRoute {
                 var result = BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR);
                 new ErrorRoute().error(req, res, next, result);
             }else {
-                var result = BaseRoute.createResult(null, errorCode);
+                var result = BaseRoute.createResult(null, parseInt(errorCode));
                 new ErrorRoute().error(req, res, next, result);
             }
         });

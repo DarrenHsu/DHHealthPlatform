@@ -18,7 +18,7 @@ class ErrorRoute extends BaseRoute_1.BaseRoute {
                 new ErrorRoute().error(req, res, next, result);
             }
             else {
-                var result = BaseRoute_1.BaseRoute.createResult(null, errorCode);
+                var result = BaseRoute_1.BaseRoute.createResult(null, parseInt(errorCode));
                 new ErrorRoute().error(req, res, next, result);
             }
         });
