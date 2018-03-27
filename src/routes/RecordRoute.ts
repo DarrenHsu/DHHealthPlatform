@@ -1,5 +1,6 @@
 import mongoose = require("mongoose");
 import querystring = require("querystring");
+import { DHDateFormat } from "../const/DHDateFormat";
 import { parseIso, format } from "ts-date/locale/en";
 import { NextFunction, Request, Response, Router } from "express";
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "./ResultCode";
@@ -8,10 +9,9 @@ import { DBHelper } from "../mongo/helper/DBHelper";
 import { RecordHelper } from "../mongo/helper/RecordHelper";
 import { UserHelper } from "../mongo/helper/UserHelper";
 import { IRecord } from "../mongo/interface/IRecord";
-import { DHAPI } from "../const/DHAPI";
-import { DHDateFormat } from "../const/DHDateFormat";
-import { DHLog } from "../util/DHLog";
 import { IUser } from "../mongo/interface/IUser";
+import { DHAPI } from "../const/DHAPI";
+import { DHLog } from "../util/DHLog";
 
 declare type Location = {
     lat: string;

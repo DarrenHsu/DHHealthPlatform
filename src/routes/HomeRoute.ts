@@ -4,9 +4,8 @@ import { BaseRoute } from "./BaseRoute";
 import { DHAPI } from "../const/DHAPI";
 import { LINEAPI } from "../const/LINEAPI";
 import { DHLog } from "../util/DHLog";
-import { LoginRoute } from "./LoginRoute";
 
-export class IndexRoute extends BaseRoute {
+export class HomeRoute extends BaseRoute {
     
     constructor() {
         super();
@@ -19,12 +18,7 @@ export class IndexRoute extends BaseRoute {
                 return;
             }
             
-            new IndexRoute().index(req, res, next);
-        });
-
-        DHLog.d("[" + this.name + ":create] " + DHAPI.CALENDAR_INDEX_PATH);
-        router.get(DHAPI.CALENDAR_INDEX_PATH, (req: Request, res: Response, next: NextFunction) => {
-            new IndexRoute().calendarIndex(req, res, next);
+            new HomeRoute().index(req, res, next);
         });
     }
 
@@ -37,14 +31,6 @@ export class IndexRoute extends BaseRoute {
             "picture": req.session.picture, 
             "loginTime": req.session.time
         };
-        this.render(req, res, "index", options);
-    }
-
-    public calendarIndex(req: Request, res: Response, next: NextFunction) {
-        this.title = BaseRoute.AP_TITLE;
-        let options: Object = {
-            "message": "Welcome to the Index",
-        };
-        this.render(req, res, "calendar/index", options);
+        this.render(req, res, "home/index", options);
     }
 }

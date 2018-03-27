@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
+const DHDateFormat_1 = require("../const/DHDateFormat");
 const en_1 = require("ts-date/locale/en");
 const ResultCode_1 = require("./ResultCode");
 const BaseRoute_1 = require("./BaseRoute");
@@ -8,7 +9,6 @@ const DBHelper_1 = require("../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../mongo/helper/RecordHelper");
 const UserHelper_1 = require("../mongo/helper/UserHelper");
 const DHAPI_1 = require("../const/DHAPI");
-const DHDateFormat_1 = require("../const/DHDateFormat");
 const DHLog_1 = require("../util/DHLog");
 class RecordRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {

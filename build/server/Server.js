@@ -11,7 +11,8 @@ const path = require("path");
 const errorHandler = require("errorhandler");
 const methodOverride = require("method-override");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
-const IndexRoute_1 = require("../routes/IndexRoute");
+const HomeRoute_1 = require("../routes/HomeRoute");
+const CalendarRoute_1 = require("../routes/CalendarRoute");
 const LoginRoute_1 = require("../routes/LoginRoute");
 const RecordRoute_1 = require("../routes/RecordRoute");
 const ErrorRoute_1 = require("../routes/ErrorRoute");
@@ -68,7 +69,8 @@ class Server {
     }
     routes() {
         let router = express.Router();
-        IndexRoute_1.IndexRoute.create(router);
+        HomeRoute_1.HomeRoute.create(router);
+        CalendarRoute_1.CalendarRoute.create(router);
         LoginRoute_1.LoginRoute.create(router);
         RecordRoute_1.RecordRoute.create(router);
         ErrorRoute_1.ErrorRoute.create(router);

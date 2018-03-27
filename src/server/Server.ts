@@ -9,17 +9,21 @@ import * as path from "path";
 import errorHandler = require("errorhandler");
 import methodOverride = require("method-override");
 import mongoose = require("mongoose");
+
+import { DHLog } from "../util/DHLog";
 import { DBHelper } from  "../mongo/helper/DBHelper";
-import { IndexRoute } from "../routes/IndexRoute";
+
+import { HomeRoute } from "../routes/HomeRoute";
+import { CalendarRoute } from "../routes/CalendarRoute";
 import { LoginRoute } from "../routes/LoginRoute";
 import { RecordRoute } from "../routes/RecordRoute";
 import { ErrorRoute } from "../routes/ErrorRoute";
+
 import { DHAPI } from "../const/DHAPI";
 import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
 import { RouteAPI } from "../routes/api/RouteAPI";
 import { LineWebhookAPI } from "../routes/api/LineWebhookAPI"
-import { DHLog } from "../util/DHLog";
 
 var MongoStore = connectMongo(session);
 
@@ -81,7 +85,8 @@ export class Server {
     private routes() {
         let router: express.Router = express.Router();
 
-        IndexRoute.create(router);
+        HomeRoute.create(router);
+        CalendarRoute.create(router);
         LoginRoute.create(router);
         RecordRoute.create(router);
         ErrorRoute.create(router);
