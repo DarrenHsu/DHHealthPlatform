@@ -3,13 +3,19 @@ extends ./layout/body
 block content
   script.
     $('document').ready(function() {  
-      console.log("ready");
+      $(function() {
+        loadImage();
+      })
+      
       $("#RecordCarousel").on("slid.bs.carousel", function (e) {
-        var url = $(".carousel-item.active").find("img").attr("url"); 
-        console.log("url " + url);
-        $(".carousel-item.active").find("img").attr("src", url); //set value : src = url
+        loadImage();
       });
     });
+
+    function loadImage() {
+      var url = $(".carousel-item.active").find("img").attr("url"); 
+      $(".carousel-item.active").find("img").attr("src", url);
+    }
 
   div(id="RecordCarousel" class="carousel slide" data-ride="carousel")
     div(class="carousel-inner")
