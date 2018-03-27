@@ -4,6 +4,7 @@ class DHAPI {
 }
 DHAPI.pkgjson = require("../../package.json");
 DHAPI.ROOT_PATH = "/";
+DHAPI.HOME_PATH = "/home";
 DHAPI.LOGIN_PATH = "/login";
 DHAPI.LOGIN_INPUT_PATH = DHAPI.LOGIN_PATH + "/input";
 DHAPI.LOGIN_PROCESS_PATH = DHAPI.LOGIN_PATH + "/process";

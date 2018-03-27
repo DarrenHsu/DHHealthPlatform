@@ -18,11 +18,25 @@ export class HomeRoute extends BaseRoute {
                 return;
             }
             
+            new HomeRoute().loginIndex(req, res, next);
+        });
+
+        DHLog.d("[" + this.name + ":create] " + DHAPI.HOME_PATH);
+        router.get(DHAPI.HOME_PATH, (req: Request, res: Response, next: NextFunction) => {
             new HomeRoute().index(req, res, next);
         });
     }
 
     public index(req: Request, res: Response, next: NextFunction) {
+        this.title = BaseRoute.AP_TITLE;
+        let options: Object = {
+            "message": "Welcome to the Index",
+            "name": req.session.name,
+        };
+        this.render(req, res, "home/index", options);
+    }
+
+    public loginIndex(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             "message": "Welcome to the Index",

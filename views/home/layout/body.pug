@@ -1,0 +1,10 @@
+extends ../../layout/html
+
+block bodyContent
+  include ./link
+  include ../../layout/script
+  body
+    include ../../layout/navbar
+    div(class="container content")
+      block content
+    include ../../layout/footer

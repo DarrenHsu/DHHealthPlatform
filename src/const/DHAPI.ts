@@ -3,6 +3,8 @@ export class DHAPI {
     public static pkgjson =                         require("../../package.json");
 
     public static ROOT_PATH =                       "/";
+
+    public static HOME_PATH =                       "/home";
     
     public static LOGIN_PATH =                      "/login";
     public static LOGIN_INPUT_PATH =                DHAPI.LOGIN_PATH + "/input";
