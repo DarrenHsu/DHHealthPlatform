@@ -1,21 +1,31 @@
 extends ./layout/body
 
 block content
+  script.
+    $('document').ready(function() {  
+      console.log("ready");
+      $("#RecordCarousel").on("slid.bs.carousel", function (e) {
+        var url = $(".carousel-item.active").find("img").attr("url"); 
+        console.log("url " + url);
+        $(".carousel-item.active").find("img").attr("src", url); //set value : src = url
+      });
+    });
 
-  //- div(id="carouselExampleControls" class="carousel slide" data-ride="carousel")
-  //-   div(class="carousel-inner")
-  //-     div(class="carousel-item active")
-  //-       img(class="d-block w-100" src="/images/first.jpg" alt="First slide")
-  //-     div(class="carousel-item")
-  //-       img(class="d-block w-100" src="/images/second.jpg" alt="Second slide")
-  //-     div(class="carousel-item")
-  //-       img(class="d-block w-100" src="/images/third.jpg" alt="Thrid slide")
-  //-     a(class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev")
-  //-       span(class="carousel-control-prev-icon" aria-hidden="true")
-  //-       span(class="sr-only") Previous
-  //-     a(class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next")
-  //-       span(class="carousel-control-next-icon" aria-hidden="true")
-  //-       span(class="sr-only") Next
+  div(id="RecordCarousel" class="carousel slide" data-ride="carousel")
+    div(class="carousel-inner")
+      div(class="carousel-item active")
+        img(class="d-block w-100 home-carousel-item" src="" url="https://maps.googleapis.com/maps/api/streetview?key=AIzaSyDSByvQBEGXDzErlMl8zxgH8_iRegQSN3E&size=1024x300&location=23.558215,120.471724&fov=20&heading=75&pitch=5" alt="First slide")
+      div(class="carousel-item")
+        img(class="d-block w-100 home-carousel-item" src="" url="https://maps.googleapis.com/maps/api/streetview?key=AIzaSyDSByvQBEGXDzErlMl8zxgH8_iRegQSN3E&size=1024x300&location=23.558215,120.471724&fov=30&heading=90&pitch=5" alt="Second slide")
+      div(class="carousel-item")
+        img(class="d-block w-100 home-carousel-item" src="" url="https://maps.googleapis.com/maps/api/streetview?key=AIzaSyDSByvQBEGXDzErlMl8zxgH8_iRegQSN3E&size=1024x300&location=23.558215,120.471724&fov=60&heading=70&pitch=5" alt="Second slide")
+        
+      a(class="carousel-control-prev" href="#RecordCarousel" role="button" data-slide="prev")
+        span(class="carousel-control-prev-icon" aria-hidden="true")
+        span(class="sr-only") Previous
+      a(class="carousel-control-next" href="#RecordCarousel" role="button" data-slide="next")
+        span(class="carousel-control-next-icon" aria-hidden="true")
+        span(class="sr-only") Next
       
   h4(class="my-3") 我的紀錄統計
     small 以下為統計資訊
