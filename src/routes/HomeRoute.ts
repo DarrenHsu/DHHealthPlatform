@@ -12,22 +12,39 @@ export class HomeRoute extends BaseRoute {
     }
 
     public static create(router: Router) {
-        DHLog.d("[" + this.name + ":create] " + DHAPI.ROOT_PATH);
-        router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
-            if (!this.checkLogin(req, res, next)) {
-                return;
-            }
-            
-            new HomeRoute().loginIndex(req, res, next);
-        });
+        var app = new HomeRoute();
 
-        DHLog.d("[" + this.name + ":create] " + DHAPI.HOME_PATH);
+        app.getTestIndex(router);
+        app.getIndex(router);
+    }
+
+    /**
+     * @description 測試頁面
+     * @param router 
+     */
+    public getTestIndex(router: Router) {
+        DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI.HOME_PATH);
         router.get(DHAPI.HOME_PATH, (req: Request, res: Response, next: NextFunction) => {
-            new HomeRoute().index(req, res, next);
+            this.renderTestIndex(req, res, next);
         });
     }
 
-    public index(req: Request, res: Response, next: NextFunction) {
+    /**
+     * @description 首頁畫面
+     * @param router 
+     */
+    public getIndex(router: Router) {
+        DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI.ROOT_PATH);
+        router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
+            if (!HomeRoute.checkLogin(req, res, next)) {
+                return;
+            }
+            
+            this.renderIndex(req, res, next);
+        });
+    }
+
+    public renderTestIndex(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: {
@@ -39,7 +56,7 @@ export class HomeRoute extends BaseRoute {
         this.render(req, res, "home/index", options);
     }
 
-    public loginIndex(req: Request, res: Response, next: NextFunction) {
+    public renderIndex(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: {

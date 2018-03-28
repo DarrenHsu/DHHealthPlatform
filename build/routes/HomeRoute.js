@@ -8,19 +8,34 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
         super();
     }
     static create(router) {
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.ROOT_PATH);
-        router.get(DHAPI_1.DHAPI.ROOT_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
-                return;
-            }
-            new HomeRoute().loginIndex(req, res, next);
-        });
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.HOME_PATH);
+        var app = new HomeRoute();
+        app.getTestIndex(router);
+        app.getIndex(router);
+    }
+    /**
+     * @description 測試頁面
+     * @param router
+     */
+    getTestIndex(router) {
+        DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.HOME_PATH);
         router.get(DHAPI_1.DHAPI.HOME_PATH, (req, res, next) => {
-            new HomeRoute().index(req, res, next);
+            this.renderTestIndex(req, res, next);
         });
     }
-    index(req, res, next) {
+    /**
+     * @description 首頁畫面
+     * @param router
+     */
+    getIndex(router) {
+        DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.ROOT_PATH);
+        router.get(DHAPI_1.DHAPI.ROOT_PATH, (req, res, next) => {
+            if (!HomeRoute.checkLogin(req, res, next)) {
+                return;
+            }
+            this.renderIndex(req, res, next);
+        });
+    }
+    renderTestIndex(req, res, next) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: {
@@ -31,7 +46,7 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
         };
         this.render(req, res, "home/index", options);
     }
-    loginIndex(req, res, next) {
+    renderIndex(req, res, next) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: {

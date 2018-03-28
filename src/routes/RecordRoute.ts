@@ -26,22 +26,23 @@ export class RecordRoute extends BaseRoute {
     
     constructor(connection: mongoose.Connection) {
         super();
+
         this.recordHelper = new RecordHelper(connection);
         this.userHelper = new UserHelper(connection);
     }
     
     public static create(router: Router) {
         var app = new RecordRoute(DBHelper.connection);
-        DHLog.d("[" + this.name + ":create] " + app.uri);
         
-        app.get(router);
+        app.getPublicRecord(router);
     }
 
     /**
      * @description 取得紀錄並顯示單筆紀錄祥細內容
      * @param router 
      */
-    public get(router: Router) {
+    public getPublicRecord(router: Router) {
+        DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PATH);
         router.get(DHAPI.RECORD_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
             if (req.params.id == null || req.params.auth == null) {
                 return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
@@ -60,13 +61,13 @@ export class RecordRoute extends BaseRoute {
                 }
 
                 this.userHelper.list(record.lineUserId, (code, user) => {
-                    this.index(req, res, next, user[0], record);
+                    this.renderPublicRecord(req, res, next, user[0], record);
                 });
             });
         });
     }
 
-    public index(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
+    public renderPublicRecord(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
         this.title = BaseRoute.AP_TITLE;
         var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
         var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
@@ -88,6 +89,6 @@ export class RecordRoute extends BaseRoute {
             avgSpeed: record.avgSpeed.toFixed(1),
             locations: record.locations
         };
-        this.render(req, res, "record/index", options);
+        this.render(req, res, "record/publicIndex", options);
     }
 }

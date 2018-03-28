@@ -9,21 +9,27 @@ class ErrorRoute extends BaseRoute_1.BaseRoute {
         super();
     }
     static create(router) {
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + DHAPI_1.DHAPI.ERROR_PATH);
+        var app = new ErrorRoute();
+        app.getError(router);
+    }
+    /**
+     * @description 蟣示錯誤頁面
+     * @param router
+     */
+    getError(router) {
+        DHLog_1.DHLog.d("[" + ErrorRoute.name + ":create] " + DHAPI_1.DHAPI.ERROR_PATH);
         router.get(DHAPI_1.DHAPI.ERROR_PATH + "/:errorCode", (req, res, next) => {
             var errorCode = req.params.errorCode;
-            DHLog_1.DHLog.d("error code " + errorCode);
             if (!errorCode) {
                 var result = BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
-                new ErrorRoute().error(req, res, next, result);
             }
             else {
                 var result = BaseRoute_1.BaseRoute.createResult(null, parseInt(errorCode));
-                new ErrorRoute().error(req, res, next, result);
             }
+            this.renderError(req, res, next, result);
         });
     }
-    error(req, res, next, result) {
+    renderError(req, res, next, result) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: {

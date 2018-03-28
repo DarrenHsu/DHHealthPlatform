@@ -19,14 +19,14 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     }
     static create(router) {
         var app = new RecordRoute(DBHelper_1.DBHelper.connection);
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + app.uri);
-        app.get(router);
+        app.getPublicRecord(router);
     }
     /**
      * @description 取得紀錄並顯示單筆紀錄祥細內容
      * @param router
      */
-    get(router) {
+    getPublicRecord(router) {
+        DHLog_1.DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI_1.DHAPI.RECORD_PATH);
         router.get(DHAPI_1.DHAPI.RECORD_PATH + "/:id/:auth", (req, res, next) => {
             if (req.params.id == null || req.params.auth == null) {
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
@@ -41,12 +41,12 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + code);
                 }
                 this.userHelper.list(record.lineUserId, (code, user) => {
-                    this.index(req, res, next, user[0], record);
+                    this.renderPublicRecord(req, res, next, user[0], record);
                 });
             });
         });
     }
-    index(req, res, next, user, record) {
+    renderPublicRecord(req, res, next, user, record) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
         var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
@@ -68,7 +68,7 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             avgSpeed: record.avgSpeed.toFixed(1),
             locations: record.locations
         };
-        this.render(req, res, "record/index", options);
+        this.render(req, res, "record/publicIndex", options);
     }
 }
 exports.RecordRoute = RecordRoute;

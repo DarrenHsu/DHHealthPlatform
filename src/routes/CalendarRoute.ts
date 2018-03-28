@@ -12,13 +12,23 @@ export class CalendarRoute extends BaseRoute {
     }
 
     public static create(router: Router) {
-        DHLog.d("[" + this.name + ":create] " + DHAPI.CALENDAR_PATH);
+        var app = new CalendarRoute();
+
+        app.getCalendar(router);
+    }
+
+    /**
+     * @description 產生行程頁面
+     * @param router 
+     */
+    public getCalendar(router: Router) {
+        DHLog.d("[" + CalendarRoute.name + ":create] " + DHAPI.CALENDAR_PATH);
         router.get(DHAPI.CALENDAR_PATH, (req: Request, res: Response, next: NextFunction) => {
-            new CalendarRoute().calendarIndex(req, res, next);
+            this.renderCalendar(req, res, next);
         });
     }
 
-    public calendarIndex(req: Request, res: Response, next: NextFunction) {
+    public renderCalendar(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: {

@@ -12,12 +12,23 @@ export class LoginRoute extends BaseRoute {
     }
 
     public static create(router: Router) {
-        DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_PROCESS_PATH);
+        var app = new LoginRoute();
+
+        app.getLoginProcess(router);
+        app.getLogout(router);
+    }
+
+    /**
+     * @description 取得 login process 的程序
+     * @param router 
+     */
+    public getLoginProcess(router: Router) {
+        DHLog.d("[" + LoginRoute.name + ":create] " + DHAPI.LOGIN_PROCESS_PATH);
         router.get(DHAPI.LOGIN_PROCESS_PATH, (req: Request, res: Response, next: NextFunction) => {
             var act = req.session.account;
             
             if (!act) {
-                var fullUrl = this.getFullHostUrl(req);
+                var fullUrl = LoginRoute.getFullHostUrl(req);
                 var authUrl = encodeURIComponent(fullUrl + LINEAPI.API_LINE_AUTH_PATH);
                 var channelId = DHAPI.pkgjson.linelogin.channelId;
                 var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
@@ -40,8 +51,14 @@ export class LoginRoute extends BaseRoute {
                 return res.redirect(DHAPI.ROOT_PATH);
             }
         });
+    }
 
-        DHLog.d("[" + this.name + ":create] " + DHAPI.LOGIN_KILL_PATH);
+    /**
+     * @description 呼叫 logout 程序
+     * @param router 
+     */
+    public getLogout(router: Router) {
+        DHLog.d("[" + LoginRoute.name + ":create] " + DHAPI.LOGIN_KILL_PATH);
         router.get(DHAPI.LOGIN_KILL_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (req.session.account) {
                 DHLog.d(req.session.account + " logout");
