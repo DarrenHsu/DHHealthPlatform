@@ -14,7 +14,7 @@ export class DHAPI {
     
     public static CALENDAR_PATH =                   "/calendar";
     
-    public static RECORD_PATH =                     "/record";
+    public static RECORD_PATH =                     "/records";
     public static RECORD_PREVIEW_PATH =             DHAPI.RECORD_PATH + "/preview";
 
     public static ERROR_PATH =                      "/error";
