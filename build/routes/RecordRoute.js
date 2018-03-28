@@ -52,17 +52,21 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
         var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
         var endTimeStr = en_1.format(record.endTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
         let options = {
-            "user": user.name,
-            "pictureUrl": user.pictureUrl,
-            "name": record.name,
-            "locality": record.locality,
-            "dateStr": dateStr,
-            "startTimeStr": startTimeStr,
-            "endTimeStr": endTimeStr,
-            "distance": record.distance.toFixed(1),
-            "maxSpeed": record.maxSpeed.toFixed(1),
-            "avgSpeed": record.avgSpeed.toFixed(1),
-            "locations": record.locations
+            auth: {
+                path: DHAPI_1.DHAPI.RECORD_PATH,
+                checkLogin: false
+            },
+            user: user.name,
+            pictureUrl: user.pictureUrl,
+            name: record.name,
+            locality: record.locality,
+            dateStr: dateStr,
+            startTimeStr: startTimeStr,
+            endTimeStr: endTimeStr,
+            distance: record.distance.toFixed(1),
+            maxSpeed: record.maxSpeed.toFixed(1),
+            avgSpeed: record.avgSpeed.toFixed(1),
+            locations: record.locations
         };
         this.render(req, res, "record/index", options);
     }

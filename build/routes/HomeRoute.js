@@ -23,19 +23,25 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
     index(req, res, next) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
-            "message": "Welcome to the Index",
-            "name": req.session.name,
+            auth: {
+                path: DHAPI_1.DHAPI.HOME_PATH,
+                checkLogin: true
+            },
+            name: req.session.name,
         };
         this.render(req, res, "home/index", options);
     }
     loginIndex(req, res, next) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
-            "message": "Welcome to the Index",
-            "account": req.session.account,
-            "name": req.session.name,
-            "picture": req.session.picture,
-            "loginTime": req.session.time
+            auth: {
+                path: DHAPI_1.DHAPI.HOME_PATH,
+                checkLogin: true
+            },
+            account: req.session.account,
+            name: req.session.name,
+            picture: req.session.picture,
+            loginTime: req.session.time
         };
         this.render(req, res, "home/index", options);
     }

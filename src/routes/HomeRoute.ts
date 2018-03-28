@@ -30,8 +30,11 @@ export class HomeRoute extends BaseRoute {
     public index(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
-            "message": "Welcome to the Index",
-            "name": req.session.name,
+            auth: {
+                path: DHAPI.HOME_PATH,
+                checkLogin: true
+            },
+            name: req.session.name,
         };
         this.render(req, res, "home/index", options);
     }
@@ -39,11 +42,14 @@ export class HomeRoute extends BaseRoute {
     public loginIndex(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
-            "message": "Welcome to the Index",
-            "account": req.session.account,
-            "name": req.session.name,
-            "picture": req.session.picture, 
-            "loginTime": req.session.time
+            auth: {
+                path: DHAPI.HOME_PATH,
+                checkLogin: true
+            },
+            account: req.session.account,
+            name: req.session.name,
+            picture: req.session.picture, 
+            loginTime: req.session.time
         };
         this.render(req, res, "home/index", options);
     }

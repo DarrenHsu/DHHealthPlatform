@@ -44,8 +44,11 @@ body {
 }
 
 .headerTitle{
+  font-size: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
   padding-left: 10px;
-  color: white;
+  color: greenyellow;
 }
 
 .userPicture {
