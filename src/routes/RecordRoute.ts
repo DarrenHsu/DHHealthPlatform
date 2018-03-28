@@ -34,16 +34,34 @@ export class RecordRoute extends BaseRoute {
     public static create(router: Router) {
         var app = new RecordRoute(DBHelper.connection);
         
-        app.getPublicRecord(router);
+        app.getPreviewRecord(router);
+        app.getRecord(router);
+    }
+
+    /**
+     * @description 顯示紀錄頁面
+     * @param router 
+     */
+    public getRecord(router: Router) {
+        DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PATH);
+        router.get(DHAPI.RECORD_PATH + "/:start/:end", (req: Request, res: Response, next: NextFunction) => {
+            var start = req.params.start;
+            var end = req.params.end;
+            if (!start && !end) {
+                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            }
+
+            this.renderRecord(req, res, next, null);
+        });
     }
 
     /**
      * @description 取得紀錄並顯示單筆紀錄祥細內容
      * @param router 
      */
-    public getPublicRecord(router: Router) {
-        DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PATH);
-        router.get(DHAPI.RECORD_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
+    public getPreviewRecord(router: Router) {
+        DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PREVIEW_PATH);
+        router.get(DHAPI.RECORD_PREVIEW_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
             if (req.params.id == null || req.params.auth == null) {
                 return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
@@ -61,13 +79,25 @@ export class RecordRoute extends BaseRoute {
                 }
 
                 this.userHelper.list(record.lineUserId, (code, user) => {
-                    this.renderPublicRecord(req, res, next, user[0], record);
+                    this.renderPreviewRecord(req, res, next, user[0], record);
                 });
             });
         });
     }
 
-    public renderPublicRecord(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
+    public renderRecord(req: Request, res: Response, next: NextFunction, recds: IRecord[]) {
+        this.title = BaseRoute.AP_TITLE;
+        let options: Object = {
+            auth: {
+                path: DHAPI.RECORD_PATH,
+                checkLogin: false
+            },
+            records: recds
+        };
+        this.render(req, res, "record/index", options);
+    }
+
+    public renderPreviewRecord(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
         this.title = BaseRoute.AP_TITLE;
         var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
         var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);

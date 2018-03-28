@@ -19,15 +19,31 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     }
     static create(router) {
         var app = new RecordRoute(DBHelper_1.DBHelper.connection);
-        app.getPublicRecord(router);
+        app.getPreviewRecord(router);
+        app.getRecord(router);
+    }
+    /**
+     * @description 顯示紀錄頁面
+     * @param router
+     */
+    getRecord(router) {
+        DHLog_1.DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI_1.DHAPI.RECORD_PATH);
+        router.get(DHAPI_1.DHAPI.RECORD_PATH + "/:start/:end", (req, res, next) => {
+            var start = req.params.start;
+            var end = req.params.end;
+            if (!start && !end) {
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
+            }
+            this.renderRecord(req, res, next, null);
+        });
     }
     /**
      * @description 取得紀錄並顯示單筆紀錄祥細內容
      * @param router
      */
-    getPublicRecord(router) {
-        DHLog_1.DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI_1.DHAPI.RECORD_PATH);
-        router.get(DHAPI_1.DHAPI.RECORD_PATH + "/:id/:auth", (req, res, next) => {
+    getPreviewRecord(router) {
+        DHLog_1.DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH);
+        router.get(DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + "/:id/:auth", (req, res, next) => {
             if (req.params.id == null || req.params.auth == null) {
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
@@ -41,12 +57,23 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + code);
                 }
                 this.userHelper.list(record.lineUserId, (code, user) => {
-                    this.renderPublicRecord(req, res, next, user[0], record);
+                    this.renderPreviewRecord(req, res, next, user[0], record);
                 });
             });
         });
     }
-    renderPublicRecord(req, res, next, user, record) {
+    renderRecord(req, res, next, recds) {
+        this.title = BaseRoute_1.BaseRoute.AP_TITLE;
+        let options = {
+            auth: {
+                path: DHAPI_1.DHAPI.RECORD_PATH,
+                checkLogin: false
+            },
+            records: recds
+        };
+        this.render(req, res, "record/index", options);
+    }
+    renderPreviewRecord(req, res, next, user, record) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
         var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);

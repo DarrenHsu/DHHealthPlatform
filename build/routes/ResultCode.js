@@ -14,6 +14,7 @@ var CONNECTION_CODE;
     CONNECTION_CODE[CONNECTION_CODE["CC_REQUEST_BODY_ERROR"] = -202] = "CC_REQUEST_BODY_ERROR";
     CONNECTION_CODE[CONNECTION_CODE["CC_AUTH_ERROR"] = -203] = "CC_AUTH_ERROR";
     CONNECTION_CODE[CONNECTION_CODE["CC_GENERAL_ERROR"] = -999] = "CC_GENERAL_ERROR";
+    CONNECTION_CODE[CONNECTION_CODE["CC_PAGE_NOT_FOUND_ERROR"] = -1000] = "CC_PAGE_NOT_FOUND_ERROR";
 })(CONNECTION_CODE = exports.CONNECTION_CODE || (exports.CONNECTION_CODE = {}));
 var MONGODB_CODE;
 (function (MONGODB_CODE) {
@@ -43,6 +44,7 @@ ResultMsg.CC_PARAMETER_ERROR = "輸入的參數有誤";
 ResultMsg.CC_REQUEST_BODY_ERROR = "傳入的資料有誤";
 ResultMsg.CC_AUTH_ERROR = "認證失敗";
 ResultMsg.CC_GENERAL_ERROR = "系統發生錯誤，不再繼續執行下去!";
+ResultMsg.CC_PAGE_NOT_FOUND_ERROR = "找不到此頁面";
 ResultMsg.MC_DATA_EXIST = "資料已存在";
 ResultMsg.MC_SUCCESS = "執行成功";
 ResultMsg.MC_INSERT_ERROR = "新增失敗";
@@ -78,6 +80,8 @@ class ResultCodeMsg {
                 return ResultMsg.CC_AUTH_ERROR;
             case CONNECTION_CODE.CC_GENERAL_ERROR:
                 return ResultMsg.CC_GENERAL_ERROR;
+            case CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR:
+                return ResultMsg.CC_PAGE_NOT_FOUND_ERROR;
             case MONGODB_CODE.MC_DATA_EXIST:
                 return ResultMsg.MC_DATA_EXIST;
             case MONGODB_CODE.MC_SUCCESS:

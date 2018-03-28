@@ -8,7 +8,7 @@ import { DHLog } from "../util/DHLog";
 
 export class BaseRoute {
 
-    protected static AP_TITLE: string = "DHHealthPlatform";
+    public static AP_TITLE: string = "DHHealthPlatform";
     
     protected static FEED_AUTH: string = "Darren Hsu I Love You";
     protected static FEED_AUTH_PASS: string = "imdarren";

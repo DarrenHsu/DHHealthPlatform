@@ -10,7 +10,8 @@ export enum CONNECTION_CODE {
     CC_PARAMETER_ERROR = -201,
     CC_REQUEST_BODY_ERROR = -202,
     CC_AUTH_ERROR = -203,
-    CC_GENERAL_ERROR = -999
+    CC_GENERAL_ERROR = -999,
+    CC_PAGE_NOT_FOUND_ERROR = -1000
 }
 
 export enum MONGODB_CODE {
@@ -41,6 +42,7 @@ class ResultMsg {
     public static CC_REQUEST_BODY_ERROR = "傳入的資料有誤";
     public static CC_AUTH_ERROR = "認證失敗";
     public static CC_GENERAL_ERROR = "系統發生錯誤，不再繼續執行下去!";
+    public static CC_PAGE_NOT_FOUND_ERROR = "找不到此頁面"
 
     public static MC_DATA_EXIST = "資料已存在";
     public static MC_SUCCESS = "執行成功";
@@ -80,6 +82,8 @@ export class ResultCodeMsg {
                 return ResultMsg.CC_AUTH_ERROR;
             case CONNECTION_CODE.CC_GENERAL_ERROR:
                 return ResultMsg.CC_GENERAL_ERROR;
+            case CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR:
+                return ResultMsg.CC_PAGE_NOT_FOUND_ERROR;
 
             case MONGODB_CODE.MC_DATA_EXIST:
                 return ResultMsg.MC_DATA_EXIST;

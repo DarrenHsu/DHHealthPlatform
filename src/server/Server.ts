@@ -24,6 +24,8 @@ import { RecordAPI } from "../routes/api/RecordAPI";
 import { UserAPI } from "../routes/api/UserAPI";
 import { RouteAPI } from "../routes/api/RouteAPI";
 import { LineWebhookAPI } from "../routes/api/LineWebhookAPI"
+import { CONNECTION_CODE, ResultCodeMsg } from "../routes/ResultCode";
+import { BaseRoute } from "../routes/BaseRoute";
 
 var MongoStore = connectMongo(session);
 
@@ -41,6 +43,21 @@ export class Server {
         this.config();
         this.routes();
         this.api();
+
+        this.app.use((req, res) => {
+            res.locals.title = BaseRoute.AP_TITLE;
+            var options = {
+                auth: {
+                    path: DHAPI.ERROR_PATH,
+                    checkLogin: false
+                }, 
+                result: {
+                    code: CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR,
+                    message: ResultCodeMsg.getMsg(CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
+                }
+            }
+            res.render("error/error", options);
+        })
     }
 
     public config() {
@@ -68,11 +85,6 @@ export class Server {
         }));
         this.app.use(cookieParser("SECRET_GOES_HERE"));
         this.app.use(methodOverride());
-        this.app.use(function(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-            err.status = 404;
-            next(err);
-        });
-        this.app.use(errorHandler());
         this.app.use(session({
             secret: "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567",
             store: new MongoStore({url: "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9"}),
