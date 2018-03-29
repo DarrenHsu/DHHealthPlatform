@@ -10,20 +10,33 @@ block content
         div(class="card h-100")
           div#map(class="mapView card-img-top")
           div(class="card-body record-card")
-            h5(class="card-title") 我的紀錄
-            ul(class="card-text")
-              li 
-                img(class="records-icon" src="/images/records/location.png") 
-                span(class="records-value") 松山區
-              li 
-                img(class="records-icon" src="/images/records/time.png") 
-                span(class="records-value") 2018-03-30 09:30 ~ 10:30
-              li 
-                img(class="records-icon" src="/images/home/distance.png") 
-                span(class="records-value") 20.5 公里
-              li 
-                img(class="records-icon" src="/images/home/calories.png") 
-                span(class="records-value") 1,400 卡
+
+            div(class="row")
+              div(class="col-lg-6")
+                div(class="card h-100")
+                  div(class="card-body record-card")
+                    h5(class="card-title") 我的紀錄
+                    ul(class="card-text")
+                      li 
+                        img(class="records-icon" src="/images/records/location.png") 
+                        span(class="records-value") 松山區
+                      li 
+                        img(class="records-icon" src="/images/records/time.png") 
+                        span(class="records-value") 2018-03-30 09:30 ~ 10:30
+                      li 
+                        img(class="records-icon" src="/images/home/distance.png") 
+                        span(class="records-value") 20.5 公里
+                      li 
+                        img(class="records-icon" src="/images/home/calories.png") 
+                        span(class="records-value") 1,400 卡
+
+              div(class="col-lg-6")
+                div(class="card h-100")
+                  div(class="card-body record-card text-center ")
+                    div(class="btn-group-vertical" role="group" aria-label="Basic example")
+                      button(type="button" class="btn btn-success btn-sm") 發送至Line
+                      button(type="button" class="btn btn-danger btn-sm") 刪除
+                      
               
   include ../layout/pagination
 
