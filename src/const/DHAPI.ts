@@ -17,6 +17,8 @@ export class DHAPI {
     public static RECORD_PATH =                     "/records";
     public static RECORD_PREVIEW_PATH =             DHAPI.RECORD_PATH + "/preview";
 
+    public static LIVE_PATH =                       "/live";
+    
     public static ERROR_PATH =                      "/error";
 
     public static API_PATH =                        DHAPI.ROOT_PATH + "api";
