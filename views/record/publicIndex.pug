@@ -1,90 +1,107 @@
-extends ./layout/body
+extends ../layout/html
 
-block content
+block bodyContent
+  include ../layout/link
+  include ../layout/script
+  style.
+    #map {
+      max-height: 100%;
+      min-height: 500px;
+      height: 100%;
+      width: 100%;
+      border-color: #43ad43;
+      border-style: solid;
+      border-width: 1px 1px;
+      border-radius: 15px;
+      z-index: 0;
+    }
+  body
+    include ../layout/navbar
+    div(class="container content")
+      - var sLat = locations[0][0]
+      - var sLng = locations[0][1]
+      - var eLat = locations[locations.length - 1][0]
+      - var eLng = locations[locations.length - 1][1]
+      - var j = ""
+      - var ls = locations
+        each location in ls
+          - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
 
-  - var sLat = locations[0][0]
-  - var sLng = locations[0][1]
-  - var eLat = locations[locations.length - 1][0]
-  - var eLng = locations[locations.length - 1][1]
-  - var j = ""
-  - var ls = locations
-    each location in ls
-      - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
+      div.container-fluid
+        img.userPicture.float.image(src=pictureUrl)
+        h5 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
+        table.table.table-condensed
+          thead
+            th 項目
+            th 數值
+          tbody
+            tr 
+              td 紀錄名稱：
+              td #{name}
+            tr 
+              td 地區：
+              td #{locality}
+            tr
+              td 日期：
+              td #{dateStr}
+            tr
+              td 時間：
+              td #{startTimeStr} ~ #{endTimeStr}
+            tr
+              td 距離：
+              td #{distance} km
+            tr
+              td 最快速度：
+              td #{maxSpeed} km/h
+            tr
+              td 平均速度：
+              td #{avgSpeed} km/h
+        div#map
 
-  div.container-fluid
-    img.userPicture.float.image(src=pictureUrl)
-    h5 以下是「#{user}」的運動紀錄哦，請給他一點喝采唷!
-    table.table.table-condensed
-      thead
-        th 項目
-        th 數值
-      tbody
-        tr 
-          td 紀錄名稱：
-          td #{name}
-        tr 
-          td 地區：
-          td #{locality}
-        tr
-          td 日期：
-          td #{dateStr}
-        tr
-          td 時間：
-          td #{startTimeStr} ~ #{endTimeStr}
-        tr
-          td 距離：
-          td #{distance} km
-        tr
-          td 最快速度：
-          td #{maxSpeed} km
-        tr
-          td 平均速度：
-          td #{avgSpeed} km
-    div#map
+        script.
+          function initMap() {
+            var flightPlanCoordinates = [
+              #{j}
+            ];
 
-    script.
-      function initMap() {
-        var flightPlanCoordinates = [
-          #{j}
-        ];
+            var flightPath = new google.maps.Polyline({
+              path: flightPlanCoordinates,
+              geodesic: true,
+              strokeColor: '#5FB404',
+              strokeOpacity: 1.0,
+              strokeWeight: 7
+            });
 
-        var flightPath = new google.maps.Polyline({
-          path: flightPlanCoordinates,
-          geodesic: true,
-          strokeColor: '#5FB404',
-          strokeOpacity: 1.0,
-          strokeWeight: 7
-        });
+            var map = new google.maps.Map(document.getElementById("map"), {
+              mapTypeId: 'terrain'
+            });
 
-        var map = new google.maps.Map(document.getElementById("map"), {
-          mapTypeId: 'terrain'
-        });
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0 ; i < flightPlanCoordinates.length ; i++) {
+              var path = flightPlanCoordinates[i];
+              bounds.extend(path);
+            }
+            map.fitBounds(bounds);
+            flightPath.setMap(map);
 
-        var bounds = new google.maps.LatLngBounds();
-        for (var i = 0 ; i < flightPlanCoordinates.length ; i++) {
-          var path = flightPlanCoordinates[i];
-          bounds.extend(path);
-        }
-        map.fitBounds(bounds);
-        flightPath.setMap(map);
+            var sMark = new google.maps.Marker({
+              position: {lat: #{sLat}, lng: #{sLng}},
+              map: map,
+            });
+            new google.maps.InfoWindow({
+              content:"開始"
+            }).open(map, sMark);
 
-        var sMark = new google.maps.Marker({
-          position: {lat: #{sLat}, lng: #{sLng}},
-          map: map,
-        });
-        new google.maps.InfoWindow({
-          content:"開始"
-        }).open(map, sMark);
-
-        var eMark = new google.maps.Marker({
-          position: {lat: #{eLat}, lng: #{eLng}},
-          map: map,
-        });
-        new google.maps.InfoWindow({
-          content:"結束"
-        }).open(map, eMark);
-      }
-    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap")
+            var eMark = new google.maps.Marker({
+              position: {lat: #{eLat}, lng: #{eLng}},
+              map: map,
+            });
+            new google.maps.InfoWindow({
+              content:"結束"
+            }).open(map, eMark);
+          }
+        script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap")
+    include ../layout/footer
 
 
 
