@@ -8,14 +8,19 @@ block content
     each val in [1, 2, 3, 4, 5, 6, 7, 8]
       div(class="col-lg-6 portfolio-item")
         div(class="card h-100")
-          div#map(class="mapView card-img-top")
+          
+          div(class="card-header")
+            span 我的紀錄
+            button(type="button" class="close" aria-label="Close")
+              span(aria-hidden="true") &times;
+          
           div(class="card-body record-card")
+            div#map(class="mapView card-img-top")
 
-            div(class="row")
-              div(class="col-lg-6")
-                div(class="card h-100")
-                  div(class="card-body record-card")
-                    h5(class="card-title") 我的紀錄
+            div(class="row records-detail-row")
+              div(class="col-lg-8")
+                div(class="card h-100 card-no-border")
+                  div(class="card-body")
                     ul(class="card-text")
                       li 
                         img(class="records-icon" src="/images/records/location.png") 
@@ -30,12 +35,11 @@ block content
                         img(class="records-icon" src="/images/home/calories.png") 
                         span(class="records-value") 1,400 卡
 
-              div(class="col-lg-6")
-                div(class="card h-100")
-                  div(class="card-body record-card text-center ")
+              div(class="col-lg-4")
+                div(class="card h-100  card-no-border")
+                  div(class="card-body text-center")
                     div(class="btn-group-vertical" role="group" aria-label="Basic example")
                       button(type="button" class="btn btn-success btn-sm") 發送至Line
-                      button(type="button" class="btn btn-danger btn-sm") 刪除
                       
               
   include ../layout/pagination

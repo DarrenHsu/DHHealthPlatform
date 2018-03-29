@@ -21,3 +21,7 @@
 .records-value {
   margin-left: 10px;
 }
+
+.card-no-border {
+  border-width: 0px;
+}
