@@ -90,7 +90,7 @@ export class RecordRoute extends BaseRoute {
         let options: Object = {
             auth: {
                 path: DHAPI.RECORD_PATH,
-                checkLogin: false
+                checkLogin: true
             },
             records: recds
         };

@@ -67,7 +67,7 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
         let options = {
             auth: {
                 path: DHAPI_1.DHAPI.RECORD_PATH,
-                checkLogin: false
+                checkLogin: true
             },
             records: recds
         };
