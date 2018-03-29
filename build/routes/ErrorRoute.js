@@ -38,7 +38,7 @@ class ErrorRoute extends BaseRoute_1.BaseRoute {
             },
             result: result
         };
-        this.render(req, res, "error/error", options);
+        this.render(req, res, "error/index", options);
     }
 }
 exports.ErrorRoute = ErrorRoute;
