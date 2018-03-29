@@ -66,3 +66,18 @@ body {
   height: 100%;
   text-align: center;
 }
+
+/* .pagination a:last-child {
+  background-color: #000000;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+} */
+
+.pagination>li.active>a {
+  background-color: #000000;
+  color: white;
+}
+
+/* .pagination a:hover:not(.active) {
+  background-color: #ddd;
+} */

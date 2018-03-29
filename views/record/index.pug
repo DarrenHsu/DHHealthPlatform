@@ -1,6 +1,8 @@
 extends ./layout/body
 
 block content
+  include ../layout/pagination
+  
   - var n = 0;
   div#RecordRow(class="row")
     each val in [1, 2, 3, 4, 5, 6, 7, 8]
@@ -10,12 +12,20 @@ block content
           div(class="card-body record-card")
             h5(class="card-title") 我的紀錄
             ul(class="card-text")
-              li 地區：松山區
-              li 日期：2018-03-30
-              li 時間：09:30 ~ 10:30
-              li 距離：10 km
-              li 最快速度：10 km/h
-              li 平均速度：5 km/h
+              li 
+                img(class="records-icon" src="/images/records/location.png") 
+                span(class="records-value") 松山區
+              li 
+                img(class="records-icon" src="/images/records/time.png") 
+                span(class="records-value") 2018-03-30 09:30 ~ 10:30
+              li 
+                img(class="records-icon" src="/images/home/distance.png") 
+                span(class="records-value") 20.5 公里
+              li 
+                img(class="records-icon" src="/images/home/calories.png") 
+                span(class="records-value") 1,400 卡
+              
+  include ../layout/pagination
 
   script.
     function initMap() {
