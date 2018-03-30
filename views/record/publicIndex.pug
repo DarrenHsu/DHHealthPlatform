@@ -86,7 +86,7 @@ block bodyContent
             flightPath.setMap(map);
 
             var sMark = new google.maps.Marker({
-              position: {lat: #{sLat}, lng: #{sLng}},
+              position: flightPlanCoordinates[0],
               map: map,
             });
             new google.maps.InfoWindow({
@@ -94,7 +94,7 @@ block bodyContent
             }).open(map, sMark);
 
             var eMark = new google.maps.Marker({
-              position: {lat: #{eLat}, lng: #{eLng}},
+              position: flightPlanCoordinates[flightPlanCoordinates.length - 1],
               map: map,
             });
             new google.maps.InfoWindow({

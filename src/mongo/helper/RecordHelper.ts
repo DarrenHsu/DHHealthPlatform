@@ -139,6 +139,6 @@ export class RecordHelper implements BaseHelper {
                 DHLog.d("find " + ress.length);
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
             }
-        });
+        }).sort({ startTime : -1 });
     }
 }

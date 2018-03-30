@@ -14,6 +14,7 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();
         this.uri = DHAPI_1.DHAPI.RECORD_PATH;
+        this.displayCount = 8;
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.userHelper = new UserHelper_1.UserHelper(connection);
     }
@@ -28,16 +29,39 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
      */
     getRecord(router) {
         DHLog_1.DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI_1.DHAPI.RECORD_PATH);
-        router.get(DHAPI_1.DHAPI.RECORD_PATH + "/:start/:end", (req, res, next) => {
+        router.get(DHAPI_1.DHAPI.RECORD_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            var start = req.params.start;
-            var end = req.params.end;
-            if (!start && !end) {
+            this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
+                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            });
+        });
+        router.get(DHAPI_1.DHAPI.RECORD_PATH + "/:page", (req, res, next) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+            var page = req.params.page;
+            if (!page || page != parseInt(page, 10)) {
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
-            this.renderRecord(req, res, next, null);
+            this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
+                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            });
+        });
+    }
+    findRecord(lineUserId, page, callback) {
+        this.recordHelper.list(lineUserId, (code, records) => {
+            var start = (page - 1) * this.displayCount;
+            var end = start + this.displayCount;
+            var results = records.slice(start, end);
+            var pageCount = Math.ceil(records.length / this.displayCount);
+            DHLog_1.DHLog.d("sindex " + start);
+            DHLog_1.DHLog.d("eindex " + end);
+            DHLog_1.DHLog.d("page index " + page);
+            DHLog_1.DHLog.d("total page " + pageCount);
+            DHLog_1.DHLog.d("results count " + results.length);
+            callback(records.length, pageCount, page, results);
         });
     }
     /**
@@ -65,11 +89,29 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             });
         });
     }
-    renderRecord(req, res, next, recds) {
+    renderRecord(req, res, next, tCount, pCount, pIndex, recds) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
+        var timeStr = [];
+        for (let record of recds) {
+            var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
+            var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+            var endTimeStr = en_1.format(record.endTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+            timeStr.push({
+                dateStr: dateStr,
+                startTimeStr: startTimeStr,
+                endTimeStr: endTimeStr
+            });
+        }
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.RECORD_PATH, true),
-            records: recds
+            totalCount: tCount,
+            pageIndex: pIndex,
+            pageCount: pCount,
+            count: this.displayCount,
+            previous: pIndex > 1,
+            next: pIndex < pCount,
+            records: recds,
+            times: timeStr
         };
         this.render(req, res, "record/index", options);
     }

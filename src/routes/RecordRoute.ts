@@ -22,7 +22,9 @@ export class RecordRoute extends BaseRoute {
 
     protected userHelper: UserHelper;
     protected recordHelper: RecordHelper;
-    protected uri = DHAPI.RECORD_PATH;
+    protected uri: string = DHAPI.RECORD_PATH;
+    
+    private displayCount: number = 8;
     
     constructor(connection: mongoose.Connection) {
         super();
@@ -44,18 +46,46 @@ export class RecordRoute extends BaseRoute {
      */
     public getRecord(router: Router) {
         DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PATH);
-        router.get(DHAPI.RECORD_PATH + "/:start/:end", (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
 
-            var start = req.params.start;
-            var end = req.params.end;
-            if (!start && !end) {
-                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
+                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            });
+        });
+
+        router.get(DHAPI.RECORD_PATH + "/:page", (req: Request, res: Response, next: NextFunction) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
             }
 
-            this.renderRecord(req, res, next, null);
+            var page = req.params.page;
+            if (!page || page != parseInt(page, 10)) {
+                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            }
+            
+            this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
+                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            });
+        });
+    }
+
+    private findRecord(lineUserId: string, page: number, callback: (totalCount: number, pageCount: number, pageIndex: number, records: IRecord[]) => void) {        
+        this.recordHelper.list(lineUserId, (code, records) => {
+            var start = (page - 1) * this.displayCount;
+            var end = start + this.displayCount;
+            var results = records.slice(start, end);
+            var pageCount = Math.ceil(records.length / this.displayCount);
+
+            DHLog.d("sindex " + start);
+            DHLog.d("eindex " + end);
+            DHLog.d("page index " + page);
+            DHLog.d("total page " + pageCount);
+            DHLog.d("results count " + results.length);
+
+            callback(records.length, pageCount, page, results);
         });
     }
 
@@ -89,11 +119,33 @@ export class RecordRoute extends BaseRoute {
         });
     }
 
-    public renderRecord(req: Request, res: Response, next: NextFunction, recds: IRecord[]) {
+    public renderRecord(req: Request, res: Response, next: NextFunction, tCount: number, pCount: number,  pIndex: number, recds: IRecord[]) {
         this.title = BaseRoute.AP_TITLE;
+
+        var timeStr = [];
+        for (let record of recds) {
+            var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
+            var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
+            var endTimeStr = format(record.endTime, DHDateFormat.TIME_FORMAT);
+            timeStr.push(
+                {
+                    dateStr: dateStr,
+                    startTimeStr: startTimeStr,
+                    endTimeStr: endTimeStr
+                }
+            );
+        }
+
         let options: Object = {
             auth: this.getAuth(req, DHAPI.RECORD_PATH, true),
-            records: recds
+            totalCount: tCount,
+            pageIndex: pIndex,
+            pageCount: pCount,
+            count: this.displayCount,
+            previous: pIndex > 1,
+            next: pIndex < pCount,
+            records: recds,
+            times: timeStr
         };
         this.render(req, res, "record/index", options);
     }
