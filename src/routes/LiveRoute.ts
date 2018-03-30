@@ -47,13 +47,13 @@ export class LiveRoute extends BaseRoute {
 
             this.renderLive(req, res, next, null);
         });
-    }
+    }x
 
     public renderLive(req: Request, res: Response, next: NextFunction, recds: IRecord[]) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: {
-                path: DHAPI.RECORD_PATH,
+                path: DHAPI.LIVE_PATH,
                 checkLogin: true
             },
             records: recds

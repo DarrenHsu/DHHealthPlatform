@@ -3,10 +3,9 @@ extends ./layout/body
 block content
   include ../layout/pagination
   
-  - var n = 0;
   div#RecordRow(class="row")
     each val in [1, 2, 3, 4, 5, 6, 7, 8]
-      div(class="col-lg-6 portfolio-item")
+      div(class="col-lg-6 col-md-6 portfolio-item")
         div(class="card h-100")
           
           div(class="card-header")
@@ -40,7 +39,6 @@ block content
                   div(class="card-body text-center")
                     div(class="btn-group-vertical" role="group" aria-label="Basic example")
                       button(type="button" class="btn btn-success btn-sm") 發送至Line
-                      
               
   include ../layout/pagination
 

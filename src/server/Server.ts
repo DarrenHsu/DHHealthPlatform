@@ -17,6 +17,7 @@ import { HomeRoute } from "../routes/HomeRoute";
 import { CalendarRoute } from "../routes/CalendarRoute";
 import { LoginRoute } from "../routes/LoginRoute";
 import { RecordRoute } from "../routes/RecordRoute";
+import { LiveRoute } from "../routes/LiveRoute";
 import { ErrorRoute } from "../routes/ErrorRoute";
 
 import { DHAPI } from "../const/DHAPI";
@@ -56,7 +57,7 @@ export class Server {
                     message: ResultCodeMsg.getMsg(CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
                 }
             }
-            res.render("error/error", options);
+            res.render("error/index", options);
         })
     }
 
@@ -101,6 +102,7 @@ export class Server {
         CalendarRoute.create(router);
         LoginRoute.create(router);
         RecordRoute.create(router);
+        LiveRoute.create(router);
         ErrorRoute.create(router);
         
         this.app.use(router);

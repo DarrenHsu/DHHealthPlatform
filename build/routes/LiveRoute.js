@@ -37,7 +37,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: {
-                path: DHAPI_1.DHAPI.RECORD_PATH,
+                path: DHAPI_1.DHAPI.LIVE_PATH,
                 checkLogin: true
             },
             records: recds

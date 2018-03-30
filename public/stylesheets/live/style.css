@@ -1,0 +1,44 @@
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+#PlayRow {
+  margin-top: 30px;
+}
+
+.PlayBaseImg {
+  display: inline-block;
+  width: 200px;
+}
+
+.PlayBase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: black;
+}
+
+#LiveRow {
+  margin-top: 30px;
+}
+
+.liveThemb {
+  display: inline-block;
+  width: 100px;
+}
+
+.livePreview {
+  min-height:200px;
+  height: auto;
+  min-width: 100px;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  background-color: black;
+}

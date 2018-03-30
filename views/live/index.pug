@@ -1,19 +1,22 @@
 extends ./layout/body
 
 block content
-  h3(class="my-4")Page Heading
-    <small>Secondary Text</small>
+  h3(class="my-4") Page Heading
+    small Secondary Text
   
-  <div class="row">
+  div#PlayRow(class="row")
+    div(class="col-md-8 PlayBase")
+      img(class="PlayBaseImg" src="/images/live/youtube.png")
 
-    <div class="col-md-8">
-      
-    </div>
-
-    <div class="col-md-4">
+    div(class="col-md-4")
       h4(class="my-3") Project Description
-      Ｐ>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
-    </div>
+      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 
-  </div>
+  div#LiveRow(class="row")
+    each val in [1, 2, 3, 4, 5, 6, 7, 8]
+      div(class="col-lg-4 col-md-6 portfolio-item")
+        div(class="card livePreview")
+          img(class="liveThemb" src="/images/live/youtube.png")
+
+  
 

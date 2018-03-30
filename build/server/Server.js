@@ -14,6 +14,7 @@ const HomeRoute_1 = require("../routes/HomeRoute");
 const CalendarRoute_1 = require("../routes/CalendarRoute");
 const LoginRoute_1 = require("../routes/LoginRoute");
 const RecordRoute_1 = require("../routes/RecordRoute");
+const LiveRoute_1 = require("../routes/LiveRoute");
 const ErrorRoute_1 = require("../routes/ErrorRoute");
 const DHAPI_1 = require("../const/DHAPI");
 const RecordAPI_1 = require("../routes/api/RecordAPI");
@@ -43,7 +44,7 @@ class Server {
                     message: ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
                 }
             };
-            res.render("error/error", options);
+            res.render("error/index", options);
         });
     }
     static bootstrap() {
@@ -84,6 +85,7 @@ class Server {
         CalendarRoute_1.CalendarRoute.create(router);
         LoginRoute_1.LoginRoute.create(router);
         RecordRoute_1.RecordRoute.create(router);
+        LiveRoute_1.LiveRoute.create(router);
         ErrorRoute_1.ErrorRoute.create(router);
         this.app.use(router);
     }
