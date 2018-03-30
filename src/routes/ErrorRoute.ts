@@ -39,10 +39,7 @@ export class ErrorRoute extends BaseRoute {
     public renderError(req: Request, res: Response, next: NextFunction, result: IResult) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
-            auth: {
-                path: DHAPI.ERROR_PATH,
-                checkLogin: false
-            },
+            auth: this.getAuth(req, DHAPI.ERROR_PATH, false),            
             result: result
         };
         this.render(req, res, "error/index", options);

@@ -9,18 +9,8 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
     }
     static create(router) {
         var app = new HomeRoute();
-        app.getTestIndex(router);
         app.getIndex(router);
-    }
-    /**
-     * @description 測試頁面
-     * @param router
-     */
-    getTestIndex(router) {
-        DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.HOME_PATH);
-        router.get(DHAPI_1.DHAPI.HOME_PATH, (req, res, next) => {
-            this.renderTestIndex(req, res, next);
-        });
+        app.getHome(router);
     }
     /**
      * @description 首頁畫面
@@ -29,34 +19,32 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
     getIndex(router) {
         DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.ROOT_PATH);
         router.get(DHAPI_1.DHAPI.ROOT_PATH, (req, res, next) => {
-            if (!HomeRoute.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            this.renderIndex(req, res, next);
+            this.renderHome(req, res, next);
         });
     }
-    renderTestIndex(req, res, next) {
-        this.title = BaseRoute_1.BaseRoute.AP_TITLE;
-        let options = {
-            auth: {
-                path: DHAPI_1.DHAPI.HOME_PATH,
-                checkLogin: true
-            },
-            name: req.session.name,
-        };
-        this.render(req, res, "home/index", options);
+    /**
+     * @description 首頁畫面
+     * @param router
+     */
+    getHome(router) {
+        DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.HOME_PATH);
+        router.get(DHAPI_1.DHAPI.HOME_PATH, (req, res, next) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+            this.renderHome(req, res, next);
+        });
     }
-    renderIndex(req, res, next) {
+    renderHome(req, res, next) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
-            auth: {
-                path: DHAPI_1.DHAPI.HOME_PATH,
-                checkLogin: true
-            },
+            auth: this.getAuth(req, DHAPI_1.DHAPI.HOME_PATH, true),
             account: req.session.account,
             name: req.session.name,
             picture: req.session.picture,
-            loginTime: req.session.time
         };
         this.render(req, res, "home/index", options);
     }

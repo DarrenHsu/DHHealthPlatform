@@ -45,6 +45,10 @@ export class RecordRoute extends BaseRoute {
     public getRecord(router: Router) {
         DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PATH);
         router.get(DHAPI.RECORD_PATH + "/:start/:end", (req: Request, res: Response, next: NextFunction) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+
             var start = req.params.start;
             var end = req.params.end;
             if (!start && !end) {
@@ -88,10 +92,7 @@ export class RecordRoute extends BaseRoute {
     public renderRecord(req: Request, res: Response, next: NextFunction, recds: IRecord[]) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
-            auth: {
-                path: DHAPI.RECORD_PATH,
-                checkLogin: true
-            },
+            auth: this.getAuth(req, DHAPI.RECORD_PATH, true),
             records: recds
         };
         this.render(req, res, "record/index", options);
@@ -103,10 +104,7 @@ export class RecordRoute extends BaseRoute {
         var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
         var endTimeStr = format(record.endTime, DHDateFormat.TIME_FORMAT);
         let options: Object = {
-            auth: {
-                path: DHAPI.RECORD_PATH,
-                checkLogin: false
-            },
+            auth: this.getAuth(req, DHAPI.RECORD_PATH, false),
             user: user.name,
             pictureUrl: user.pictureUrl,
             name: record.name,

@@ -5,6 +5,7 @@ import { IRecord } from "../mongo/interface/IRecord";
 import { ResultCodeMsg } from  "./ResultCode";
 import { DHAPI } from "../const/DHAPI";
 import { DHLog } from "../util/DHLog";
+import { IAuth } from "./interface/IAuth";
 
 export class BaseRoute {
 
@@ -27,6 +28,23 @@ export class BaseRoute {
      */
     protected static getFullHostUrl(req: Request): String {
         return req.protocol + "s://" + req.hostname; 
+    }
+
+    /**
+     * @description 建立回傳結果物件
+     * @param obj 
+     * @param code 
+     */
+    public static createResult(obj: any, code: number): IResult {
+        var result: IResult = {
+            code: code,
+            message: ResultCodeMsg.getMsg(code)
+        };
+
+        if (obj) {
+            result.data = obj;
+        }
+        return result;
     }
 
     /**
@@ -89,7 +107,14 @@ export class BaseRoute {
      * @param res 
      * @param next 
      */
-    public static checkLogin(req: Request, res: Response, next: NextFunction): boolean {
+    public checkLogin(req: Request, res: Response, next: NextFunction): boolean {
+        // for test data
+        if (!req.session.account) {
+            req.session.name = "Darren Hsu";
+            req.session.account = "U9d844766ccf8f9ae7dcd16f14e47ca0d";
+            req.session.picture = "https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz";
+        }
+
         var isLogin = false;
         if (req.session.account && req.session.name && req.session.picture) {
             isLogin = true;
@@ -100,6 +125,31 @@ export class BaseRoute {
         }
 
         return isLogin;
+    }
+
+    /**
+     * @description 產生 auth 物件
+     * @param req 
+     * @param pth 
+     * @param clogin 
+     */
+    public getAuth(req: Request, pth: string, clogin: boolean): IAuth {
+        var auth: IAuth = {
+            path: pth,
+            checkLogin: clogin,
+        };
+
+        if (!clogin) {
+            return auth;
+        }
+
+        if (req.session.account) {
+            auth.account = req.session.account;
+            auth.name = req.session.name;
+            auth.picture = req.session.picture;
+        }
+
+        return auth;
     }
 
     /**
@@ -114,22 +164,5 @@ export class BaseRoute {
         res.locals.scripts = this.scripts;
         res.locals.title = this.title;
         res.render(view, options);
-    }
-
-    /**
-     * @description 建立回傳結果物件
-     * @param obj 
-     * @param code 
-     */
-    public static createResult(obj: any, code: number): IResult {
-        var result: IResult = {
-            code: code,
-            message: ResultCodeMsg.getMsg(code)
-        };
-
-        if (obj) {
-            result.data = obj;
-        }
-        return result;
     }
 }

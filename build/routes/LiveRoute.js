@@ -25,6 +25,9 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     getLive(router) {
         DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI_1.DHAPI.LIVE_PATH);
         router.get(DHAPI_1.DHAPI.LIVE_PATH + "/:start/:end", (req, res, next) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
             var start = req.params.start;
             var end = req.params.end;
             if (!start && !end) {
@@ -36,10 +39,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     renderLive(req, res, next, recds) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
-            auth: {
-                path: DHAPI_1.DHAPI.LIVE_PATH,
-                checkLogin: true
-            },
+            auth: this.getAuth(req, DHAPI_1.DHAPI.LIVE_PATH, true),
             records: recds
         };
         this.render(req, res, "live/index", options);

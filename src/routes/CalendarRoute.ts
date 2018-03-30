@@ -24,6 +24,10 @@ export class CalendarRoute extends BaseRoute {
     public getCalendar(router: Router) {
         DHLog.d("[" + CalendarRoute.name + ":create] " + DHAPI.CALENDAR_PATH);
         router.get(DHAPI.CALENDAR_PATH, (req: Request, res: Response, next: NextFunction) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+            
             this.renderCalendar(req, res, next);
         });
     }
@@ -31,10 +35,7 @@ export class CalendarRoute extends BaseRoute {
     public renderCalendar(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
-            auth: {
-                path: DHAPI.CALENDAR_PATH,
-                checkLogin: true
-            }
+            auth: this.getAuth(req, DHAPI.CALENDAR_PATH, true),
         };
         this.render(req, res, "calendar/index", options);
     }

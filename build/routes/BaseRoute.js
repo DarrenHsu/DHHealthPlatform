@@ -17,6 +17,21 @@ class BaseRoute {
         return req.protocol + "s://" + req.hostname;
     }
     /**
+     * @description 建立回傳結果物件
+     * @param obj
+     * @param code
+     */
+    static createResult(obj, code) {
+        var result = {
+            code: code,
+            message: ResultCode_1.ResultCodeMsg.getMsg(code)
+        };
+        if (obj) {
+            result.data = obj;
+        }
+        return result;
+    }
+    /**
      * @description 確認參數是否處合授權要求
      * @param auth
      * @param value
@@ -70,7 +85,12 @@ class BaseRoute {
      * @param res
      * @param next
      */
-    static checkLogin(req, res, next) {
+    checkLogin(req, res, next) {
+        if (!req.session.account) {
+            req.session.name = "Darren Hsu";
+            req.session.account = "U9d844766ccf8f9ae7dcd16f14e47ca0d";
+            req.session.picture = "https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz";
+        }
         var isLogin = false;
         if (req.session.account && req.session.name && req.session.picture) {
             isLogin = true;
@@ -79,6 +99,27 @@ class BaseRoute {
             res.redirect(DHAPI_1.DHAPI.LOGIN_PROCESS_PATH);
         }
         return isLogin;
+    }
+    /**
+     * @description 產生 auth 物件
+     * @param req
+     * @param pth
+     * @param clogin
+     */
+    getAuth(req, pth, clogin) {
+        var auth = {
+            path: pth,
+            checkLogin: clogin,
+        };
+        if (!clogin) {
+            return auth;
+        }
+        if (req.session.account) {
+            auth.account = req.session.account;
+            auth.name = req.session.name;
+            auth.picture = req.session.picture;
+        }
+        return auth;
     }
     /**
      * @description 產生畫面處理程序
@@ -92,21 +133,6 @@ class BaseRoute {
         res.locals.scripts = this.scripts;
         res.locals.title = this.title;
         res.render(view, options);
-    }
-    /**
-     * @description 建立回傳結果物件
-     * @param obj
-     * @param code
-     */
-    static createResult(obj, code) {
-        var result = {
-            code: code,
-            message: ResultCode_1.ResultCodeMsg.getMsg(code)
-        };
-        if (obj) {
-            result.data = obj;
-        }
-        return result;
     }
 }
 BaseRoute.AP_TITLE = "DHHealthPlatform";
