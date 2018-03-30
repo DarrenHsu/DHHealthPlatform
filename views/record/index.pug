@@ -8,14 +8,17 @@ block content
       div(class="col-lg-6 col-md-6 portfolio-item")
         div(class="card h-100")
           
+          //- Header
           div(class="card-header")
             span 我的紀錄
             button(type="button" class="close" aria-label="Close")
               span(aria-hidden="true") &times;
           
+          //- Body: Map
           div(class="card-body record-card")
             div#map(class="mapView card-img-top")
 
+            //- Body: Detail Value
             div(class="row records-detail-row")
               div(class="col-lg-8")
                 div(class="card h-100 card-no-border")
@@ -34,6 +37,7 @@ block content
                         img(class="records-icon" src="/images/home/calories.png") 
                         span(class="records-value") 1,400 卡
 
+              //- Body: Options
               div(class="col-lg-4")
                 div(class="card h-100  card-no-border")
                   div(class="card-body text-center")

@@ -15,8 +15,16 @@ block content
   div#LiveRow(class="row")
     each val in [1, 2, 3, 4, 5, 6, 7, 8]
       div(class="col-lg-4 col-md-6 portfolio-item")
-        div(class="card livePreview")
-          img(class="liveThemb" src="/images/live/youtube.png")
+        div(class="card")
+
+          div(class="card-header")
+            span 2018-04-31 LIVE
+            button(type="button" class="close" aria-label="Close")
+              span(aria-hidden="true") &times;
+          
+          div(class="card-body")
+            div(class="livePreview")
+              img(class="liveThemb" src="/images/live/youtube.png")
 
   
 
