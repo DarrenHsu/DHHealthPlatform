@@ -1,4 +1,4 @@
-import mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import { IRecord } from "../interface/IRecord";
 import { RecordSchema } from "../schemas/RecordSchema";
 import { IRecordModel } from "../models/model";

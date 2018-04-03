@@ -1,5 +1,5 @@
-import mongoose = require("mongoose");
-import querystring = require("querystring");
+import * as mongoose from "mongoose";
+import * as querystring from "querystring";
 import { DHDateFormat } from "../const/DHDateFormat";
 import { parseIso, format } from "ts-date/locale/en";
 import { NextFunction, Request, Response, Router } from "express";

@@ -1,4 +1,4 @@
-import mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import { IChatroom } from "../interface/IChatroom";
 import { ChatroomSchema } from "../schemas/ChatroomSchema";
 import { IChatroomModel } from "../models/model";

@@ -1,4 +1,4 @@
-import mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import { IRoute } from "../interface/IRoute";
 import { RouteSchema } from "../schemas/RouteSchema";
 import { IUserModel, IRouteModel, IRecordModel } from "../models/model";

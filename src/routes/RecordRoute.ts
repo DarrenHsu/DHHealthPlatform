@@ -1,5 +1,6 @@
-import mongoose = require("mongoose");
-import querystring = require("querystring");
+import * as mongoose from "mongoose";
+import * as querystring from "querystring";
+import * as moment from "moment";
 import { DHDateFormat } from "../const/DHDateFormat";
 import { parseIso, format } from "ts-date/locale/en";
 import { NextFunction, Request, Response, Router } from "express";
@@ -78,13 +79,6 @@ export class RecordRoute extends BaseRoute {
             var end = start + this.displayCount;
             var results = records.slice(start, end);
             var pageCount = Math.ceil(records.length / this.displayCount);
-
-            DHLog.d("sindex " + start);
-            DHLog.d("eindex " + end);
-            DHLog.d("page index " + page);
-            DHLog.d("total page " + pageCount);
-            DHLog.d("results count " + results.length);
-
             callback(records.length, pageCount, page, results);
         });
     }
@@ -124,9 +118,9 @@ export class RecordRoute extends BaseRoute {
 
         var timeStr = [];
         for (let record of recds) {
-            var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
-            var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
-            var endTimeStr = format(record.endTime, DHDateFormat.TIME_FORMAT);
+            var dateStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.DATE_FORMAT);
+            var startTimeStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
+            var endTimeStr = moment(record.endTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
             timeStr.push(
                 {
                     dateStr: dateStr,
@@ -152,9 +146,9 @@ export class RecordRoute extends BaseRoute {
 
     public renderPreviewRecord(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
         this.title = BaseRoute.AP_TITLE;
-        var dateStr = format(record.startTime, DHDateFormat.DATE_FORMAT);
-        var startTimeStr = format(record.startTime, DHDateFormat.TIME_FORMAT);
-        var endTimeStr = format(record.endTime, DHDateFormat.TIME_FORMAT);
+        var dateStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.DATE_FORMAT);
+        var startTimeStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
+        var endTimeStr = moment(record.endTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
         let options: Object = {
             auth: this.getAuth(req, DHAPI.RECORD_PATH, false),
             user: user.name,

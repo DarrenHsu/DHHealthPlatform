@@ -6,9 +6,9 @@ import * as connectMongo from "connect-mongo";
 import * as compression from "compression";
 import * as logger from "morgan";
 import * as path from "path";
-import errorHandler = require("errorhandler");
-import methodOverride = require("method-override");
-import mongoose = require("mongoose");
+import * as errorHandler from "errorhandler";
+import * as methodOverride from "method-override";
+import * as mongoose from "mongoose";
 
 import { DHLog } from "../util/DHLog";
 import { DBHelper } from  "../mongo/helper/DBHelper";

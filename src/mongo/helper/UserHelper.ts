@@ -1,4 +1,4 @@
-import mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import { IUser } from "../interface/IUser";
 import { UserSchema } from "../schemas/UserSchema";
 import { IUserModel } from "../models/model";

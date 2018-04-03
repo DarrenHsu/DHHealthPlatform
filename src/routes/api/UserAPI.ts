@@ -1,4 +1,4 @@
-import mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import { NextFunction, Request, Response, Router } from "express";
 import { BaseAPI } from "./BaseAPI";
 import { MONGODB_CODE, CONNECTION_CODE, ResultCodeMsg } from "../ResultCode";

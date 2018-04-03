@@ -1,5 +1,5 @@
-import mongoose = require("mongoose");
-import querystring = require("querystring");
+import * as mongoose from "mongoose";
+import * as querystring from "querystring";
 import * as JwtDecode from "jwt-decode";
 import * as request from "request";
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from "@line/bot-sdk";

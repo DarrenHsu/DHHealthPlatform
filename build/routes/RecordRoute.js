@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
+const moment = require("moment");
 const DHDateFormat_1 = require("../const/DHDateFormat");
-const en_1 = require("ts-date/locale/en");
 const ResultCode_1 = require("./ResultCode");
 const BaseRoute_1 = require("./BaseRoute");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
@@ -56,11 +56,6 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             var end = start + this.displayCount;
             var results = records.slice(start, end);
             var pageCount = Math.ceil(records.length / this.displayCount);
-            DHLog_1.DHLog.d("sindex " + start);
-            DHLog_1.DHLog.d("eindex " + end);
-            DHLog_1.DHLog.d("page index " + page);
-            DHLog_1.DHLog.d("total page " + pageCount);
-            DHLog_1.DHLog.d("results count " + results.length);
             callback(records.length, pageCount, page, results);
         });
     }
@@ -93,9 +88,9 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         var timeStr = [];
         for (let record of recds) {
-            var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
-            var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
-            var endTimeStr = en_1.format(record.endTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+            var dateStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.DATE_FORMAT);
+            var startTimeStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+            var endTimeStr = moment(record.endTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
             timeStr.push({
                 dateStr: dateStr,
                 startTimeStr: startTimeStr,
@@ -117,9 +112,9 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     }
     renderPreviewRecord(req, res, next, user, record) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
-        var dateStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.DATE_FORMAT);
-        var startTimeStr = en_1.format(record.startTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
-        var endTimeStr = en_1.format(record.endTime, DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+        var dateStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.DATE_FORMAT);
+        var startTimeStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+        var endTimeStr = moment(record.endTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.RECORD_PATH, false),
             user: user.name,

@@ -1,14 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const moment = require("moment");
+const DHDateFormat_1 = require("../const/DHDateFormat");
 const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
 const BaseRoute_1 = require("./BaseRoute");
+const DBHelper_1 = require("../mongo/helper/DBHelper");
+const RouteHelper_1 = require("../mongo/helper/RouteHelper");
+const UserHelper_1 = require("../mongo/helper/UserHelper");
 class CalendarRoute extends BaseRoute_1.BaseRoute {
-    constructor() {
+    constructor(connection) {
         super();
+        this.routeHelper = new RouteHelper_1.RouteHelper(connection);
+        this.userHelper = new UserHelper_1.UserHelper(connection);
     }
     static create(router) {
-        var app = new CalendarRoute();
+        var app = new CalendarRoute(DBHelper_1.DBHelper.connection);
         app.getCalendar(router);
     }
     /**
@@ -21,13 +28,29 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            this.renderCalendar(req, res, next);
+            this.routeHelper.list(req.session.account, (code, rts) => {
+                var events = [];
+                for (let route of rts) {
+                    if (!(route.startTime && route.endTime))
+                        continue;
+                    var s = moment(route.startTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.DATE_FORMAT + " " + DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+                    var e = moment(route.endTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.DATE_FORMAT + " " + DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+                    var event = {
+                        title: route.name,
+                        start: s,
+                        end: e
+                    };
+                    events.push(event);
+                }
+                this.renderCalendar(req, res, next, events);
+            });
         });
     }
-    renderCalendar(req, res, next) {
+    renderCalendar(req, res, next, events) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.CALENDAR_PATH, true),
+            events: events
         };
         this.render(req, res, "calendar/index", options);
     }
