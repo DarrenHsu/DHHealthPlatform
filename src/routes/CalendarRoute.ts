@@ -48,8 +48,9 @@ export class CalendarRoute extends BaseRoute {
 
                     var s = moment(route.startTime).utcOffset("+0000").format(DHDateFormat.DATE_FORMAT + " " + DHDateFormat.TIME_FORMAT)
                     var e = moment(route.endTime).utcOffset("+0000").format(DHDateFormat.DATE_FORMAT + " " + DHDateFormat.TIME_FORMAT)
-
-                    var event: IEvent  = {
+                    
+                    var event  = {
+                        id: route._id,
                         title: route.name,
                         start: s,
                         end: e

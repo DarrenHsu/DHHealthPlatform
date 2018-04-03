@@ -17,7 +17,7 @@ export class RecordHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecord) => void) {
+    public save(id: string, data: IRecord, callback?: (code: MONGODB_CODE, result: IRecordModel) => void) {
         if (!data || !id) {
             DHLog.d("data error：" + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA_ERROR, null);
@@ -124,7 +124,7 @@ export class RecordHelper implements BaseHelper {
         });
     }
     
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecord[]) => void) {
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);

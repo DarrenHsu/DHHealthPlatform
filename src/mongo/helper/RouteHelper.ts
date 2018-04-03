@@ -16,7 +16,7 @@ export class RouteHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IRoute, callback?: (code: MONGODB_CODE, result: IRoute) => void) {
+    public save(id: string, data: IRoute, callback?: (code: MONGODB_CODE, result: IRouteModel) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
@@ -47,7 +47,7 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
-    public add(data: IRoute, callback: (code: MONGODB_CODE, result: IRoute) => void) {
+    public add(data: IRoute, callback: (code: MONGODB_CODE, result: IRouteModel) => void) {
         if (!data) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA_ERROR, null);
@@ -83,7 +83,7 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRoute[]) => void) {
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);

@@ -16,7 +16,7 @@ export class UserHelper implements BaseHelper {
         }
     }
 
-    public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUser) => void) {
+    public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUserModel) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
@@ -50,7 +50,7 @@ export class UserHelper implements BaseHelper {
         });
     }
     
-    public add(data: IUser, callback: (code: MONGODB_CODE, result: IUser) => void) {
+    public add(data: IUser, callback: (code: MONGODB_CODE, result: IUserModel) => void) {
         if (!data || !data.lineUserId) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA_ERROR, null);
@@ -99,7 +99,7 @@ export class UserHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IUser[]) => void) {
+    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IUserModel[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
