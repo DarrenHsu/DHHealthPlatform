@@ -116,9 +116,7 @@ export class BaseAPI extends BaseRoute {
     protected sendSuccess(res: Response, code: number)
     protected sendSuccess(res: Response, code: number, result: IBase)
     protected sendSuccess(res: Response, code: number, result?: IBase) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute.createResult(result, code));
-        res.end();
+        this.sendJsonResult(res, BaseRoute.createResult(result, code));
     }
 
     /**

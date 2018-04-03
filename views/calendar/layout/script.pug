@@ -6,11 +6,6 @@ script(src="/scripts/fullcalendar.min.js" )
 script(src="/scripts/locale/zh-tw.js" )
 script(src="/javascripts/calendar/theme-chooser.js")
 
-- var j = "";
-  each event in events
-    - j += (j != "" ? "," : "") + "{id:'" + event.id + "',title:'" + event.title + "', start:'" + event.start + "',end:'" + event.end + "', textColor: '#ffffff'}";
-    - index++
-
 script.
   $(document).ready(function() {
     $('#calendar').fullCalendar({
@@ -23,9 +18,7 @@ script.
       navLinks: true, // can click day/week names to navigate views
       editable: false,
       eventLimit: false, // allow "more" link when too many events
-      events: [
-        #{j}
-      ],
+      events: '/calendar/feed',
       eventClick: function(calEvent, jsEvent, view) {
          alert('Event: ' + calEvent.id);
       }

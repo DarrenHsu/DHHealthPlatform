@@ -17,6 +17,7 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
         var app = new CalendarRoute(DBHelper_1.DBHelper.connection);
         app.getCalendar(router);
+        app.getCalendarFeed(router);
     }
     /**
      * @description 產生行程頁面
@@ -28,6 +29,21 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
+            this.renderCalendar(req, res, next);
+        });
+    }
+    getCalendarFeed(router) {
+        DHLog_1.DHLog.d("[" + CalendarRoute.name + ":create] " + DHAPI_1.DHAPI.CALENDAR_FEED_PATH);
+        router.get(DHAPI_1.DHAPI.CALENDAR_FEED_PATH, (req, res, next) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+            if (!req.query.start || !req.query.end) {
+                this.sendJsonResult(res, {});
+                return;
+            }
+            var start = req.query.start;
+            var end = req.query.end;
             this.routeHelper.list(req.session.account, (code, rts) => {
                 var events = [];
                 for (let route of rts) {
@@ -39,19 +55,19 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
                         id: route._id,
                         title: route.name,
                         start: s,
-                        end: e
+                        end: e,
+                        textColor: "#ffffff"
                     };
                     events.push(event);
                 }
-                this.renderCalendar(req, res, next, events);
+                this.sendJsonResult(res, events);
             });
         });
     }
-    renderCalendar(req, res, next, events) {
+    renderCalendar(req, res, next) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
-            auth: this.getAuth(req, DHAPI_1.DHAPI.CALENDAR_PATH, true),
-            events: events
+            auth: this.getAuth(req, DHAPI_1.DHAPI.CALENDAR_PATH, true)
         };
         this.render(req, res, "calendar/index", options);
     }

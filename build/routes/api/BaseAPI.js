@@ -85,9 +85,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
         });
     }
     sendSuccess(res, code, result) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute_1.BaseRoute.createResult(result, code));
-        res.end();
+        this.sendJsonResult(res, BaseRoute_1.BaseRoute.createResult(result, code));
     }
     /**
      * @description 回傳失敗處理程序

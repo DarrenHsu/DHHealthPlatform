@@ -27,6 +27,7 @@ export class CalendarRoute extends BaseRoute {
         var app = new CalendarRoute(DBHelper.connection);
 
         app.getCalendar(router);
+        app.getCalendarFeed(router);
     }
 
     /**
@@ -39,6 +40,25 @@ export class CalendarRoute extends BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
+
+            this.renderCalendar(req, res, next);
+        });
+    }
+
+    public getCalendarFeed(router: Router) {
+        DHLog.d("[" + CalendarRoute.name + ":create] " + DHAPI.CALENDAR_FEED_PATH);
+        router.get(DHAPI.CALENDAR_FEED_PATH, (req: Request, res: Response, next: NextFunction) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+
+            if (!req.query.start || !req.query.end) {
+                this.sendJsonResult(res, {});
+                return;
+            }
+
+            var start = req.query.start;
+            var end = req.query.end;
 
             this.routeHelper.list(req.session.account, (code, rts) => {
                 var events: IEvent[] = [];
@@ -53,20 +73,20 @@ export class CalendarRoute extends BaseRoute {
                         id: route._id,
                         title: route.name,
                         start: s,
-                        end: e
+                        end: e,
+                        textColor: "#ffffff"
                     };
                     events.push(event);
                 }
-                this.renderCalendar(req, res, next, events);
+                this.sendJsonResult(res, events);
             });
         });
     }
 
-    public renderCalendar(req: Request, res: Response, next: NextFunction, events: IEvent[]) {
+    public renderCalendar(req: Request, res: Response, next: NextFunction) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
-            auth: this.getAuth(req, DHAPI.CALENDAR_PATH, true),
-            events: events
+            auth: this.getAuth(req, DHAPI.CALENDAR_PATH, true)
         };
         this.render(req, res, "calendar/index", options);
     }

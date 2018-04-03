@@ -13,6 +13,7 @@ export class DHAPI {
     public static LOGIN_RESULT_PATH =               DHAPI.LOGIN_PATH + "/result";
     
     public static CALENDAR_PATH =                   "/calendar";
+    public static CALENDAR_FEED_PATH =              DHAPI.CALENDAR_PATH + "/feed";
     
     public static RECORD_PATH =                     "/records";
     public static RECORD_PREVIEW_PATH =             DHAPI.RECORD_PATH + "/preview";

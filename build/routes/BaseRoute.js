@@ -135,6 +135,16 @@ class BaseRoute {
         res.locals.title = this.title;
         res.render(view, options);
     }
+    /**
+     * @description 回呼json結果
+     * @param res
+     * @param result
+     */
+    sendJsonResult(res, result) {
+        res.setHeader("Content-type", "application/json");
+        res.json(result);
+        res.end();
+    }
 }
 BaseRoute.AP_TITLE = "DHHealthPlatform";
 BaseRoute.FEED_AUTH = "Darren Hsu I Love You";

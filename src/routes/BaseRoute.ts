@@ -165,4 +165,15 @@ export class BaseRoute {
         res.locals.title = this.title;
         res.render(view, options);
     }
+
+    /**
+     * @description 回呼json結果
+     * @param res 
+     * @param result 
+     */
+    protected sendJsonResult(res: Response ,result: any) {
+        res.setHeader("Content-type", "application/json");
+        res.json(result);
+        res.end();
+    }
 }
