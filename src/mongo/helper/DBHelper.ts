@@ -1,3 +1,4 @@
+import * as q from "q";
 import mongoose = require("mongoose");
 import { DHLog } from "../../util/DHLog";
 
@@ -7,7 +8,7 @@ export class DBHelper {
     public static isConnection: boolean = false;
 
     public static openDB(path: string) {
-        global.Promise = require("q").Promise;
+        global.Promise = q.Promise;
         mongoose.Promise = global.Promise;
         this.connection = mongoose.createConnection(path,  { useMongoClient: true });
         this.connection.on("error", console.error.bind(console, "Connection Error:"));

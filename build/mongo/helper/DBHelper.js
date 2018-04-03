@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const q = require("q");
 const mongoose = require("mongoose");
 const DHLog_1 = require("../../util/DHLog");
 class DBHelper {
     static openDB(path) {
-        global.Promise = require("q").Promise;
+        global.Promise = q.Promise;
         mongoose.Promise = global.Promise;
         this.connection = mongoose.createConnection(path, { useMongoClient: true });
         this.connection.on("error", console.error.bind(console, "Connection Error:"));
