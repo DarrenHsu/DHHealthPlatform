@@ -83,6 +83,8 @@ export class LiveRoute extends BaseRoute {
                 if (!token) {
                     return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
+
+                DHLog.d("token " + token);
     
                 this.renderLive(req, res, next, null);
             });
