@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const google = require("google-auth-library");
-const ResultCode_1 = require("./ResultCode");
 const DHAPI_1 = require("../const/DHAPI");
 const GoogleAPI_1 = require("../const/GoogleAPI");
 const DHLog_1 = require("../util/DHLog");
@@ -57,12 +56,13 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 access_type: "offline",
                 scope: scopes
             });
-            var start = req.params.start;
-            var end = req.params.end;
-            if (!start && !end) {
-                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
-            }
-            this.renderLive(req, res, next, null);
+            res.redirect(url);
+            // var start = req.params.start;
+            // var end = req.params.end;
+            // if (!start && !end) {
+            //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            // }
+            // this.renderLive(req, res, next, null);
         });
     }
     renderLive(req, res, next, recds) {

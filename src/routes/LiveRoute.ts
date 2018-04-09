@@ -83,13 +83,15 @@ export class LiveRoute extends BaseRoute {
                 scope: scopes
             })
 
-            var start = req.params.start;
-            var end = req.params.end;
-            if (!start && !end) {
-                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-            }
+            res.redirect(url);
 
-            this.renderLive(req, res, next, null);
+            // var start = req.params.start;
+            // var end = req.params.end;
+            // if (!start && !end) {
+            //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            // }
+
+            // this.renderLive(req, res, next, null);
         });
     }x
 
