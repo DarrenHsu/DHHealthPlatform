@@ -23,7 +23,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     }
     getGoogleAuth(router) {
         DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH);
-        router.get(GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH + "/:start/:end", (req, res, next) => {
+        router.get(GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH, (req, res, next) => {
             DHLog_1.DHLog.d("google auth");
         });
     }

@@ -37,7 +37,7 @@ export class LiveRoute extends BaseRoute {
 
     public getGoogleAuth(router: Router) {
         DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI.API_GOOGLE_AUTH_PATH);
-        router.get(GoogleAPI.API_GOOGLE_AUTH_PATH + "/:start/:end", (req: Request, res: Response, next: NextFunction) => {
+        router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req: Request, res: Response, next: NextFunction) => {
             DHLog.d("google auth");
         });
     }
