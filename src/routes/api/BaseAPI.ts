@@ -125,9 +125,7 @@ export class BaseAPI extends BaseRoute {
      * @param code 
      */
     protected sendFaild(res: Response, code: number) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute.createResult(null, code));
-        res.end();
+        this.sendJsonResult(res, BaseRoute.createResult(null, code));
     }
 
     /**
@@ -135,10 +133,8 @@ export class BaseAPI extends BaseRoute {
      * @param res 
      */
     protected sendAuthFaild(res: Response) {
-        res.setHeader("Content-type", "application/json");
         res.statusCode = 403;
-        res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
-        res.end();
+        this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
     }
 
     /**
@@ -146,9 +142,7 @@ export class BaseAPI extends BaseRoute {
      * @param res 
      */
     protected sendParamsFaild(res: Response) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
-        res.end();
+        this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
     }
 
     /**
@@ -156,8 +150,6 @@ export class BaseAPI extends BaseRoute {
      * @param res 
      */
     protected sendBodyFaild(res: Response) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
-        res.end();
+        this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
     }
 }

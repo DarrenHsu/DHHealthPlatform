@@ -93,37 +93,29 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
      * @param code
      */
     sendFaild(res, code) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute_1.BaseRoute.createResult(null, code));
-        res.end();
+        this.sendJsonResult(res, BaseRoute_1.BaseRoute.createResult(null, code));
     }
     /**
      * @description 回傳授權失敗處理程序
      * @param res
      */
     sendAuthFaild(res) {
-        res.setHeader("Content-type", "application/json");
         res.statusCode = 403;
-        res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
-        res.end();
+        this.sendJsonResult(res, BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
     }
     /**
      * @description 回傳參數錯誤處理程序
      * @param res
      */
     sendParamsFaild(res) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
-        res.end();
+        this.sendJsonResult(res, BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
     }
     /**
      * @description 回傳接收資料錯誤處理程序
      * @param res
      */
     sendBodyFaild(res) {
-        res.setHeader("Content-type", "application/json");
-        res.json(BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
-        res.end();
+        this.sendJsonResult(res, BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
     }
 }
 exports.BaseAPI = BaseAPI;
