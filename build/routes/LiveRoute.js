@@ -76,7 +76,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         var newAuth = {
                             lineUserId: req.session.account,
                             googleToken: token.access_token,
-                            googleTokenExpire: new Date(token.expiry_date),
+                            googleTokenExpire: new Date(token.expiry_date * 1000),
                             lineToken: null,
                             lineTokenExpire: null
                         };
