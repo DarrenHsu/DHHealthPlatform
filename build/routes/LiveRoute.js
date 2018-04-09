@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const google = require("google-auth-library");
+const ResultCode_1 = require("./ResultCode");
 const DHAPI_1 = require("../const/DHAPI");
 const GoogleAPI_1 = require("../const/GoogleAPI");
 const DHLog_1 = require("../util/DHLog");
@@ -14,16 +15,49 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         this.uri = DHAPI_1.DHAPI.RECORD_PATH;
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.userHelper = new UserHelper_1.UserHelper(connection);
+        this.scopes = [
+            "https://www.googleapis.com/auth/youtube",
+            "https://www.googleapis.com/auth/youtube.force-ssl",
+            "https://www.googleapis.com/auth/youtube.upload",
+            "https://www.googleapis.com/auth/youtubepartner",
+            "https://www.googleapis.com/auth/youtubepartner-channel-audit",
+            "https://www.googleapis.com/auth/youtube.readonly"
+        ];
     }
     static create(router) {
         var app = new LiveRoute(DBHelper_1.DBHelper.connection);
         app.getLive(router);
         app.getGoogleAuth(router);
     }
+    initOAuth2Client(req) {
+        if (!this.oauth2Client) {
+            var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
+            var redirectUrl = fullUrl + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH;
+            var client_id = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_id;
+            var client_secret = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_secret;
+            DHLog_1.DHLog.d("redirectUrl " + redirectUrl);
+            DHLog_1.DHLog.d("client_id " + client_id);
+            DHLog_1.DHLog.d("client_secret " + client_secret);
+            const oauth2Client = new google.OAuth2Client(client_id, client_secret, redirectUrl);
+        }
+    }
     getGoogleAuth(router) {
         DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH);
         router.get(GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH, (req, res, next) => {
-            DHLog_1.DHLog.d("google auth");
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+            this.initOAuth2Client(req);
+            this.oauth2Client.getToken(req.query.code, (err, token) => {
+                if (err) {
+                    DHLog_1.DHLog.d("" + err);
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_AUTH_ERROR);
+                }
+                if (!token) {
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
+                }
+                this.renderLive(req, res, next, null);
+            });
         });
     }
     /**
@@ -36,25 +70,10 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
-            var redirectUrl = fullUrl + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH;
-            var client_id = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_id;
-            var client_secret = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_secret;
-            DHLog_1.DHLog.d("redirectUrl " + redirectUrl);
-            DHLog_1.DHLog.d("client_id " + client_id);
-            DHLog_1.DHLog.d("client_secret " + client_secret);
-            const oauth2Client = new google.OAuth2Client(client_id, client_secret, redirectUrl);
-            const scopes = [
-                "https://www.googleapis.com/auth/youtube",
-                "https://www.googleapis.com/auth/youtube.force-ssl",
-                "https://www.googleapis.com/auth/youtube.upload",
-                "https://www.googleapis.com/auth/youtubepartner",
-                "https://www.googleapis.com/auth/youtubepartner-channel-audit",
-                "https://www.googleapis.com/auth/youtube.readonly"
-            ];
-            const url = oauth2Client.generateAuthUrl({
+            this.initOAuth2Client(req);
+            const url = this.oauth2Client.generateAuthUrl({
                 access_type: "offline",
-                scope: scopes
+                scope: this.scopes
             });
             res.redirect(url);
             // var start = req.params.start;

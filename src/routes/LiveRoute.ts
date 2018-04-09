@@ -4,7 +4,7 @@ import * as google from "google-auth-library";
 import { DHDateFormat } from "../const/DHDateFormat";
 import { parseIso, format } from "ts-date/locale/en";
 import { NextFunction, Request, Response, Router } from "express";
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "./ResultCode";
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, GOOGLE_CODE } from "./ResultCode";
 import { DHAPI } from "../const/DHAPI";
 import { GoogleAPI } from "../const/GoogleAPI";
 import { DHLog } from "../util/DHLog";
@@ -20,12 +20,23 @@ export class LiveRoute extends BaseRoute {
     protected userHelper: UserHelper;
     protected recordHelper: RecordHelper;
     protected uri = DHAPI.RECORD_PATH;
+
+    private oauth2Client: google.OAuth2Client;
+    private scopes: [string, string, string, string, string, string];
     
     constructor(connection: mongoose.Connection) {
         super();
 
         this.recordHelper = new RecordHelper(connection);
         this.userHelper = new UserHelper(connection);
+        this.scopes = [
+            "https://www.googleapis.com/auth/youtube",
+            "https://www.googleapis.com/auth/youtube.force-ssl",
+            "https://www.googleapis.com/auth/youtube.upload",
+            "https://www.googleapis.com/auth/youtubepartner",
+            "https://www.googleapis.com/auth/youtubepartner-channel-audit",
+            "https://www.googleapis.com/auth/youtube.readonly"
+        ];
     }
     
     public static create(router: Router) {
@@ -35,25 +46,8 @@ export class LiveRoute extends BaseRoute {
         app.getGoogleAuth(router);
     }
 
-    public getGoogleAuth(router: Router) {
-        DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI.API_GOOGLE_AUTH_PATH);
-        router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req: Request, res: Response, next: NextFunction) => {
-            DHLog.d("google auth");
-        });
-    }
-
-    /**
-     * @description 顯示紀錄頁面
-     * @param router 
-     */
-    public getLive(router: Router) {
-        DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI.LIVE_PATH);
-        router.get(DHAPI.LIVE_PATH + "/:start/:end", (req: Request, res: Response, next: NextFunction) => {
-            if (!this.checkLogin(req, res, next)) {
-                return;
-            }
-
-            
+    private initOAuth2Client(req: Request) {
+        if (!this.oauth2Client) {
             var fullUrl = BaseRoute.getFullHostUrl(req);
             var redirectUrl = fullUrl + GoogleAPI.API_GOOGLE_AUTH_PATH;
             var client_id = DHAPI.pkgjson.googleapis.auth.client_id;
@@ -68,19 +62,49 @@ export class LiveRoute extends BaseRoute {
                 client_secret,
                 redirectUrl
             );
+        }
+    }
 
-            const scopes = [
-                "https://www.googleapis.com/auth/youtube",
-                "https://www.googleapis.com/auth/youtube.force-ssl",
-                "https://www.googleapis.com/auth/youtube.upload",
-                "https://www.googleapis.com/auth/youtubepartner",
-                "https://www.googleapis.com/auth/youtubepartner-channel-audit",
-                "https://www.googleapis.com/auth/youtube.readonly"
-            ];
+    public getGoogleAuth(router: Router) {
+        DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI.API_GOOGLE_AUTH_PATH);
+        router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req: Request, res: Response, next: NextFunction) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+
+            this.initOAuth2Client(req);
+
+            this.oauth2Client.getToken(req.query.code, (err, token) => {
+                if (err) {
+                    DHLog.d("" + err);
+                    return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_AUTH_ERROR);
+                }
+
+                if (!token) {
+                    return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_TOKEN_ERROR);
+                }
+    
+                this.renderLive(req, res, next, null);
+            });
+        });
+    }
+
+    /**
+     * @description 顯示紀錄頁面
+     * @param router 
+     */
+    public getLive(router: Router) {
+        DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI.LIVE_PATH);
+        router.get(DHAPI.LIVE_PATH + "/:start/:end", (req: Request, res: Response, next: NextFunction) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+
+            this.initOAuth2Client(req);
             
-            const url = oauth2Client.generateAuthUrl({
+            const url = this.oauth2Client.generateAuthUrl({
                 access_type: "offline",
-                scope: scopes
+                scope: this.scopes
             })
 
             res.redirect(url);

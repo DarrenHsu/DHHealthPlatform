@@ -14,6 +14,12 @@ export enum CONNECTION_CODE {
     CC_PAGE_NOT_FOUND_ERROR = -1000
 }
 
+export enum GOOGLE_CODE {
+    GC_SUCCESS = 0,
+    GC_AUTH_ERROR = -301,
+    GC_TOKEN_ERROR = -302
+}
+
 export enum MONGODB_CODE {
     MC_DATA_EXIST = 1,
     MC_SUCCESS = 0,
@@ -58,6 +64,10 @@ class ResultMsg {
     public static MC_NO_USER_DATA_ERROR = "查無會員資料";
     public static MC_NO_DATA_ERROR = "無傳入處理資料";
     public static MC_NO_CONDITION_ERROR = "無傳入選擇條件";
+
+    public static GC_SUCCESS = "資料已存在";
+    public static GC_AUTH_ERROR = "Google 授權失敗!";
+    public static GC_TOKEN_ERROR = "Google 取得授權碼失敗";
 }
 
 export class ResultCodeMsg {
@@ -84,7 +94,14 @@ export class ResultCodeMsg {
                 return ResultMsg.CC_GENERAL_ERROR;
             case CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR:
                 return ResultMsg.CC_PAGE_NOT_FOUND_ERROR;
-
+            
+            case GOOGLE_CODE.GC_SUCCESS:
+                return ResultMsg.GC_SUCCESS;
+            case GOOGLE_CODE.GC_AUTH_ERROR:
+                return ResultMsg.GC_AUTH_ERROR;
+            case GOOGLE_CODE.GC_TOKEN_ERROR:
+                return ResultMsg.GC_TOKEN_ERROR;
+            
             case MONGODB_CODE.MC_DATA_EXIST:
                 return ResultMsg.MC_DATA_EXIST;
             case MONGODB_CODE.MC_SUCCESS:
