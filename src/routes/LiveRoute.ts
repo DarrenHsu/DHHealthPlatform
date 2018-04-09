@@ -57,7 +57,7 @@ export class LiveRoute extends BaseRoute {
             DHLog.d("client_id " + client_id);
             DHLog.d("client_secret " + client_secret);
 
-            const oauth2Client = new google.OAuth2Client(
+            this.oauth2Client = new google.OAuth2Client(
                 client_id,
                 client_secret,
                 redirectUrl

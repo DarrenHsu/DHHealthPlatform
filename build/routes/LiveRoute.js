@@ -38,7 +38,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             DHLog_1.DHLog.d("redirectUrl " + redirectUrl);
             DHLog_1.DHLog.d("client_id " + client_id);
             DHLog_1.DHLog.d("client_secret " + client_secret);
-            const oauth2Client = new google.OAuth2Client(client_id, client_secret, redirectUrl);
+            this.oauth2Client = new google.OAuth2Client(client_id, client_secret, redirectUrl);
         }
     }
     getGoogleAuth(router) {
