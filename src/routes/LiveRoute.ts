@@ -69,14 +69,16 @@ export class LiveRoute extends BaseRoute {
         }
     }
 
+    /**
+     * @description 取得回傳授權資料
+     * @param router 
+     */
     public getGoogleAuth(router: Router) {
         DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI.API_GOOGLE_AUTH_PATH);
         router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-
-            this.initOAuth2Client(req);
 
             this.oauth2Client.getToken(req.query.code, (err, token) => {
                 if (err) {
@@ -88,6 +90,9 @@ export class LiveRoute extends BaseRoute {
                     return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
 
+                DHLog.d("get token " + token.access_token);
+                DHLog.d("get token " + token.expiry_date);
+
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
                     if (auth) {
                         auth.googleToken = token.access_token;
@@ -97,6 +102,8 @@ export class LiveRoute extends BaseRoute {
                         DHLog.d("token " + auth.googleTokenExpire);
                         return this.renderLive(req, res, next, null);
                     }else {
+                        this.initOAuth2Client(req);
+
                         var newAuth: IAuth = {
                             lineUserId: req.session.account,
                             googleToken: token.access_token,
