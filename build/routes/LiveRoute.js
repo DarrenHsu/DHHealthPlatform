@@ -56,7 +56,11 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 if (!token) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
-                DHLog_1.DHLog.d("token " + token);
+                DHLog_1.DHLog.d("id_token " + token.id_token);
+                DHLog_1.DHLog.d("refresh_token " + token.refresh_token);
+                DHLog_1.DHLog.d("token_type " + token.token_type);
+                DHLog_1.DHLog.d("access_token " + token.access_token);
+                DHLog_1.DHLog.d("expiry_date " + token.expiry_date);
                 this.renderLive(req, res, next, null);
             });
         });
