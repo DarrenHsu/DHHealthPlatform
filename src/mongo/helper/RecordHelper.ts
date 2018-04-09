@@ -118,7 +118,7 @@ export class RecordHelper implements BaseHelper {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
             }else {
-                DHLog.d("find " + res ? res.recordId : "undifined");
+                DHLog.d("find " + res.recordId ? res.recordId : "undifined");
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }
         });

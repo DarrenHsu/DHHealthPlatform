@@ -109,7 +109,7 @@ class AuthHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                DHLog_1.DHLog.d("find " + res ? res.lineUserId : "undifined");
+                DHLog_1.DHLog.d("find " + res.lineUserId ? res.lineUserId : "undifined");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, res);
             }
