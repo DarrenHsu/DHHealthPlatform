@@ -18,7 +18,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
                 this.sendParamsFaild(res);
                 return;
             }
-            this.helper.list(req.params.id, (code, results) => {
+            this.helper.find(req.params.id, (code, results) => {
                 this.sendSuccess(res, code, results);
             });
         });

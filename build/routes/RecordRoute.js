@@ -51,7 +51,7 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
         });
     }
     findRecord(lineUserId, page, callback) {
-        this.recordHelper.list(lineUserId, (code, records) => {
+        this.recordHelper.find(lineUserId, (code, records) => {
             var start = (page - 1) * this.displayCount;
             var end = start + this.displayCount;
             var results = records.slice(start, end);
@@ -74,11 +74,11 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkParam(auth, recordId)) {
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR);
             }
-            this.recordHelper.get(recordId, (code, record) => {
+            this.recordHelper.findOne(recordId, (code, record) => {
                 if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + code);
                 }
-                this.userHelper.list(record.lineUserId, (code, user) => {
+                this.userHelper.find(record.lineUserId, (code, user) => {
                     this.renderPreviewRecord(req, res, next, user[0], record);
                 });
             });

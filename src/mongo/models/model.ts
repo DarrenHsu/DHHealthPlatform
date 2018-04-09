@@ -3,6 +3,7 @@ import { IUser } from "../interface/IUser";
 import { IRoute } from "../interface/IRoute";
 import { IRecord } from "../interface/IRecord";
 import { IChatroom } from "../interface/IChatroom";
+import { IAuth } from "../interface/IAuth";
 
 export interface IBaseModel extends Document {}
 
@@ -13,3 +14,5 @@ export interface IRecordModel extends IRecord, IBaseModel {}
 export interface IRouteModel extends IRoute, IBaseModel {}
 
 export interface IChatroomModel extends IChatroom, IBaseModel {}
+
+export interface IAuthModel extends IAuth, IBaseModel {}

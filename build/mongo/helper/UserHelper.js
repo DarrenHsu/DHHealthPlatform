@@ -99,7 +99,7 @@ class UserHelper {
             }
         });
     }
-    list(lineUserId, callback) {
+    find(lineUserId, callback) {
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)

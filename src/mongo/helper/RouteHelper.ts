@@ -83,7 +83,7 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
+    public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);

@@ -94,7 +94,7 @@ export class ChatroomHelper implements BaseHelper {
         });
     }
 
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IChatroomModel[]) => void) {
+    public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IChatroomModel[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);

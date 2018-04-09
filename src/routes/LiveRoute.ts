@@ -12,13 +12,16 @@ import { BaseRoute } from "./BaseRoute";
 import { DBHelper } from "../mongo/helper/DBHelper";
 import { RecordHelper } from "../mongo/helper/RecordHelper";
 import { UserHelper } from "../mongo/helper/UserHelper";
+import { AuthHelper } from "../mongo/helper/AuthHelper";
 import { IRecord } from "../mongo/interface/IRecord";
 import { IUser } from "../mongo/interface/IUser";
+import { IAuth } from "../mongo/interface/IAuth";
 
 export class LiveRoute extends BaseRoute {
     
     protected userHelper: UserHelper;
     protected recordHelper: RecordHelper;
+    protected authHelper: AuthHelper;
     protected uri = DHAPI.RECORD_PATH;
 
     private oauth2Client: google.OAuth2Client;
@@ -29,6 +32,7 @@ export class LiveRoute extends BaseRoute {
 
         this.recordHelper = new RecordHelper(connection);
         this.userHelper = new UserHelper(connection);
+        this.authHelper = new AuthHelper(connection);
         this.scopes = [
             "https://www.googleapis.com/auth/youtube",
             "https://www.googleapis.com/auth/youtube.force-ssl",
@@ -84,13 +88,30 @@ export class LiveRoute extends BaseRoute {
                     return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
 
-                DHLog.d("id_token " + token.id_token);
-                DHLog.d("refresh_token " + token.refresh_token);
-                DHLog.d("token_type " + token.token_type);
-                DHLog.d("access_token " + token.access_token);
-                DHLog.d("expiry_date " + token.expiry_date);
-    
-                this.renderLive(req, res, next, null);
+                this.authHelper.findOne(req.session.account, (code, auth) =>{
+                    if (auth) {
+                        auth.googleToken = token.access_token;
+                        auth.googleTokenExpire = new Date(token.expiry_date);
+                        
+                        DHLog.d("token " + auth.googleToken);
+                        DHLog.d("token " + auth.googleTokenExpire);
+                        return this.renderLive(req, res, next, null);
+                    }else {
+                        var newAuth: IAuth = {
+                            lineUserId: req.session.account,
+                            googleToken: token.access_token,
+                            googleTokenExpire: new Date(token.expiry_date),
+                            lineToken: null,
+                            lineTokenExpire: null
+                        };
+
+                        this.authHelper.add(newAuth, (code, auth) => {
+                            DHLog.d("token " + auth.googleToken);
+                            DHLog.d("token " + auth.googleTokenExpire);
+                            return this.renderLive(req, res, next, null);
+                        });
+                    }
+                });
             });
         });
     }
@@ -106,22 +127,26 @@ export class LiveRoute extends BaseRoute {
                 return;
             }
 
-            this.initOAuth2Client(req);
+            this.authHelper.findOne(req.session.account, (code, auth) =>{
+                if (auth) {
+                    var start = req.params.start;
+                    var end = req.params.end;
+                    if (!start && !end) {
+                        return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+                    }
+        
+                    this.renderLive(req, res, next, null);
+                }else {
+                    this.initOAuth2Client(req);
             
-            const url = this.oauth2Client.generateAuthUrl({
-                access_type: "offline",
-                scope: this.scopes
-            })
-
-            res.redirect(url);
-
-            // var start = req.params.start;
-            // var end = req.params.end;
-            // if (!start && !end) {
-            //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-            // }
-
-            // this.renderLive(req, res, next, null);
+                    const url = this.oauth2Client.generateAuthUrl({
+                        access_type: "offline",
+                        scope: this.scopes
+                    });
+        
+                    return res.redirect(url);
+                }
+            });
         });
     }x
 

@@ -31,7 +31,7 @@ export class BaseAPI extends BaseRoute {
                 return;
             }
 
-            this.helper.list(req.params.id, (code, results) => {
+            this.helper.find(req.params.id, (code, results) => {
                 this.sendSuccess(res, code, results);
             });
         });

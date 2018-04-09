@@ -60,7 +60,7 @@ export class CalendarRoute extends BaseRoute {
             var start = req.query.start;
             var end = req.query.end;
 
-            this.routeHelper.list(req.session.account, (code, rts) => {
+            this.routeHelper.find(req.session.account, (code, rts) => {
                 var events: IEvent[] = [];
                 for (let route of rts) {
                     if (!(route.startTime && route.endTime)) 

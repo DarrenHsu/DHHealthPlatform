@@ -9,12 +9,14 @@ const BaseRoute_1 = require("./BaseRoute");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../mongo/helper/RecordHelper");
 const UserHelper_1 = require("../mongo/helper/UserHelper");
+const AuthHelper_1 = require("../mongo/helper/AuthHelper");
 class LiveRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();
         this.uri = DHAPI_1.DHAPI.RECORD_PATH;
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.userHelper = new UserHelper_1.UserHelper(connection);
+        this.authHelper = new AuthHelper_1.AuthHelper(connection);
         this.scopes = [
             "https://www.googleapis.com/auth/youtube",
             "https://www.googleapis.com/auth/youtube.force-ssl",
@@ -56,12 +58,29 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 if (!token) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
-                DHLog_1.DHLog.d("id_token " + token.id_token);
-                DHLog_1.DHLog.d("refresh_token " + token.refresh_token);
-                DHLog_1.DHLog.d("token_type " + token.token_type);
-                DHLog_1.DHLog.d("access_token " + token.access_token);
-                DHLog_1.DHLog.d("expiry_date " + token.expiry_date);
-                this.renderLive(req, res, next, null);
+                this.authHelper.findOne(req.session.account, (code, auth) => {
+                    if (auth) {
+                        auth.googleToken = token.access_token;
+                        auth.googleTokenExpire = new Date(token.expiry_date);
+                        DHLog_1.DHLog.d("token " + auth.googleToken);
+                        DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
+                        return this.renderLive(req, res, next, null);
+                    }
+                    else {
+                        var newAuth = {
+                            lineUserId: req.session.account,
+                            googleToken: token.access_token,
+                            googleTokenExpire: new Date(token.expiry_date),
+                            lineToken: null,
+                            lineTokenExpire: null
+                        };
+                        this.authHelper.add(newAuth, (code, auth) => {
+                            DHLog_1.DHLog.d("token " + auth.googleToken);
+                            DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
+                            return this.renderLive(req, res, next, null);
+                        });
+                    }
+                });
             });
         });
     }
@@ -75,18 +94,24 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            this.initOAuth2Client(req);
-            const url = this.oauth2Client.generateAuthUrl({
-                access_type: "offline",
-                scope: this.scopes
+            this.authHelper.findOne(req.session.account, (code, auth) => {
+                if (auth) {
+                    var start = req.params.start;
+                    var end = req.params.end;
+                    if (!start && !end) {
+                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
+                    }
+                    this.renderLive(req, res, next, null);
+                }
+                else {
+                    this.initOAuth2Client(req);
+                    const url = this.oauth2Client.generateAuthUrl({
+                        access_type: "offline",
+                        scope: this.scopes
+                    });
+                    return res.redirect(url);
+                }
             });
-            res.redirect(url);
-            // var start = req.params.start;
-            // var end = req.params.end;
-            // if (!start && !end) {
-            //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-            // }
-            // this.renderLive(req, res, next, null);
         });
     }
     renderLive(req, res, next, recds) {

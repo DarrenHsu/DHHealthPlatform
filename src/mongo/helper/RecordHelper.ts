@@ -106,7 +106,7 @@ export class RecordHelper implements BaseHelper {
         });
     }
 
-    public get(recordId: string, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
+    public findOne(recordId: string, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
         if (!recordId) {
             DHLog.d("recordId error：" + recordId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
@@ -118,13 +118,13 @@ export class RecordHelper implements BaseHelper {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
             }else {
-                DHLog.d("find " + recordId);
+                DHLog.d("find " + res ? res.recordId : "undifined");
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
             }
         });
     }
     
-    public list(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
+    public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);

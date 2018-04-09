@@ -1,29 +1,29 @@
 import * as mongoose from "mongoose";
-import { IUser } from "../interface/IUser";
-import { UserSchema } from "../schemas/UserSchema";
-import { IUserModel } from "../models/model";
+import { IAuth } from "../interface/IAuth";
+import { AuthSchema } from "../schemas/AuthSchema";
+import { IUserModel, IAuthModel } from "../models/model";
 import { BaseHelper } from "./BaseHelper";
 import { MONGODB_CODE } from "../../routes/ResultCode";
 import { DHLog } from "../../util/DHLog";
 
-export class UserHelper implements BaseHelper {
+export class AuthHelper implements BaseHelper {
     
-    private static model: mongoose.Model<IUserModel>;
+    private static model: mongoose.Model<IAuthModel>;
     
     constructor(connection: mongoose.Connection) {
-        if (!UserHelper.model)  {
-            UserHelper.model = connection.model<IUserModel>("user", UserSchema);
+        if (!AuthHelper.model)  {
+            AuthHelper.model = connection.model<IAuthModel>("Auth", AuthSchema);
         }
     }
 
-    public save(id: string, data: IUser, callback?: (code: MONGODB_CODE, result: IUserModel) => void) {
+    public save(id: string, data: IAuth, callback?: (code: MONGODB_CODE, result: IAuthModel) => void) {
         if (!id) {
             DHLog.d("id error：" + id);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
         
-        UserHelper.model.findByIdAndUpdate(id, data, (err, res) => {
+        AuthHelper.model.findByIdAndUpdate(id, data, (err, res) => {
             if (err) {
                 DHLog.d("find by id and update error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -32,14 +32,10 @@ export class UserHelper implements BaseHelper {
 
             if (res) {
                 DHLog.d("find");
-                res.name = data.name;
-                res.age = data.age;
-                res.height = data.height;
-                res.weight = data.weight;
-                res.gmail = data.gmail;
-                res.lineUserId = data.lineUserId;
-                res.pictureUrl = data.pictureUrl;
-                res.modifyAt = new Date();
+                res.googleToken = data.googleToken;
+                res.googleTokenExpire = data.googleTokenExpire;
+                res.lineToken = data.lineToken;
+                res.lineTokenExpire = data.lineTokenExpire;
                 res.save();
                 
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
@@ -50,14 +46,14 @@ export class UserHelper implements BaseHelper {
         });
     }
     
-    public add(data: IUser, callback: (code: MONGODB_CODE, result: IUserModel) => void) {
+    public add(data: IAuth, callback: (code: MONGODB_CODE, result: IAuthModel) => void) {
         if (!data || !data.lineUserId) {
             DHLog.d("add data error " + data);
             if (callback) callback(MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
 
-        UserHelper.model.count({lineUserId: data.lineUserId}, (err, count) => {
+        AuthHelper.model.count({lineUserId: data.lineUserId}, (err, count) => {
             if (err) {
                 DHLog.d("count error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
@@ -68,7 +64,7 @@ export class UserHelper implements BaseHelper {
                 DHLog.d("data exist!");
                 if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
             }else {
-                new UserHelper.model(data).save((err, res, count) => {
+                new AuthHelper.model(data).save((err, res, count) => {
                     if (err) {
                         DHLog.d("add error:" + err);
                         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
@@ -88,7 +84,7 @@ export class UserHelper implements BaseHelper {
             return;
         }
 
-        UserHelper.model.remove({_id: id} , (err) => {
+        AuthHelper.model.remove({_id: id} , (err) => {
             if (err) {
                 DHLog.d("remove by id error：" + err);
                 if (callback) callback(MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);                    
@@ -99,14 +95,32 @@ export class UserHelper implements BaseHelper {
         });
     }
 
-    public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IUserModel[]) => void) {
+    public findOne(lineUserId: string, callback?: (code: MONGODB_CODE, results: IAuthModel) => void) {
         if (!lineUserId) {
             DHLog.d("id error：" + lineUserId);
             if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
 
-        UserHelper.model.find({lineUserId: lineUserId}, (err, ress) => {
+        AuthHelper.model.findOne({lineUserId: lineUserId}, (err, res) => {
+            if (err) {
+                DHLog.d("find error:" + err);
+                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
+            }else {
+                DHLog.d("find " + res ? res.lineUserId : "undifined");
+                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, res);
+            }
+        });
+    }
+
+    public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IAuthModel[]) => void) {
+        if (!lineUserId) {
+            DHLog.d("id error：" + lineUserId);
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
+            return;
+        }
+
+        AuthHelper.model.find({lineUserId: lineUserId}, (err, ress) => {
             if (err) {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    

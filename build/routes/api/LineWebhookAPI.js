@@ -182,7 +182,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
                     }
                     DHLog_1.DHLog.ld("step 3  callback and check user " + sub);
-                    this.userHelper.list(sub, (code, result) => {
+                    this.userHelper.find(sub, (code, result) => {
                         if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
                             DHLog_1.DHLog.ld("step 4  result " + sub);
                             if (req.session.account) {
@@ -241,7 +241,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             let lineUserId = body.lineUserId;
             let msg = body.msg;
             DHLog_1.DHLog.ld(JSON.stringify(body));
-            this.chatroomHelper.list(lineUserId, (code, chats) => {
+            this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message = {
                     type: 'text',
                     text: msg
@@ -267,12 +267,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 return;
             }
             let recordId = req.params.recordId;
-            this.recordHelper.get(recordId, (code, record) => {
+            this.recordHelper.findOne(recordId, (code, record) => {
                 if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
                     this.sendFaild(res, code);
                     return;
                 }
-                this.chatroomHelper.list(record.lineUserId, (code, chats) => {
+                this.chatroomHelper.find(record.lineUserId, (code, chats) => {
                     let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + "/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
                     var message = {
                         type: 'text',

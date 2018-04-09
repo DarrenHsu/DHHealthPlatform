@@ -215,7 +215,7 @@ export class LineWebhookAPI extends BaseAPI {
                     }
 
                     DHLog.ld("step 3  callback and check user " + sub);
-                    this.userHelper.list(sub, (code, result) => {
+                    this.userHelper.find(sub, (code, result) => {
                         if (code == MONGODB_CODE.MC_SUCCESS) {
                             DHLog.ld("step 4  result " + sub);
                             if (req.session.account) {
@@ -280,7 +280,7 @@ export class LineWebhookAPI extends BaseAPI {
             let msg = body.msg;
             DHLog.ld(JSON.stringify(body));
 
-            this.chatroomHelper.list(lineUserId, (code, chats) => {
+            this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message: TextMessage = {
                     type: 'text',
                     text: msg
@@ -310,13 +310,13 @@ export class LineWebhookAPI extends BaseAPI {
             }
 
             let recordId = req.params.recordId;
-            this.recordHelper.get(recordId, (code, record) => {
+            this.recordHelper.findOne(recordId, (code, record) => {
                 if (code != MONGODB_CODE.MC_SUCCESS) {
                     this.sendFaild(res, code);
                     return;
                 }
 
-                this.chatroomHelper.list(record.lineUserId, (code, chats) => {
+                this.chatroomHelper.find(record.lineUserId, (code, chats) => {
                     let text = BaseRoute.getFullHostUrl(req) + DHAPI.RECORD_PREVIEW_PATH + "/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
                     
                     var message: TextMessage = {

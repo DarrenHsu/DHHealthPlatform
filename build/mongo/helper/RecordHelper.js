@@ -105,7 +105,7 @@ class RecordHelper {
             }
         });
     }
-    get(recordId, callback) {
+    findOne(recordId, callback) {
         if (!recordId) {
             DHLog_1.DHLog.d("recordId error：" + recordId);
             if (callback)
@@ -119,13 +119,13 @@ class RecordHelper {
                     callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
             }
             else {
-                DHLog_1.DHLog.d("find " + recordId);
+                DHLog_1.DHLog.d("find " + res ? res.recordId : "undifined");
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
             }
         });
     }
-    list(lineUserId, callback) {
+    find(lineUserId, callback) {
         if (!lineUserId) {
             DHLog_1.DHLog.d("id error：" + lineUserId);
             if (callback)

@@ -74,7 +74,7 @@ export class RecordRoute extends BaseRoute {
     }
 
     private findRecord(lineUserId: string, page: number, callback: (totalCount: number, pageCount: number, pageIndex: number, records: IRecord[]) => void) {        
-        this.recordHelper.list(lineUserId, (code, records) => {
+        this.recordHelper.find(lineUserId, (code, records) => {
             var start = (page - 1) * this.displayCount;
             var end = start + this.displayCount;
             var results = records.slice(start, end);
@@ -101,12 +101,12 @@ export class RecordRoute extends BaseRoute {
                 return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_AUTH_ERROR);
             }
             
-            this.recordHelper.get(recordId, (code, record) => {
+            this.recordHelper.findOne(recordId, (code, record) => {
                 if (code != MONGODB_CODE.MC_SUCCESS) {
                     return res.redirect(DHAPI.ERROR_PATH + "/" + code);
                 }
 
-                this.userHelper.list(record.lineUserId, (code, user) => {
+                this.userHelper.find(record.lineUserId, (code, user) => {
                     this.renderPreviewRecord(req, res, next, user[0], record);
                 });
             });

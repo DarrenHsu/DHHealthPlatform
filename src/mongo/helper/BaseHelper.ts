@@ -32,7 +32,7 @@ export interface BaseHelper {
      * @description 查詢程序
      * @param id 
      */
-    list(id: string);
-    list(id: string, callback: (code: MONGODB_CODE, results: IBase[]) => void);
-    list(id: string, callback?: (code: MONGODB_CODE, results: IBase[]) => void);
+    find(id: string);
+    find(id: string, callback: (code: MONGODB_CODE, results: IBase[]) => void);
+    find(id: string, callback?: (code: MONGODB_CODE, results: IBase[]) => void);
 }
