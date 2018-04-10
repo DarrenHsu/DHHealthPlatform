@@ -72,7 +72,6 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                             DHLog_1.DHLog.d("token " + auth.googleToken);
                             DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
                             this.getLiveList(auth.googleToken, req, res, next);
-                            return this.renderLive(req, res, next, null);
                         });
                     }
                     else {
@@ -89,7 +88,6 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                             DHLog_1.DHLog.d("token " + auth.googleToken);
                             DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
                             this.getLiveList(auth.googleToken, req, res, next);
-                            return this.renderLive(req, res, next, null);
                         });
                     }
                 });
@@ -148,9 +146,11 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         request.get(url, option, (error, response, body) => {
             if (error) {
                 DHLog_1.DHLog.d("youtube error " + error);
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_YT_ERROR);
             }
             else {
                 DHLog_1.DHLog.d("youtube body " + body);
+                return this.renderLive(req, res, next, null);
             }
         });
     }

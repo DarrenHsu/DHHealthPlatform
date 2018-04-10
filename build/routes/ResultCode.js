@@ -21,6 +21,7 @@ var GOOGLE_CODE;
     GOOGLE_CODE[GOOGLE_CODE["GC_SUCCESS"] = 0] = "GC_SUCCESS";
     GOOGLE_CODE[GOOGLE_CODE["GC_AUTH_ERROR"] = -301] = "GC_AUTH_ERROR";
     GOOGLE_CODE[GOOGLE_CODE["GC_TOKEN_ERROR"] = -302] = "GC_TOKEN_ERROR";
+    GOOGLE_CODE[GOOGLE_CODE["GC_YT_ERROR"] = -303] = "GC_YT_ERROR";
 })(GOOGLE_CODE = exports.GOOGLE_CODE || (exports.GOOGLE_CODE = {}));
 var MONGODB_CODE;
 (function (MONGODB_CODE) {
@@ -68,6 +69,7 @@ ResultMsg.MC_NO_CONDITION_ERROR = "無傳入選擇條件";
 ResultMsg.GC_SUCCESS = "資料已存在";
 ResultMsg.GC_AUTH_ERROR = "Google 授權失敗!";
 ResultMsg.GC_TOKEN_ERROR = "Google 取得授權碼失敗";
+ResultMsg.GC_YT_ERROR = "取得 Youtube 資源失敗";
 class ResultCodeMsg {
     static getMsg(code) {
         switch (code) {
@@ -97,6 +99,8 @@ class ResultCodeMsg {
                 return ResultMsg.GC_AUTH_ERROR;
             case GOOGLE_CODE.GC_TOKEN_ERROR:
                 return ResultMsg.GC_TOKEN_ERROR;
+            case GOOGLE_CODE.GC_YT_ERROR:
+                return ResultMsg.GC_YT_ERROR;
             case MONGODB_CODE.MC_DATA_EXIST:
                 return ResultMsg.MC_DATA_EXIST;
             case MONGODB_CODE.MC_SUCCESS:
