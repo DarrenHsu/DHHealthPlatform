@@ -101,7 +101,7 @@ export class LiveRoute extends BaseRoute {
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
                     if (auth) {
                         auth.googleToken = token.access_token;
-                        auth.googleTokenExpire = new Date(token.expiry_date);
+                        auth.googleTokenExpire = new Date(token.expiry_date * 1000);
                         
                         DHLog.d("token " + auth.googleToken);
                         DHLog.d("token " + auth.googleTokenExpire);
@@ -146,24 +146,25 @@ export class LiveRoute extends BaseRoute {
             }
 
             this.authHelper.findOne(req.session.account, (code, auth) =>{
-                if (auth) {
-                    // var start = req.params.start;
-                    // var end = req.params.end;
-                    // if (!start && !end) {
-                    //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-                    // }
+                // if (auth) {
+                //     // var start = req.params.start;
+                //     // var end = req.params.end;
+                //     // if (!start && !end) {
+                //     //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+                //     // }
 
-                    var now = new Date();
-                    DHLog.d("now  date " + now);
-                    DHLog.d("auth date " + auth.googleTokenExpire);
-                    if (now <= auth.googleTokenExpire) {
-                        this.renderLive(req, res, next, null);
-                    }else {
-                        this.getLiveList(auth.googleToken, req, res, next);
-                    }
-                }else {
+                //     var now = new Date();
+                //     DHLog.d("now  date " + now);
+                //     DHLog.d("auth date " + auth.googleTokenExpire);
+
+                //     if (now <= auth.googleTokenExpire) {
+                //         this.redirectGoogleAuth(req, res, next);
+                //     }else {
+                //         this.getLiveList(auth.googleToken, req, res, next);
+                //     }
+                // }else {
                     this.redirectGoogleAuth(req, res, next);
-                }
+                // }
             });
         });
     }
