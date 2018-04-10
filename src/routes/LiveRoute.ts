@@ -100,6 +100,8 @@ export class LiveRoute extends BaseRoute {
 
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
                     if (auth) {
+                        DHLog.d("have auth");
+
                         auth.googleToken = token.access_token;
                         auth.googleTokenExpire = new Date(token.expiry_date);
                         
@@ -110,6 +112,8 @@ export class LiveRoute extends BaseRoute {
 
                         return this.renderLive(req, res, next, null);
                     }else {
+                        DHLog.d("no auth");
+
                         this.initOAuth2Client(req);
 
                         var newAuth: IAuth = {
