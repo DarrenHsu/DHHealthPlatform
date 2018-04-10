@@ -209,7 +209,7 @@ export class LiveRoute extends BaseRoute {
                 return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
             }else {
                 var jsonBody = JSON.parse(body);
-
+                DHLog.d("body " + body);
                 DHLog.d("body " + jsonBody.pageInfo);
                 return this.renderLive(req, res, next, null);
             }
