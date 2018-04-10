@@ -168,18 +168,19 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             }
             else {
                 var jsonBody = JSON.parse(body);
+                var items = jsonBody.items;
                 DHLog_1.DHLog.d("body " + body);
                 DHLog_1.DHLog.d("body " + jsonBody.pageInfo.totalResults);
                 DHLog_1.DHLog.d("body " + jsonBody.pageInfo.resultsPerPage);
-                return this.renderLive(req, res, next, null);
+                return this.renderLive(req, res, next, items);
             }
         });
     }
-    renderLive(req, res, next, recds) {
+    renderLive(req, res, next, items) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.LIVE_PATH, true),
-            records: recds
+            items: items
         };
         this.render(req, res, "live/index", options);
     }

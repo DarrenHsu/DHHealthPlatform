@@ -209,19 +209,20 @@ export class LiveRoute extends BaseRoute {
                 return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
             }else {
                 var jsonBody = JSON.parse(body);
+                var items = jsonBody.items;
                 DHLog.d("body " + body);
                 DHLog.d("body " + jsonBody.pageInfo.totalResults);
                 DHLog.d("body " + jsonBody.pageInfo.resultsPerPage);
-                return this.renderLive(req, res, next, null);
+                return this.renderLive(req, res, next, items);
             }
         });
     }
 
-    public renderLive(req: Request, res: Response, next: NextFunction, recds: IRecord[]) {
+    public renderLive(req: Request, res: Response, next: NextFunction, items: JSON[]) {
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: this.getAuth(req, DHAPI.LIVE_PATH, true),
-            records: recds
+            items: items
         };
         this.render(req, res, "live/index", options);
     }
