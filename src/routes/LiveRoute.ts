@@ -75,6 +75,20 @@ export class LiveRoute extends BaseRoute {
     }
 
     /**
+     * @description 建立 youtube 授權 headers
+     * @param token 
+     */
+    private createAuthHeader(token: string): any {
+        var option = {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        };
+        return open;
+    }
+
+    /**
      * @description 取得回傳授權資料
      * @param router 
      */
@@ -97,20 +111,14 @@ export class LiveRoute extends BaseRoute {
 
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
                     if (auth) {
-                        DHLog.d("have auth");
-
                         auth.googleToken = token.access_token;
                         auth.googleTokenExpire = new Date(token.expiry_date);
                         
+                        /* update auth */
                         this.authHelper.save(auth._id, auth, (code, auth) => {
-                            DHLog.d("token " + auth.googleToken);
-                            DHLog.d("token " + auth.googleTokenExpire);
-
-                            this.getLiveList(auth.googleToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
                     }else {
-                        DHLog.d("no auth");
-
                         this.initOAuth2Client(req);
 
                         var newAuth: IAuth = {
@@ -121,11 +129,9 @@ export class LiveRoute extends BaseRoute {
                             lineTokenExpire: null
                         };
 
+                        /* create auth */
                         this.authHelper.add(newAuth, (code, auth) => {
-                            DHLog.d("token " + auth.googleToken);
-                            DHLog.d("token " + auth.googleTokenExpire);
-                            
-                            this.getLiveList(auth.googleToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
                     }
                 });
@@ -156,7 +162,7 @@ export class LiveRoute extends BaseRoute {
                     if (now > auth.googleTokenExpire) {
                         this.redirectGoogleAuth(req, res, next);
                     }else {
-                        this.getLiveList(auth.googleToken, req, res, next);
+                        this.getYTBroadcastList(auth.googleToken, req, res, next);
                     }
                 }else {
                     this.redirectGoogleAuth(req, res, next);
@@ -165,7 +171,13 @@ export class LiveRoute extends BaseRoute {
         });
     }
 
-    public redirectGoogleAuth(req: Request, res: Response, next: NextFunction) {
+    /**
+     * @description 重新導向到 google 登入頁
+     * @param req 
+     * @param res 
+     * @param next 
+     */
+    private redirectGoogleAuth(req: Request, res: Response, next: NextFunction) {
         this.initOAuth2Client(req);
             
         const url = this.oauth2Client.generateAuthUrl({
@@ -176,24 +188,21 @@ export class LiveRoute extends BaseRoute {
         return res.redirect(url);
     }
 
-    public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
+    /**
+     * @description
+     * @param token 
+     * @param req 
+     * @param res 
+     * @param next 
+     */
+    private getYTBroadcastList(token: string, req: Request, res: Response, next: NextFunction) {
         var url = GoogleAPI.API_YOUTUBE + 
         "?key=" + this.clientId + 
         "&part=" + querystring.escape("id,snippet,contentDetails,status") + 
         "&maxResults=10" + 
         "&broadcastStatus=all";  
 
-        var option = {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            }
-        };
-
-        DHLog.d("url " + url);
-        DHLog.d(JSON.stringify(option));
-
-        request.get(url, option,  (error, response, body) => {
+        request.get(url, this.createAuthHeader(token),  (error, response, body) => {
             if (error) {
                 DHLog.d("youtube error " + error);
                 return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
