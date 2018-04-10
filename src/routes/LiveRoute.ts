@@ -210,7 +210,8 @@ export class LiveRoute extends BaseRoute {
             }else {
                 var jsonBody = JSON.parse(body);
                 DHLog.d("body " + body);
-                DHLog.d("body " + jsonBody.pageInfo);
+                DHLog.d("body " + jsonBody.pageInfo.totalResults);
+                DHLog.d("body " + jsonBody.pageInfo.resultsPerPage);
                 return this.renderLive(req, res, next, null);
             }
         });

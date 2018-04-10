@@ -169,7 +169,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             else {
                 var jsonBody = JSON.parse(body);
                 DHLog_1.DHLog.d("body " + body);
-                DHLog_1.DHLog.d("body " + jsonBody.pageInfo);
+                DHLog_1.DHLog.d("body " + jsonBody.pageInfo.totalResults);
+                DHLog_1.DHLog.d("body " + jsonBody.pageInfo.resultsPerPage);
                 return this.renderLive(req, res, next, null);
             }
         });
