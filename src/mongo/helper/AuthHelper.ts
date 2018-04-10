@@ -107,7 +107,7 @@ export class AuthHelper implements BaseHelper {
                 DHLog.d("find error:" + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
             }else {
-                DHLog.d("find " + res);
+                DHLog.d("find auth");
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, res);
             }
         });

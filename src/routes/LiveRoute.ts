@@ -175,7 +175,7 @@ export class LiveRoute extends BaseRoute {
         };
 
         DHLog.d("url " + url);
-        DHLog.d(option);
+        DHLog.d(JSON.stringify(option));
 
         request.get(url, option,  (error, response, body) => {
             if (error) {

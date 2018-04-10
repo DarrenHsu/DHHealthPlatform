@@ -132,7 +132,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             }
         };
         DHLog_1.DHLog.d("url " + url);
-        DHLog_1.DHLog.d(option);
+        DHLog_1.DHLog.d(JSON.stringify(option));
         request.get(url, option, (error, response, body) => {
             if (error) {
                 DHLog_1.DHLog.d("youtube error " + error);
