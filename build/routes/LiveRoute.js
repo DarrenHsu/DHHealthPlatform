@@ -131,8 +131,9 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 "Authorization": "Bearer " + token
             }
         };
+        DHLog_1.DHLog.d("url " + url);
+        DHLog_1.DHLog.d(option);
         request.get(url, option, (error, response, body) => {
-            DHLog_1.DHLog.d("url " + url);
             if (error) {
                 DHLog_1.DHLog.d("youtube error " + error);
             }
