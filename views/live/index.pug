@@ -13,18 +13,18 @@ block content
       p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 
   div#LiveRow(class="row")
-    each val in items
+    each item in items
       div(class="col-lg-4 col-md-6 portfolio-item")
         div(class="card")
 
           div(class="card-header")
-            span #{items.snippet.title}
+            span #{item.snippet.title}
             button(type="button" class="close" aria-label="Close")
               span(aria-hidden="true") &times;
           
           div(class="card-body")
             div(class="livePreview")
-              img(class="liveThemb" src=items.snippet.thumbnails.medium.url)
+              img(class="liveThemb" src=item.snippet.thumbnails.medium.url)
 
   
 
