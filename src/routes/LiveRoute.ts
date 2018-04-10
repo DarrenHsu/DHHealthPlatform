@@ -17,6 +17,7 @@ import { AuthHelper } from "../mongo/helper/AuthHelper";
 import { IRecord } from "../mongo/interface/IRecord";
 import { IUser } from "../mongo/interface/IUser";
 import { IAuth } from "../mongo/interface/IAuth";
+import { urlencoded } from "body-parser";
 
 export class LiveRoute extends BaseRoute {
     
@@ -164,16 +165,9 @@ export class LiveRoute extends BaseRoute {
     }x
 
     public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
-        var option = {
-            form: {
-                "part": "id,snippet,contentDetails,status",
-                "broadcastStatus": "all",
-                "maxResults": 50,
-                "key": token
-            }
-        };
-
-        request.get(GoogleAPI.API_YOUTUBE, option, (error, response, body) => {
+        var url = GoogleAPI.API_YOUTUBE + "?key=" + token + "&part=" + querystring.stringify("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";  
+        request.get(url, (error, response, body) => {
+            DHLog.d("url");
             if (error) {
                 DHLog.d("youtube error " + error);
             }else {

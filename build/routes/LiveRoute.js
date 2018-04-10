@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const querystring = require("querystring");
 const google = require("google-auth-library");
 const request = require("request");
 const ResultCode_1 = require("./ResultCode");
@@ -123,15 +124,9 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         });
     }
     getLiveList(token, req, res, next) {
-        var option = {
-            form: {
-                "part": "id,snippet,contentDetails,status",
-                "broadcastStatus": "all",
-                "maxResults": 50,
-                "key": token
-            }
-        };
-        request.get(GoogleAPI_1.GoogleAPI.API_YOUTUBE, option, (error, response, body) => {
+        var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE + "?key=" + token + "&part=" + querystring.stringify("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";
+        request.get(url, (error, response, body) => {
+            DHLog_1.DHLog.d("url");
             if (error) {
                 DHLog_1.DHLog.d("youtube error " + error);
             }
