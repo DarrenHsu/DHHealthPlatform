@@ -25,20 +25,27 @@
   margin-top: 30px;
 }
 
-.liveThemb {
+.live-body {
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.live-themb {
   display: inline-block;
   width: 100px;
 }
 
-.livePreview {
-  min-height:200px;
-  height: auto;
-  min-width: 100px;
-  width: auto;
+.live-preview {
+  min-width: 320px;
+  width: 320px;
+  min-height: 180px;
+  height: 180px; 
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   vertical-align: middle;
-  background-color: black;
+  background-color: bisque;
 }

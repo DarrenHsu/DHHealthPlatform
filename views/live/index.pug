@@ -22,9 +22,9 @@ block content
             button(type="button" class="close" aria-label="Close")
               span(aria-hidden="true") &times;
           
-          div(class="card-body")
-            div(class="livePreview")
-              img(class="liveThemb" src=item.snippet.thumbnails.medium.url)
+          div(class="card-body live-body")
+            div(class="live-preview" style="background-image:url(" + item.snippet.thumbnails.medium.url +  ")")
+              img(class="live-themb" src="/images/live/youtube.png")
 
   
 
