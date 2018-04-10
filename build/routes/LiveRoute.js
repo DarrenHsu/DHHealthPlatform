@@ -168,8 +168,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             }
             else {
                 DHLog_1.DHLog.d("body " + body);
-                DHLog_1.DHLog.d("body " + body.pageInfo.totalResults);
-                DHLog_1.DHLog.d("body " + body.pageInfo.resultsPerPage);
+                DHLog_1.DHLog.d("body " + body.pageInfo);
                 return this.renderLive(req, res, next, null);
             }
         });

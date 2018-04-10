@@ -208,10 +208,9 @@ export class LiveRoute extends BaseRoute {
                 return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
             }else {
                 DHLog.d("body " + body);
-                DHLog.d("body " + body.pageInfo.totalResults);
-                DHLog.d("body " + body.pageInfo.resultsPerPage);
+                DHLog.d("body " + body.pageInfo);
                 return this.renderLive(req, res, next, null);
-            }     
+            }
         });
     }
 
