@@ -68,7 +68,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 this.authHelper.findOne(req.session.account, (code, auth) => {
                     if (auth) {
                         auth.googleToken = token.access_token;
-                        auth.googleTokenExpire = new Date(token.expiry_date * 1000);
+                        auth.googleTokenExpire = new Date(token.expiry_date);
                         DHLog_1.DHLog.d("token " + auth.googleToken);
                         DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
                         this.getLiveList(auth.googleToken, req, res, next);
@@ -79,7 +79,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         var newAuth = {
                             lineUserId: req.session.account,
                             googleToken: token.access_token,
-                            googleTokenExpire: new Date(token.expiry_date * 1000),
+                            googleTokenExpire: new Date(token.expiry_date),
                             lineToken: null,
                             lineTokenExpire: null
                         };
