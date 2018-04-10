@@ -21,9 +21,8 @@ declare type Location = {
 
 export class RecordRoute extends BaseRoute {
 
-    protected userHelper: UserHelper;
-    protected recordHelper: RecordHelper;
-    protected uri: string = DHAPI.RECORD_PATH;
+    private userHelper: UserHelper;
+    private recordHelper: RecordHelper;
     
     private displayCount: number = 8;
     

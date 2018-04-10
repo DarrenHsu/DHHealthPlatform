@@ -1,6 +1,7 @@
 import * as mongoose from "mongoose";
 import * as querystring from "querystring";
 import * as google from "google-auth-library";
+import * as request from "request";
 import { DHDateFormat } from "../const/DHDateFormat";
 import { parseIso, format } from "ts-date/locale/en";
 import { NextFunction, Request, Response, Router } from "express";
@@ -19,13 +20,16 @@ import { IAuth } from "../mongo/interface/IAuth";
 
 export class LiveRoute extends BaseRoute {
     
-    protected userHelper: UserHelper;
-    protected recordHelper: RecordHelper;
-    protected authHelper: AuthHelper;
-    protected uri = DHAPI.RECORD_PATH;
-
+    private userHelper: UserHelper;
+    private recordHelper: RecordHelper;
+    private authHelper: AuthHelper;
+    
     private oauth2Client: google.OAuth2Client;
-    private scopes: [string, string, string, string, string, string];
+
+    private scopes: string[];
+    
+    private clientId: string;
+    private clientSecret: string;
     
     constructor(connection: mongoose.Connection) {
         super();
@@ -33,6 +37,8 @@ export class LiveRoute extends BaseRoute {
         this.recordHelper = new RecordHelper(connection);
         this.userHelper = new UserHelper(connection);
         this.authHelper = new AuthHelper(connection);
+        this.clientId = DHAPI.pkgjson.googleapis.auth.client_id;
+        this.clientSecret = DHAPI.pkgjson.googleapis.auth.client_secret;
         this.scopes = [
             "https://www.googleapis.com/auth/youtube",
             "https://www.googleapis.com/auth/youtube.force-ssl",
@@ -50,20 +56,18 @@ export class LiveRoute extends BaseRoute {
         app.getGoogleAuth(router);
     }
 
+    /**
+     * @description 產生OAuth2Client物件
+     * @param req 
+     */
     private initOAuth2Client(req: Request) {
         if (!this.oauth2Client) {
             var fullUrl = BaseRoute.getFullHostUrl(req);
             var redirectUrl = fullUrl + GoogleAPI.API_GOOGLE_AUTH_PATH;
-            var client_id = DHAPI.pkgjson.googleapis.auth.client_id;
-            var client_secret = DHAPI.pkgjson.googleapis.auth.client_secret;
-
-            DHLog.d("redirectUrl " + redirectUrl);
-            DHLog.d("client_id " + client_id);
-            DHLog.d("client_secret " + client_secret);
-
+            
             this.oauth2Client = new google.OAuth2Client(
-                client_id,
-                client_secret,
+                this.clientId,
+                this.clientSecret,
                 redirectUrl
             );
         }
@@ -141,6 +145,8 @@ export class LiveRoute extends BaseRoute {
                     if (!start && !end) {
                         return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
                     }
+
+                    this.getLiveList(auth.googleToken, req, res, next);
         
                     this.renderLive(req, res, next, null);
                 }else {
@@ -156,6 +162,25 @@ export class LiveRoute extends BaseRoute {
             });
         });
     }x
+
+    public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
+        var option = {
+            form: {
+                "part": "id,snippet,contentDetails,status",
+                "broadcastStatus": "all",
+                "maxResults": 50,
+                "key": token
+            }
+        };
+
+        request.get(GoogleAPI.API_YOUTUBE, option, (error, response, body) => {
+            if (error) {
+                DHLog.d("youtube error " + error);
+            }else {
+                DHLog.d("youtube body " + body);
+            }
+        });
+    }
 
     public renderLive(req: Request, res: Response, next: NextFunction, recds: IRecord[]) {
         this.title = BaseRoute.AP_TITLE;

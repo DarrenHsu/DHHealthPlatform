@@ -13,8 +13,8 @@ import { IEvent } from "./interface/IEvent";
 
 export class CalendarRoute extends BaseRoute {
 
-    protected routeHelper: RouteHelper;
-    protected userHelper: UserHelper;
+    private routeHelper: RouteHelper;
+    private userHelper: UserHelper;
     
     constructor(connection: mongoose.Connection) {
         super();

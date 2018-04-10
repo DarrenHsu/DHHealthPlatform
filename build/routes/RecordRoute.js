@@ -13,7 +13,6 @@ const DHLog_1 = require("../util/DHLog");
 class RecordRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();
-        this.uri = DHAPI_1.DHAPI.RECORD_PATH;
         this.displayCount = 8;
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.userHelper = new UserHelper_1.UserHelper(connection);

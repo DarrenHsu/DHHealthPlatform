@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const google = require("google-auth-library");
+const request = require("request");
 const ResultCode_1 = require("./ResultCode");
 const DHAPI_1 = require("../const/DHAPI");
 const GoogleAPI_1 = require("../const/GoogleAPI");
@@ -13,10 +14,11 @@ const AuthHelper_1 = require("../mongo/helper/AuthHelper");
 class LiveRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();
-        this.uri = DHAPI_1.DHAPI.RECORD_PATH;
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.userHelper = new UserHelper_1.UserHelper(connection);
         this.authHelper = new AuthHelper_1.AuthHelper(connection);
+        this.clientId = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_id;
+        this.clientSecret = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_secret;
         this.scopes = [
             "https://www.googleapis.com/auth/youtube",
             "https://www.googleapis.com/auth/youtube.force-ssl",
@@ -31,16 +33,15 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         app.getLive(router);
         app.getGoogleAuth(router);
     }
+    /**
+     * @description 產生OAuth2Client物件
+     * @param req
+     */
     initOAuth2Client(req) {
         if (!this.oauth2Client) {
             var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
             var redirectUrl = fullUrl + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH;
-            var client_id = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_id;
-            var client_secret = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_secret;
-            DHLog_1.DHLog.d("redirectUrl " + redirectUrl);
-            DHLog_1.DHLog.d("client_id " + client_id);
-            DHLog_1.DHLog.d("client_secret " + client_secret);
-            this.oauth2Client = new google.OAuth2Client(client_id, client_secret, redirectUrl);
+            this.oauth2Client = new google.OAuth2Client(this.clientId, this.clientSecret, redirectUrl);
         }
     }
     /**
@@ -107,6 +108,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                     if (!start && !end) {
                         return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
                     }
+                    this.getLiveList(auth.googleToken, req, res, next);
                     this.renderLive(req, res, next, null);
                 }
                 else {
@@ -118,6 +120,24 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                     return res.redirect(url);
                 }
             });
+        });
+    }
+    getLiveList(token, req, res, next) {
+        var option = {
+            form: {
+                "part": "id,snippet,contentDetails,status",
+                "broadcastStatus": "all",
+                "maxResults": 50,
+                "key": token
+            }
+        };
+        request.get(GoogleAPI_1.GoogleAPI.API_YOUTUBE, option, (error, response, body) => {
+            if (error) {
+                DHLog_1.DHLog.d("youtube error " + error);
+            }
+            else {
+                DHLog_1.DHLog.d("youtube body " + body);
+            }
         });
     }
     renderLive(req, res, next, recds) {
