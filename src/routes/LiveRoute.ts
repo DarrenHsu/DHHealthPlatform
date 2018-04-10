@@ -85,7 +85,7 @@ export class LiveRoute extends BaseRoute {
                 "Authorization": "Bearer " + token
             }
         };
-        return open;
+        return option;
     }
 
     /**

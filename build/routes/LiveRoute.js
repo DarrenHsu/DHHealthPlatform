@@ -56,7 +56,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 "Authorization": "Bearer " + token
             }
         };
-        return open;
+        return option;
     }
     /**
      * @description 取得回傳授權資料
