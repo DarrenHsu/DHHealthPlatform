@@ -167,8 +167,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_YT_ERROR);
             }
             else {
-                DHLog_1.DHLog.d("body " + body);
-                DHLog_1.DHLog.d("body " + body.pageInfo);
+                var jsonBody = JSON.parse(body);
+                DHLog_1.DHLog.d("body " + jsonBody.pageInfo);
                 return this.renderLive(req, res, next, null);
             }
         });

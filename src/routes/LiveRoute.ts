@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import * as querystring from "querystring";
+import * as bodyParser from "body-parser";
 import * as google from "google-auth-library";
 import * as request from "request";
 import { DHDateFormat } from "../const/DHDateFormat";
@@ -17,7 +18,7 @@ import { AuthHelper } from "../mongo/helper/AuthHelper";
 import { IRecord } from "../mongo/interface/IRecord";
 import { IUser } from "../mongo/interface/IUser";
 import { IAuth } from "../mongo/interface/IAuth";
-import { urlencoded } from "body-parser";
+import { urlencoded, json } from "body-parser";
 
 export class LiveRoute extends BaseRoute {
     
@@ -207,8 +208,9 @@ export class LiveRoute extends BaseRoute {
                 DHLog.d("youtube error " + error);
                 return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
             }else {
-                DHLog.d("body " + body);
-                DHLog.d("body " + body.pageInfo);
+                var jsonBody = JSON.parse(body);
+
+                DHLog.d("body " + jsonBody.pageInfo);
                 return this.renderLive(req, res, next, null);
             }
         });
