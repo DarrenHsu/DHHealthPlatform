@@ -103,7 +103,7 @@ export class LiveRoute extends BaseRoute {
                         DHLog.d("have auth");
 
                         auth.googleToken = token.access_token;
-                        auth.googleTokenExpire = new Date(token.expiry_date);
+                        auth.googleTokenExpire = new Date(token.expiry_date / 1000);
                         
                         DHLog.d("token " + auth.googleToken);
                         DHLog.d("token " + auth.googleTokenExpire);
@@ -119,7 +119,7 @@ export class LiveRoute extends BaseRoute {
                         var newAuth: IAuth = {
                             lineUserId: req.session.account,
                             googleToken: token.access_token,
-                            googleTokenExpire: new Date(token.expiry_date),
+                            googleTokenExpire: new Date(token.expiry_date / 1000),
                             lineToken: null,
                             lineTokenExpire: null
                         };
