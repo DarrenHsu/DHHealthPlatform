@@ -207,6 +207,7 @@ export class LiveRoute extends BaseRoute {
                 DHLog.d("youtube error " + error);
                 return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
             }else {
+                DHLog.d("body " + body);
                 DHLog.d("body " + body.pageInfo.totalResults);
                 DHLog.d("body " + body.pageInfo.resultsPerPage);
                 return this.renderLive(req, res, next, null);
