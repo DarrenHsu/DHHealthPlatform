@@ -167,7 +167,7 @@ export class LiveRoute extends BaseRoute {
     public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
         var url = GoogleAPI.API_YOUTUBE + "?key=" + token + "&part=" + querystring.stringify("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";  
         request.get(url, (error, response, body) => {
-            DHLog.d("url");
+            DHLog.d("url " + url);
             if (error) {
                 DHLog.d("youtube error " + error);
             }else {
