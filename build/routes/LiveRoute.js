@@ -124,7 +124,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         });
     }
     getLiveList(token, req, res, next) {
-        var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.stringify("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";
+        var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.escape("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";
         var option = {
             headers: {
                 "Content-Type": "application/json",

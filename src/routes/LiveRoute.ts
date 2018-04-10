@@ -165,14 +165,14 @@ export class LiveRoute extends BaseRoute {
     }x
 
     public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
-        var url = GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.stringify("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";  
+        var url = GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.escape("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";  
         var option = {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer " + token
             }
         };
-        
+
         request.get(url, option,  (error, response, body) => {
             DHLog.d("url " + url);
             if (error) {
