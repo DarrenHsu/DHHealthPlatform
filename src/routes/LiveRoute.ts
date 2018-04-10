@@ -105,6 +105,9 @@ export class LiveRoute extends BaseRoute {
                         
                         DHLog.d("token " + auth.googleToken);
                         DHLog.d("token " + auth.googleTokenExpire);
+
+                        this.getLiveList(auth.googleToken, req, res, next);
+                        
                         return this.renderLive(req, res, next, null);
                     }else {
                         this.initOAuth2Client(req);
@@ -120,6 +123,9 @@ export class LiveRoute extends BaseRoute {
                         this.authHelper.add(newAuth, (code, auth) => {
                             DHLog.d("token " + auth.googleToken);
                             DHLog.d("token " + auth.googleTokenExpire);
+                            
+                            this.getLiveList(auth.googleToken, req, res, next);
+
                             return this.renderLive(req, res, next, null);
                         });
                     }
@@ -139,18 +145,18 @@ export class LiveRoute extends BaseRoute {
                 return;
             }
 
-            this.authHelper.findOne(req.session.account, (code, auth) =>{
-                if (auth) {
-                    var start = req.params.start;
-                    var end = req.params.end;
-                    if (!start && !end) {
-                        return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-                    }
+            // this.authHelper.findOne(req.session.account, (code, auth) =>{
+            //     if (auth) {
+            //         var start = req.params.start;
+            //         var end = req.params.end;
+            //         if (!start && !end) {
+            //             return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            //         }
 
-                    this.getLiveList(auth.googleToken, req, res, next);
+            //         this.getLiveList(auth.googleToken, req, res, next);
         
-                    this.renderLive(req, res, next, null);
-                }else {
+            //         this.renderLive(req, res, next, null);
+            //     }else {
                     this.initOAuth2Client(req);
             
                     const url = this.oauth2Client.generateAuthUrl({
@@ -159,8 +165,8 @@ export class LiveRoute extends BaseRoute {
                     });
         
                     return res.redirect(url);
-                }
-            });
+            //     }
+            // });
         });
     }x
 

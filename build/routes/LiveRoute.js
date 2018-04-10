@@ -71,6 +71,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         auth.googleTokenExpire = new Date(token.expiry_date);
                         DHLog_1.DHLog.d("token " + auth.googleToken);
                         DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
+                        this.getLiveList(auth.googleToken, req, res, next);
                         return this.renderLive(req, res, next, null);
                     }
                     else {
@@ -85,6 +86,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         this.authHelper.add(newAuth, (code, auth) => {
                             DHLog_1.DHLog.d("token " + auth.googleToken);
                             DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
+                            this.getLiveList(auth.googleToken, req, res, next);
                             return this.renderLive(req, res, next, null);
                         });
                     }
@@ -102,25 +104,24 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            this.authHelper.findOne(req.session.account, (code, auth) => {
-                if (auth) {
-                    var start = req.params.start;
-                    var end = req.params.end;
-                    if (!start && !end) {
-                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
-                    }
-                    this.getLiveList(auth.googleToken, req, res, next);
-                    this.renderLive(req, res, next, null);
-                }
-                else {
-                    this.initOAuth2Client(req);
-                    const url = this.oauth2Client.generateAuthUrl({
-                        access_type: "offline",
-                        scope: this.scopes
-                    });
-                    return res.redirect(url);
-                }
+            // this.authHelper.findOne(req.session.account, (code, auth) =>{
+            //     if (auth) {
+            //         var start = req.params.start;
+            //         var end = req.params.end;
+            //         if (!start && !end) {
+            //             return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+            //         }
+            //         this.getLiveList(auth.googleToken, req, res, next);
+            //         this.renderLive(req, res, next, null);
+            //     }else {
+            this.initOAuth2Client(req);
+            const url = this.oauth2Client.generateAuthUrl({
+                access_type: "offline",
+                scope: this.scopes
             });
+            return res.redirect(url);
+            //     }
+            // });
         });
     }
     getLiveList(token, req, res, next) {
