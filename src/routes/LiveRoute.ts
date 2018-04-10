@@ -157,10 +157,7 @@ export class LiveRoute extends BaseRoute {
                     // }
 
                     var now = new Date();
-                    DHLog.d("now  date " + now);
-                    DHLog.d("auth date " + auth.googleTokenExpire);
-
-                    if (now <= auth.googleTokenExpire) {
+                    if (now > auth.googleTokenExpire) {
                         this.redirectGoogleAuth(req, res, next);
                     }else {
                         this.getLiveList(auth.googleToken, req, res, next);

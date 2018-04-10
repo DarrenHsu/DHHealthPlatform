@@ -114,9 +114,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                     //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
                     // }
                     var now = new Date();
-                    DHLog_1.DHLog.d("now  date " + now);
-                    DHLog_1.DHLog.d("auth date " + auth.googleTokenExpire);
-                    if (now <= auth.googleTokenExpire) {
+                    if (now > auth.googleTokenExpire) {
                         this.redirectGoogleAuth(req, res, next);
                     }
                     else {
