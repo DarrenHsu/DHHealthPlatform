@@ -104,25 +104,36 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            // this.authHelper.findOne(req.session.account, (code, auth) =>{
-            //     if (auth) {
-            //         var start = req.params.start;
-            //         var end = req.params.end;
-            //         if (!start && !end) {
-            //             return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-            //         }
-            //         this.getLiveList(auth.googleToken, req, res, next);
-            //         this.renderLive(req, res, next, null);
-            //     }else {
-            this.initOAuth2Client(req);
-            const url = this.oauth2Client.generateAuthUrl({
-                access_type: "offline",
-                scope: this.scopes
+            this.authHelper.findOne(req.session.account, (code, auth) => {
+                if (auth) {
+                    // var start = req.params.start;
+                    // var end = req.params.end;
+                    // if (!start && !end) {
+                    //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+                    // }
+                    var now = new Date();
+                    DHLog_1.DHLog.d("now  date " + now);
+                    DHLog_1.DHLog.d("auth date " + auth.googleTokenExpire);
+                    if (now <= auth.googleTokenExpire) {
+                        this.renderLive(req, res, next, null);
+                    }
+                    else {
+                        this.getLiveList(auth.googleToken, req, res, next);
+                    }
+                }
+                else {
+                    this.redirectGoogleAuth(req, res, next);
+                }
             });
-            return res.redirect(url);
-            //     }
-            // });
         });
+    }
+    redirectGoogleAuth(req, res, next) {
+        this.initOAuth2Client(req);
+        const url = this.oauth2Client.generateAuthUrl({
+            access_type: "offline",
+            scope: this.scopes
+        });
+        return res.redirect(url);
     }
     getLiveList(token, req, res, next) {
         var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.escape("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";

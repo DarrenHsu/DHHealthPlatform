@@ -107,7 +107,7 @@ export class LiveRoute extends BaseRoute {
                         DHLog.d("token " + auth.googleTokenExpire);
 
                         this.getLiveList(auth.googleToken, req, res, next);
-                        
+
                         return this.renderLive(req, res, next, null);
                     }else {
                         this.initOAuth2Client(req);
@@ -145,30 +145,39 @@ export class LiveRoute extends BaseRoute {
                 return;
             }
 
-            // this.authHelper.findOne(req.session.account, (code, auth) =>{
-            //     if (auth) {
-            //         var start = req.params.start;
-            //         var end = req.params.end;
-            //         if (!start && !end) {
-            //             return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-            //         }
+            this.authHelper.findOne(req.session.account, (code, auth) =>{
+                if (auth) {
+                    // var start = req.params.start;
+                    // var end = req.params.end;
+                    // if (!start && !end) {
+                    //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+                    // }
 
-            //         this.getLiveList(auth.googleToken, req, res, next);
-        
-            //         this.renderLive(req, res, next, null);
-            //     }else {
-                    this.initOAuth2Client(req);
-            
-                    const url = this.oauth2Client.generateAuthUrl({
-                        access_type: "offline",
-                        scope: this.scopes
-                    });
-        
-                    return res.redirect(url);
-            //     }
-            // });
+                    var now = new Date();
+                    DHLog.d("now  date " + now);
+                    DHLog.d("auth date " + auth.googleTokenExpire);
+                    if (now <= auth.googleTokenExpire) {
+                        this.renderLive(req, res, next, null);
+                    }else {
+                        this.getLiveList(auth.googleToken, req, res, next);
+                    }
+                }else {
+                    this.redirectGoogleAuth(req, res, next);
+                }
+            });
         });
-    }x
+    }
+
+    public redirectGoogleAuth(req: Request, res: Response, next: NextFunction) {
+        this.initOAuth2Client(req);
+            
+        const url = this.oauth2Client.generateAuthUrl({
+            access_type: "offline",
+            scope: this.scopes
+        });
+
+        return res.redirect(url);
+    }
 
     public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
         var url = GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.escape("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";  
