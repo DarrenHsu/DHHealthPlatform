@@ -63,17 +63,17 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 if (!token) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
-                DHLog_1.DHLog.d("get token " + token.access_token);
-                DHLog_1.DHLog.d("get token " + token.expiry_date);
                 this.authHelper.findOne(req.session.account, (code, auth) => {
                     if (auth) {
                         DHLog_1.DHLog.d("have auth");
                         auth.googleToken = token.access_token;
-                        auth.googleTokenExpire = new Date(token.expiry_date / 1000);
-                        DHLog_1.DHLog.d("token " + auth.googleToken);
-                        DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
-                        this.getLiveList(auth.googleToken, req, res, next);
-                        return this.renderLive(req, res, next, null);
+                        auth.googleTokenExpire = new Date(token.expiry_date);
+                        this.authHelper.save(auth._id, auth, (code, auth) => {
+                            DHLog_1.DHLog.d("token " + auth.googleToken);
+                            DHLog_1.DHLog.d("token " + auth.googleTokenExpire);
+                            this.getLiveList(auth.googleToken, req, res, next);
+                            return this.renderLive(req, res, next, null);
+                        });
                     }
                     else {
                         DHLog_1.DHLog.d("no auth");
@@ -81,7 +81,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         var newAuth = {
                             lineUserId: req.session.account,
                             googleToken: token.access_token,
-                            googleTokenExpire: new Date(token.expiry_date / 1000),
+                            googleTokenExpire: new Date(token.expiry_date),
                             lineToken: null,
                             lineTokenExpire: null
                         };

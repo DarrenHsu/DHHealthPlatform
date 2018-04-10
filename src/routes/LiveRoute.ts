@@ -95,22 +95,21 @@ export class LiveRoute extends BaseRoute {
                     return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
 
-                DHLog.d("get token " + token.access_token);
-                DHLog.d("get token " + token.expiry_date);
-
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
                     if (auth) {
                         DHLog.d("have auth");
 
                         auth.googleToken = token.access_token;
-                        auth.googleTokenExpire = new Date(token.expiry_date / 1000);
+                        auth.googleTokenExpire = new Date(token.expiry_date);
                         
-                        DHLog.d("token " + auth.googleToken);
-                        DHLog.d("token " + auth.googleTokenExpire);
+                        this.authHelper.save(auth._id, auth, (code, auth) => {
+                            DHLog.d("token " + auth.googleToken);
+                            DHLog.d("token " + auth.googleTokenExpire);
 
-                        this.getLiveList(auth.googleToken, req, res, next);
+                            this.getLiveList(auth.googleToken, req, res, next);
 
-                        return this.renderLive(req, res, next, null);
+                            return this.renderLive(req, res, next, null);
+                        });
                     }else {
                         DHLog.d("no auth");
 
@@ -119,7 +118,7 @@ export class LiveRoute extends BaseRoute {
                         var newAuth: IAuth = {
                             lineUserId: req.session.account,
                             googleToken: token.access_token,
-                            googleTokenExpire: new Date(token.expiry_date / 1000),
+                            googleTokenExpire: new Date(token.expiry_date),
                             lineToken: null,
                             lineTokenExpire: null
                         };
