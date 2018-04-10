@@ -177,7 +177,11 @@ export class LiveRoute extends BaseRoute {
     }
 
     public getLiveList(token: string, req: Request, res: Response, next: NextFunction) {
-        var url = GoogleAPI.API_YOUTUBE + "?key=" + this.clientId + "&part=" + querystring.escape("id,snippet,contentDetails,status") + "&maxResults=50" + "&broadcastStatus=all";  
+        var url = GoogleAPI.API_YOUTUBE + 
+        "?key=" + this.clientId + 
+        "&part=" + querystring.escape("id,snippet,contentDetails,status") + 
+        "&maxResults=10" + 
+        "&broadcastStatus=all";  
 
         var option = {
             headers: {
