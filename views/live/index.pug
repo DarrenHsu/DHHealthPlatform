@@ -1,8 +1,10 @@
 extends ./layout/body
 
 block content
-  h3(class="my-4") Page Heading
-    small Secondary Text
+  include ../layout/paginationSimple
+
+  h3(class="my-4") 我的 Live 直播
+    small #{items[0].snippet.title}
   
   div#PlayRow(class="row")
     div(class="col-md-8 first-live")
@@ -27,6 +29,8 @@ block content
             div(class="live-preview")
               img(class="live-img" src=item.snippet.thumbnails.medium.url)
               img(class="live-play" src="/images/live/youtube.png")
+  
+  include ../layout/paginationSimple
 
   
 

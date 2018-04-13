@@ -82,7 +82,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         auth.googleTokenExpire = new Date(token.expiry_date);
                         /* update auth */
                         this.authHelper.save(auth._id, auth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
                         });
                     }
                     else {
@@ -96,7 +96,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                         };
                         /* create auth */
                         this.authHelper.add(newAuth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
                         });
                     }
                 });
@@ -109,23 +109,42 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
      */
     getLive(router) {
         DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI_1.DHAPI.LIVE_PATH);
-        router.get(DHAPI_1.DHAPI.LIVE_PATH + "/:start/:end", (req, res, next) => {
+        router.get(DHAPI_1.DHAPI.LIVE_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
+            req.session.pageToken = null;
             this.authHelper.findOne(req.session.account, (code, auth) => {
                 if (auth) {
-                    // var start = req.params.start;
-                    // var end = req.params.end;
-                    // if (!start && !end) {
-                    //     return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
-                    // }
                     var now = new Date();
                     if (now > auth.googleTokenExpire) {
                         this.redirectGoogleAuth(req, res, next);
                     }
                     else {
-                        this.getYTBroadcastList(auth.googleToken, req, res, next);
+                        this.getYTBroadcastList(auth.googleToken, null, req, res, next);
+                    }
+                }
+                else {
+                    this.redirectGoogleAuth(req, res, next);
+                }
+            });
+        });
+        DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI_1.DHAPI.LIVE_PATH);
+        router.get(DHAPI_1.DHAPI.LIVE_PATH + "/:pageToken", (req, res, next) => {
+            if (!this.checkLogin(req, res, next)) {
+                return;
+            }
+            if (req.params.pageToken) {
+                req.session.pageToken = req.params.pageToken;
+            }
+            this.authHelper.findOne(req.session.account, (code, auth) => {
+                if (auth) {
+                    var now = new Date();
+                    if (now > auth.googleTokenExpire) {
+                        this.redirectGoogleAuth(req, res, next);
+                    }
+                    else {
+                        this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
                     }
                 }
                 else {
@@ -149,18 +168,22 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         return res.redirect(url);
     }
     /**
-     * @description
+     * @description 取得 youtube broadcast 的列表
      * @param token
      * @param req
      * @param res
      * @param next
      */
-    getYTBroadcastList(token, req, res, next) {
+    getYTBroadcastList(token, pageToken, req, res, next) {
         var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE +
             "?key=" + this.clientId +
             "&part=" + querystring.escape("id,snippet,contentDetails,status") +
-            "&maxResults=10" +
+            "&maxResults=5" +
             "&broadcastStatus=all";
+        if (pageToken) {
+            DHLog_1.DHLog.d("page token " + pageToken);
+            url += "&pageToken=" + pageToken;
+        }
         request.get(url, this.createAuthHeader(token), (error, response, body) => {
             if (error) {
                 DHLog_1.DHLog.d("youtube error " + error);
@@ -171,16 +194,22 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                 var items = jsonBody.items;
                 var totalResults = jsonBody.pageInfo.totalResults;
                 var resultsPerPage = jsonBody.pageInfo.resultsPerPage;
+                var prevPageToken = jsonBody.prevPageToken;
+                var nextPageToken = jsonBody.nextPageToken;
                 DHLog_1.DHLog.d("" + body);
-                return this.renderLive(req, res, next, items);
+                return this.renderLive(req, res, next, items, nextPageToken, prevPageToken);
             }
         });
     }
-    renderLive(req, res, next, items) {
+    renderLive(req, res, next, items, nxtToken, preToken) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.LIVE_PATH, true),
-            items: items
+            items: items,
+            previous: (preToken ? true : false),
+            preToken: preToken,
+            next: (nxtToken ? true : false),
+            nxtToken: nxtToken
         };
         this.render(req, res, "live/index", options);
     }
