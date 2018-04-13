@@ -7,8 +7,9 @@ block content
 
   include ../layout/paginationSimple
 
-  h3(class="my-4") 播放影片：
-    small #{items[playIndex].snippet.title}
+  h5(class="my-4") 
+    strong 影片：
+    span #{items[playIndex].snippet.title}
   
   div#PlayRow(class="row")
     div(class="col-md-12 first-live")
