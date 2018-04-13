@@ -6,46 +6,48 @@
   margin-top: 30px;
 }
 
-.PlayBaseImg {
-  display: inline-block;
-  width: 200px;
-}
-
-.PlayBase {
+.first-live {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 400px;
-  text-align: center;
-  vertical-align: middle;
-  background-color: black;
+  position: relative;
+  min-height: 360px;
+}
+
+.first-live-img {
+  position: absolute;
+  display: inline-block;
+  width: 100%;
+  z-index: 0;
+}
+
+.first-live-play {
+  display: inline-block;
+  width: 100px;
+  z-index: 1;
 }
 
 #LiveRow {
   margin-top: 30px;
 }
 
-.live-body {
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.live-themb {
-  display: inline-block;
-  width: 100px;
-}
-
 .live-preview {
-  min-width: 320px;
-  width: 320px;
-  min-height: 180px;
-  height: 180px; 
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  vertical-align: middle;
-  background-color: bisque;
+  position: relative;
+  min-height: 180px;
+}
+
+.live-img {
+  position: absolute;
+  display: inline-block;
+  width: 100%;
+  z-index: 0;
+}
+
+.live-play {
+  display: inline-block;
+  width: 100px;
+  z-index: 1;
 }

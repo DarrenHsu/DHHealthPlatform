@@ -190,7 +190,7 @@ export class LiveRoute extends BaseRoute {
     }
 
     /**
-     * @description
+     * @description 取得 youtube broadcast 的列表
      * @param token 
      * @param req 
      * @param res 
@@ -201,7 +201,7 @@ export class LiveRoute extends BaseRoute {
         "?key=" + this.clientId + 
         "&part=" + querystring.escape("id,snippet,contentDetails,status") + 
         "&maxResults=10" + 
-        "&broadcastStatus=all";  
+        "&broadcastStatus=all";
 
         request.get(url, this.createAuthHeader(token),  (error, response, body) => {
             if (error) {

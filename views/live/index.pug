@@ -5,8 +5,9 @@ block content
     small Secondary Text
   
   div#PlayRow(class="row")
-    div(class="col-md-8 PlayBase")
-      img(class="PlayBaseImg" src="/images/live/youtube.png")
+    div(class="col-md-8 first-live")
+      img(class="first-live-img" src=items[0].snippet.thumbnails.medium.url)
+      img(class="first-live-play" src="/images/live/youtube.png")
 
     div(class="col-md-4")
       h4(class="my-3") Project Description
@@ -22,9 +23,10 @@ block content
             button(type="button" class="close" aria-label="Close")
               span(aria-hidden="true") &times;
           
-          div(class="card-body live-body")
-            div(class="live-preview" style="background-image:url(" + item.snippet.thumbnails.medium.url +  ")")
-              img(class="live-themb" src="/images/live/youtube.png")
+          div(class="card-body")
+            div(class="live-preview")
+              img(class="live-img" src=item.snippet.thumbnails.medium.url)
+              img(class="live-play" src="/images/live/youtube.png")
 
   
 
