@@ -28,7 +28,7 @@ block content
 
           div(class="card-header")
             span #{item.snippet.title}
-            button(type="button" class="close" aria-label="Close")
+            button(type="button" class="close" aria-label="Close" data-toggle="modal" data-target="#ModalCenter" data-id=item.id data-title=item.snippet.title)
               span(aria-hidden="true") &times;
           
           div(class="card-body")
@@ -38,8 +38,37 @@ block content
                 //- img(class="live-play" src="/images/live/youtube.png")
     
       - index++
+
+  div#ModalCenter(class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true")
+    div(class="modal-dialog modal-dialog-centered" role="document")
+      div(class="modal-content")
+        div(class="modal-header")
+          h5#ModalTitle(class="modal-title") 提示訊息
+          button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+            span(aria-hidden="true") &times;
+        
+        div(class="modal-body")
+          span 是否確定刪除此影片?
+        
+        div(class="modal-footer")
+          button(type="button" class="btn btn-secondary" data-dismiss="modal") 取消
+          button(type="button" class="btn btn-danger") 刪除
+      
   
   include ../layout/paginationSimple
 
+  script.
+    $("#ModalCenter").on("show.bs.modal", function(e) {
+      var button = $(e.relatedTarget);
+      var videoId = button.data("id");
+      var videoTitle = button.data("title");
+      var content = "確定是否刪除「" + videoTitle + "」這部影片?";
+      var modal = $(this);
+      modal.find(".modal-body").text(content);
+      modal.find(".modal-footer").find(".btn-danger").on("click", function(e) {
+        console.log(videoId);
+        $("#ModalCenter").modal("hide");
+      });
+    });
   
 
