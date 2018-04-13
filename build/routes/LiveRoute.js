@@ -32,6 +32,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     static create(router) {
         var app = new LiveRoute(DBHelper_1.DBHelper.connection);
         app.getLive(router);
+        app.getListWithToken(router);
         app.getGoogleAuth(router);
     }
     /**
@@ -80,9 +81,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                     if (auth) {
                         auth.googleToken = token.access_token;
                         auth.googleTokenExpire = new Date(token.expiry_date);
-                        /* update auth */
                         this.authHelper.save(auth._id, auth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
                     }
                     else {
@@ -94,9 +94,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
                             lineToken: null,
                             lineTokenExpire: null
                         };
-                        /* create auth */
                         this.authHelper.add(newAuth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
                     }
                 });
@@ -104,7 +103,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         });
     }
     /**
-     * @description 顯示紀錄頁面
+     * @description 取得 youtube list
      * @param router
      */
     getLive(router) {
@@ -113,44 +112,40 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            req.session.pageToken = null;
-            this.authHelper.findOne(req.session.account, (code, auth) => {
-                if (auth) {
-                    var now = new Date();
-                    if (now > auth.googleTokenExpire) {
-                        this.redirectGoogleAuth(req, res, next);
-                    }
-                    else {
-                        this.getYTBroadcastList(auth.googleToken, null, req, res, next);
-                    }
-                }
-                else {
-                    this.redirectGoogleAuth(req, res, next);
-                }
-            });
+            req.session.ytPageToken = null;
+            req.session.ytIndex = req.query.index ? req.query.index : 0;
+            this.doAuthAndList(req, res, next);
         });
+    }
+    /**
+     * @description 取得 youtube list 含 page token
+     * @param router
+     */
+    getListWithToken(router) {
         DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI_1.DHAPI.LIVE_PATH);
         router.get(DHAPI_1.DHAPI.LIVE_PATH + "/:pageToken", (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            if (req.params.pageToken) {
-                req.session.pageToken = req.params.pageToken;
-            }
-            this.authHelper.findOne(req.session.account, (code, auth) => {
-                if (auth) {
-                    var now = new Date();
-                    if (now > auth.googleTokenExpire) {
-                        this.redirectGoogleAuth(req, res, next);
-                    }
-                    else {
-                        this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
-                    }
-                }
-                else {
+            req.session.ytPageToken = req.params.pageToken;
+            req.session.ytIndex = req.query.index ? req.query.index : 0;
+            this.doAuthAndList(req, res, next);
+        });
+    }
+    doAuthAndList(req, res, next) {
+        this.authHelper.findOne(req.session.account, (code, auth) => {
+            if (auth) {
+                var now = new Date();
+                if (now > auth.googleTokenExpire) {
                     this.redirectGoogleAuth(req, res, next);
                 }
-            });
+                else {
+                    this.getYTBroadcastList(auth.googleToken, req, res, next);
+                }
+            }
+            else {
+                this.redirectGoogleAuth(req, res, next);
+            }
         });
     }
     /**
@@ -170,19 +165,21 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     /**
      * @description 取得 youtube broadcast 的列表
      * @param token
+     * @param pageToken
      * @param req
      * @param res
      * @param next
      */
-    getYTBroadcastList(token, pageToken, req, res, next) {
+    getYTBroadcastList(token, req, res, next) {
+        var ytPageToken = req.session.ytPageToken;
         var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE +
             "?key=" + this.clientId +
             "&part=" + querystring.escape("id,snippet,contentDetails,status") +
-            "&maxResults=5" +
+            "&maxResults=6" +
             "&broadcastStatus=all";
-        if (pageToken) {
-            DHLog_1.DHLog.d("page token " + pageToken);
-            url += "&pageToken=" + pageToken;
+        if (ytPageToken) {
+            DHLog_1.DHLog.d("ytPageToken " + ytPageToken);
+            url += "&pageToken=" + ytPageToken;
         }
         request.get(url, this.createAuthHeader(token), (error, response, body) => {
             if (error) {
@@ -202,14 +199,18 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         });
     }
     renderLive(req, res, next, items, nxtToken, preToken) {
+        DHLog_1.DHLog.d("page index " + req.session.ytIndex);
+        DHLog_1.DHLog.d("page index " + parseInt(req.session.ytIndex));
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.LIVE_PATH, true),
             items: items,
+            pageToken: req.session.ytPageToken,
             previous: (preToken ? true : false),
             preToken: preToken,
             next: (nxtToken ? true : false),
-            nxtToken: nxtToken
+            nxtToken: nxtToken,
+            playIndex: parseInt(req.session.ytIndex)
         };
         this.render(req, res, "live/index", options);
     }

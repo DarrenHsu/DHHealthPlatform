@@ -55,6 +55,7 @@ export class LiveRoute extends BaseRoute {
         var app = new LiveRoute(DBHelper.connection);
         
         app.getLive(router);
+        app.getListWithToken(router);
         app.getGoogleAuth(router);
     }
 
@@ -115,9 +116,8 @@ export class LiveRoute extends BaseRoute {
                         auth.googleToken = token.access_token;
                         auth.googleTokenExpire = new Date(token.expiry_date);
                         
-                        /* update auth */
                         this.authHelper.save(auth._id, auth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
                     }else {
                         this.initOAuth2Client(req);
@@ -130,9 +130,8 @@ export class LiveRoute extends BaseRoute {
                             lineTokenExpire: null
                         };
 
-                        /* create auth */
                         this.authHelper.add(newAuth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
+                            this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
                     }
                 });
@@ -141,7 +140,7 @@ export class LiveRoute extends BaseRoute {
     }
 
     /**
-     * @description 顯示紀錄頁面
+     * @description 取得 youtube list
      * @param router 
      */
     public getLive(router: Router) {
@@ -151,44 +150,43 @@ export class LiveRoute extends BaseRoute {
                 return;
             }
 
-            req.session.pageToken = null;
+            req.session.ytPageToken = null;
+            req.session.ytIndex = req.query.index ? req.query.index : 0;
 
-            this.authHelper.findOne(req.session.account, (code, auth) =>{
-                if (auth) {
-                    var now = new Date();
-                    if (now > auth.googleTokenExpire) {
-                        this.redirectGoogleAuth(req, res, next);
-                    }else {
-                        this.getYTBroadcastList(auth.googleToken, null, req, res, next);
-                    }
-                }else {
-                    this.redirectGoogleAuth(req, res, next);
-                }
-            });
+            this.doAuthAndList(req, res, next);
         });
+    }
 
+    /**
+     * @description 取得 youtube list 含 page token
+     * @param router 
+     */
+    public getListWithToken(router: Router) {
         DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI.LIVE_PATH);
         router.get(DHAPI.LIVE_PATH + "/:pageToken", (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
 
-            if (req.params.pageToken) {
-                req.session.pageToken = req.params.pageToken;
-            }
+            req.session.ytPageToken = req.params.pageToken;
+            req.session.ytIndex = req.query.index ? req.query.index : 0;
 
-            this.authHelper.findOne(req.session.account, (code, auth) =>{
-                if (auth) {
-                    var now = new Date();
-                    if (now > auth.googleTokenExpire) {
-                        this.redirectGoogleAuth(req, res, next);
-                    }else {
-                        this.getYTBroadcastList(auth.googleToken, req.session.pageToken, req, res, next);
-                    }
-                }else {
+            this.doAuthAndList(req, res, next);
+        });
+    }
+
+    private doAuthAndList(req: Request, res: Response, next: NextFunction) {
+        this.authHelper.findOne(req.session.account, (code, auth) => {
+            if (auth) {
+                var now = new Date();
+                if (now > auth.googleTokenExpire) {
                     this.redirectGoogleAuth(req, res, next);
+                }else {
+                    this.getYTBroadcastList(auth.googleToken, req, res, next);
                 }
-            });
+            }else {
+                this.redirectGoogleAuth(req, res, next);
+            }
         });
     }
 
@@ -212,20 +210,23 @@ export class LiveRoute extends BaseRoute {
     /**
      * @description 取得 youtube broadcast 的列表
      * @param token 
+     * @param pageToken 
      * @param req 
      * @param res 
      * @param next 
      */
-    private getYTBroadcastList(token: string, pageToken: string, req: Request, res: Response, next: NextFunction) {
+    private getYTBroadcastList(token: string, req: Request, res: Response, next: NextFunction) {
+        var ytPageToken = req.session.ytPageToken;
+
         var url = GoogleAPI.API_YOUTUBE + 
         "?key=" + this.clientId + 
         "&part=" + querystring.escape("id,snippet,contentDetails,status") + 
-        "&maxResults=5" + 
+        "&maxResults=6" + 
         "&broadcastStatus=all";
         
-        if (pageToken) {
-            DHLog.d("page token " + pageToken);
-            url += "&pageToken=" + pageToken;
+        if (ytPageToken) {
+            DHLog.d("ytPageToken " + ytPageToken);
+            url += "&pageToken=" + ytPageToken;
         }
 
         request.get(url, this.createAuthHeader(token),  (error, response, body) => {
@@ -246,14 +247,18 @@ export class LiveRoute extends BaseRoute {
     }
 
     public renderLive(req: Request, res: Response, next: NextFunction, items: JSON[], nxtToken: string, preToken: string) {
+        DHLog.d("page index " + req.session.ytIndex);
+        DHLog.d("page index " + parseInt(req.session.ytIndex));
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: this.getAuth(req, DHAPI.LIVE_PATH, true),
             items: items,
+            pageToken: req.session.ytPageToken,
             previous: (preToken ? true : false),
             preToken: preToken,
             next: (nxtToken ? true : false),
-            nxtToken: nxtToken
+            nxtToken: nxtToken,
+            playIndex: parseInt(req.session.ytIndex)
         };
         this.render(req, res, "live/index", options);
     }

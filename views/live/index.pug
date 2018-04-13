@@ -1,21 +1,26 @@
 extends ./layout/body
 
 block content
+  - var path = auth.path
+  if preToken 
+    - path += "/" + pageToken
+
   include ../layout/paginationSimple
 
-  h3(class="my-4") 我的 Live 直播
-    small #{items[0].snippet.title}
+  h3(class="my-4") 現正播放的影片：
+    small #{items[playIndex].snippet.title}
   
   div#PlayRow(class="row")
-    div(class="col-md-8 first-live")
-      img(class="first-live-img" src=items[0].snippet.thumbnails.medium.url)
-      img(class="first-live-play" src="/images/live/youtube.png")
+    div(class="col-md-12 first-live")
+      div(class="embed-responsive embed-responsive-16by9")
+        #{items[playIndex].contentDetails.monitorStream.embedHtml}
 
-    div(class="col-md-4")
-      h4(class="my-3") Project Description
-      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+    //- div(class="col-md-4")
+    //-   h4(class="my-3") Project Description
+    //-   p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
 
   div#LiveRow(class="row")
+    - var index = 0
     each item in items
       div(class="col-lg-4 col-md-6 portfolio-item")
         div(class="card")
@@ -26,9 +31,12 @@ block content
               span(aria-hidden="true") &times;
           
           div(class="card-body")
-            div(class="live-preview")
-              img(class="live-img" src=item.snippet.thumbnails.medium.url)
-              img(class="live-play" src="/images/live/youtube.png")
+            a(href=path + "?index=" + index)
+              div(class="live-preview")
+                img(class="live-img" src=item.snippet.thumbnails.medium.url)
+                img(class="live-play" src="/images/live/youtube.png")
+    
+      - index++
   
   include ../layout/paginationSimple
 
