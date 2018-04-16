@@ -17,15 +17,15 @@ block bodyContent
     }
   body
     include ../layout/navbar
-    div(class="container content")
+    div(class='container content')
       - var sLat = locations[0][0]
       - var sLng = locations[0][1]
       - var eLat = locations[locations.length - 1][0]
       - var eLng = locations[locations.length - 1][1]
-      - var j = ""
+      - var j = ''
       - var ls = locations
         each location in ls
-          - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
+          - j += (j != '' ? ',' : '') + '{lat:' + location[0] + ', lng:' + location[1] + '}'
 
       div.container-fluid
         img.userPicture.float.image(src=pictureUrl)
@@ -73,7 +73,7 @@ block bodyContent
               strokeWeight: 7
             });
 
-            var map = new google.maps.Map(document.getElementById("map"), {
+            var map = new google.maps.Map(document.getElementById('map'), {
               mapTypeId: 'terrain'
             });
 
@@ -90,7 +90,7 @@ block bodyContent
               map: map,
             });
             new google.maps.InfoWindow({
-              content:"開始"
+              content:'開始'
             }).open(map, sMark);
 
             var eMark = new google.maps.Marker({
@@ -98,10 +98,10 @@ block bodyContent
               map: map,
             });
             new google.maps.InfoWindow({
-              content:"結束"
+              content:'結束'
             }).open(map, eMark);
           }
-        script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap")
+        script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap')
     include ../layout/footer
 
 

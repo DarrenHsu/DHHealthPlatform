@@ -1,13 +1,13 @@
 extends ../layout/body
 
 block content
-  div(class="card")
-    div(class="card-header") 系統發生錯誤
-    div(class="card-body")
+  div(class='card')
+    div(class='card-header') 系統發生錯誤
+    div(class='card-body')
     
-      div(class="alert alert-warning" role="alert")
-        h4(class="card-title") 錯誤代碼：#{result.code}
-        p(class="card-text") #{result.message}，很包歉，系統即將停止執行。
+      div(class='alert alert-warning' role='alert')
+        h4(class='card-title') 錯誤代碼：#{result.code}
+        p(class='card-text') #{result.message}，很包歉，系統即將停止執行。
       
-      div(align="center")
-        a(class="btn btn-info" href="/") 回首頁
+      div(align='center')
+        a(class='btn btn-info' href='/') 回首頁

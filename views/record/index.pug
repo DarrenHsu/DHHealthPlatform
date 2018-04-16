@@ -7,53 +7,53 @@ block content
   - var index = 0
     while index < records.length
       - var record = records[index]
-      - var j = "";
+      - var j = '';
       each location in record.locations
-        - j += (j != "" ? "," : "") + "{lat:" + location[0] + ', lng:' + location[1] + "}"
+        - j += (j != '' ? ',' : '') + '{lat:' + location[0] + ', lng:' + location[1] + '}'
       - ls[index] = j
       - index++
   
-  div#RecordRow(class="row")
+  div#RecordRow(class='row')
     - var timeIndex = 0;
     each record in records
-      div(class="col-lg-6 col-md-6 portfolio-item")
-        div(class="card h-100")
+      div(class='col-lg-6 col-md-6 portfolio-item')
+        div(class='card h-100')
           
           //- Header
-          div(class="card-header")
+          div(class='card-header')
             span #{record.name}
-            button(type="button" class="close" aria-label="Close")
-              span(aria-hidden="true") &times;
+            button(type='button' class='close' aria-label='Close')
+              span(aria-hidden='true') &times;
           
           //- Body: Map
-          div(class="card-body record-card")
-            div#map(class="mapView card-img-top")
+          div(class='card-body record-card')
+            div#map(class='mapView card-img-top')
 
             //- Body: Detail Value
-            div(class="row records-detail-row")
-              div(class="col-lg-8")
-                div(class="card h-100 card-no-border")
-                  div(class="card-body")
-                    ul(class="card-text")
+            div(class='row records-detail-row')
+              div(class='col-lg-8')
+                div(class='card h-100 card-no-border')
+                  div(class='card-body')
+                    ul(class='card-text')
                       li 
-                        img(class="records-icon" src="/images/records/location.png") 
-                        span(class="records-value") #{record.locality}
+                        img(class='records-icon' src='/images/records/location.png') 
+                        span(class='records-value') #{record.locality}
                       li 
-                        img(class="records-icon" src="/images/records/time.png") 
-                        span(class="records-value") #{times[timeIndex].dateStr} #{times[timeIndex].startTimeStr} ~ #{times[timeIndex].endTimeStr}
+                        img(class='records-icon' src='/images/records/time.png') 
+                        span(class='records-value') #{times[timeIndex].dateStr} #{times[timeIndex].startTimeStr} ~ #{times[timeIndex].endTimeStr}
                       li 
-                        img(class="records-icon" src="/images/home/distance.png") 
-                        span(class="records-value") #{record.distance.toFixed(1)} 公里
+                        img(class='records-icon' src='/images/home/distance.png') 
+                        span(class='records-value') #{record.distance.toFixed(1)} 公里
                       li 
-                        img(class="records-icon" src="/images/home/calories.png") 
-                        span(class="records-value") 1,400 卡
+                        img(class='records-icon' src='/images/home/calories.png') 
+                        span(class='records-value') 1,400 卡
 
               //- Body: Options
-              div(class="col-lg-4")
-                div(class="card h-100  card-no-border")
-                  div(class="card-body text-center")
-                    div(class="btn-group-vertical" role="group" aria-label="Basic example")
-                      button(type="button" class="btn btn-success btn-sm") 發送至Line
+              div(class='col-lg-4')
+                div(class='card h-100  card-no-border')
+                  div(class='card-body text-center')
+                    div(class='btn-group-vertical' role='group' aria-label='Basic example')
+                      button(type='button' class='btn btn-success btn-sm') 發送至Line
       - timeIndex++
               
   include ../layout/pagination
@@ -71,7 +71,7 @@ block content
   script.
     function initMap() {
       var recordCount = 0;
-      $(".mapView").queue(function( next ) {
+      $('.mapView').queue(function( next ) {
         var coordinate = coordinates[recordCount];
         var flightPath = new google.maps.Polyline({
           path: coordinate,
@@ -100,7 +100,7 @@ block content
           map: map,
         });
         new google.maps.InfoWindow({
-          content: "開始"
+          content: '開始'
         }).open(map, sMark);
 
         var eMark = new google.maps.Marker({
@@ -108,12 +108,12 @@ block content
           map: map,
         });
         new google.maps.InfoWindow({
-          content: "結束"
+          content: '結束'
         }).open(map, eMark);
 
         recordCount++;
         next();
       });
     }
-  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap&region=zh-TW")
+  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&callback=initMap&region=zh-TW')
 
