@@ -1,7 +1,7 @@
-import { IBase } from "../interface/IBase";
-import { IBaseModel } from "../models/model";
-import { BaseHelper } from "./BaseHelper";
-import { MONGODB_CODE } from "../../routes/ResultCode";
+import { IBase } from '../interface/IBase';
+import { IBaseModel } from '../models/model';
+import { BaseHelper } from './BaseHelper';
+import { MONGODB_CODE } from '../../routes/ResultCode';
 
 export interface BaseHelper {
     /**

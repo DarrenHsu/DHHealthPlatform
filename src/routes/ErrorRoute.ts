@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { BaseRoute } from "./BaseRoute";
-import { DHAPI } from "../const/DHAPI";
-import { DHLog } from "../util/DHLog";
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "./ResultCode";
-import { IResult } from "./interface/IResult";
-import { LINEAPI } from "../const/LINEAPI";
+import { NextFunction, Request, Response, Router } from 'express';
+import { BaseRoute } from './BaseRoute';
+import { DHAPI } from '../const/DHAPI';
+import { DHLog } from '../util/DHLog';
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
+import { IResult } from './interface/IResult';
+import { LINEAPI } from '../const/LINEAPI';
 
 export class ErrorRoute extends BaseRoute {
     
@@ -23,8 +23,8 @@ export class ErrorRoute extends BaseRoute {
      * @param router 
      */
     public getError(router: Router) {
-        DHLog.d("[" + ErrorRoute.name + ":create] " + DHAPI.ERROR_PATH);
-        router.get(DHAPI.ERROR_PATH + "/:errorCode", (req: Request, res: Response, next: NextFunction) => {
+        DHLog.d('[' + ErrorRoute.name + ':create] ' + DHAPI.ERROR_PATH);
+        router.get(DHAPI.ERROR_PATH + '/:errorCode', (req: Request, res: Response, next: NextFunction) => {
             var errorCode = req.params.errorCode;
             if (!errorCode) {
                 var result = BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR);
@@ -41,6 +41,6 @@ export class ErrorRoute extends BaseRoute {
             auth: this.getAuth(req, DHAPI.ERROR_PATH, false),            
             result: result
         };
-        this.render(req, res, "error/index", options);
+        this.render(req, res, 'error/index', options);
     }
 }

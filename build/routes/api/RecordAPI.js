@@ -13,7 +13,7 @@ class RecordAPI extends BaseAPI_1.BaseAPI {
     }
     static create(router) {
         let api = new RecordAPI(DBHelper_1.DBHelper.connection);
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + api.uri);
+        DHLog_1.DHLog.d('[' + this.name + ':create] ' + api.uri);
         api.get(router);
         api.post(router);
         api.put(router);

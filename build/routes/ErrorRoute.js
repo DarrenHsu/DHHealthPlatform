@@ -17,8 +17,8 @@ class ErrorRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getError(router) {
-        DHLog_1.DHLog.d("[" + ErrorRoute.name + ":create] " + DHAPI_1.DHAPI.ERROR_PATH);
-        router.get(DHAPI_1.DHAPI.ERROR_PATH + "/:errorCode", (req, res, next) => {
+        DHLog_1.DHLog.d('[' + ErrorRoute.name + ':create] ' + DHAPI_1.DHAPI.ERROR_PATH);
+        router.get(DHAPI_1.DHAPI.ERROR_PATH + '/:errorCode', (req, res, next) => {
             var errorCode = req.params.errorCode;
             if (!errorCode) {
                 var result = BaseRoute_1.BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
@@ -35,7 +35,7 @@ class ErrorRoute extends BaseRoute_1.BaseRoute {
             auth: this.getAuth(req, DHAPI_1.DHAPI.ERROR_PATH, false),
             result: result
         };
-        this.render(req, res, "error/index", options);
+        this.render(req, res, 'error/index', options);
     }
 }
 exports.ErrorRoute = ErrorRoute;

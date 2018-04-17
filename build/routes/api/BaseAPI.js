@@ -9,7 +9,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
      * @param router
      */
     get(router) {
-        router.get(this.uri + "/:id", (req, res, next) => {
+        router.get(this.uri + '/:id', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;
@@ -28,7 +28,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
      * @param router
      */
     put(router) {
-        router.put(this.uri + "/:id", (req, res, next) => {
+        router.put(this.uri + '/:id', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;
@@ -70,7 +70,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
      * @param router
      */
     delete(router) {
-        router.delete(this.uri + "/:id", (req, res, next) => {
+        router.delete(this.uri + '/:id', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;

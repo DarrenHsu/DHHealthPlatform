@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { BaseRoute } from "./BaseRoute";
-import { DHAPI } from "../const/DHAPI";
-import { LINEAPI } from "../const/LINEAPI";
-import { DHLog } from "../util/DHLog";
+import { NextFunction, Request, Response, Router } from 'express';
+import { BaseRoute } from './BaseRoute';
+import { DHAPI } from '../const/DHAPI';
+import { LINEAPI } from '../const/LINEAPI';
+import { DHLog } from '../util/DHLog';
 
 export class HomeRoute extends BaseRoute {
     
@@ -22,7 +22,7 @@ export class HomeRoute extends BaseRoute {
      * @param router 
      */
     public getIndex(router: Router) {
-        DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI.ROOT_PATH);
+        DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -37,7 +37,7 @@ export class HomeRoute extends BaseRoute {
      * @param router 
      */
     public getHome(router: Router) {
-        DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI.HOME_PATH);
+        DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI.HOME_PATH);
         router.get(DHAPI.HOME_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -55,6 +55,6 @@ export class HomeRoute extends BaseRoute {
             name: req.session.name,
             picture: req.session.picture, 
         };
-        this.render(req, res, "home/index", options);
+        this.render(req, res, 'home/index', options);
     }
 }

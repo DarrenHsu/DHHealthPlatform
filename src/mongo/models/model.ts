@@ -1,9 +1,9 @@
-import { Document } from "mongoose";
-import { IUser } from "../interface/IUser";
-import { IRoute } from "../interface/IRoute";
-import { IRecord } from "../interface/IRecord";
-import { IChatroom } from "../interface/IChatroom";
-import { IAuth } from "../interface/IAuth";
+import { Document } from 'mongoose';
+import { IUser } from '../interface/IUser';
+import { IRoute } from '../interface/IRoute';
+import { IRecord } from '../interface/IRecord';
+import { IChatroom } from '../interface/IChatroom';
+import { IAuth } from '../interface/IAuth';
 
 export interface IBaseModel extends Document {}
 

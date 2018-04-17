@@ -8,17 +8,17 @@ class DBHelper {
         global.Promise = q.Promise;
         mongoose.Promise = global.Promise;
         this.connection = mongoose.createConnection(path, { useMongoClient: true });
-        this.connection.on("error", console.error.bind(console, "Connection Error:"));
-        this.connection.once("open", function () {
+        this.connection.on('error', console.error.bind(console, 'Connection Error:'));
+        this.connection.once('open', function () {
             this.isConnection = true;
-            DHLog_1.DHLog.d("DB " + path + " Connected!");
+            DHLog_1.DHLog.d('DB ' + path + ' Connected!');
         });
     }
     static closeDB() {
         if (this.connection) {
             this.connection.close((err) => {
                 this.isConnection = false;
-                DHLog_1.DHLog.d("DB Closed!");
+                DHLog_1.DHLog.d('DB Closed!');
             });
         }
     }

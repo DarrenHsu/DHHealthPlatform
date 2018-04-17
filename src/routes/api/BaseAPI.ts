@@ -1,12 +1,12 @@
-import * as mongoose from "mongoose";
-import { NextFunction, Request, Response, Router } from "express";
-import { BaseRoute } from "../BaseRoute";
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
-import { DBHelper } from "../../mongo/helper/DBHelper";
-import { BaseHelper } from "../../mongo/helper/BaseHelper";
-import { IBase } from "../../mongo/interface/IBase";
-import { DHAPI } from "../../const/DHAPI";
-import { DHLog } from "../../util/DHLog";
+import * as mongoose from 'mongoose';
+import { NextFunction, Request, Response, Router } from 'express';
+import { BaseRoute } from '../BaseRoute';
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from '../ResultCode';
+import { DBHelper } from '../../mongo/helper/DBHelper';
+import { BaseHelper } from '../../mongo/helper/BaseHelper';
+import { IBase } from '../../mongo/interface/IBase';
+import { DHAPI } from '../../const/DHAPI';
+import { DHLog } from '../../util/DHLog';
 
 export class BaseAPI extends BaseRoute {
 
@@ -20,7 +20,7 @@ export class BaseAPI extends BaseRoute {
      * @param router 
      */
     protected get(router: Router) {
-        router.get(this.uri + "/:id", (req, res, next) => {
+        router.get(this.uri + '/:id', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;
@@ -42,7 +42,7 @@ export class BaseAPI extends BaseRoute {
      * @param router 
      */
     protected put(router: Router) {
-        router.put(this.uri + "/:id", (req, res, next) => {
+        router.put(this.uri + '/:id', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;
@@ -91,7 +91,7 @@ export class BaseAPI extends BaseRoute {
      * @param router 
      */
     protected delete(router: Router) {
-        router.delete(this.uri + "/:id", (req, res, next) => {
+        router.delete(this.uri + '/:id', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;

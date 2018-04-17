@@ -1,6 +1,6 @@
-import * as q from "q";
-import mongoose = require("mongoose");
-import { DHLog } from "../../util/DHLog";
+import * as q from 'q';
+import mongoose = require('mongoose');
+import { DHLog } from '../../util/DHLog';
 
 export class DBHelper {
 
@@ -11,10 +11,10 @@ export class DBHelper {
         global.Promise = q.Promise;
         mongoose.Promise = global.Promise;
         this.connection = mongoose.createConnection(path,  { useMongoClient: true });
-        this.connection.on("error", console.error.bind(console, "Connection Error:"));
-        this.connection.once("open", function() {
+        this.connection.on('error', console.error.bind(console, 'Connection Error:'));
+        this.connection.once('open', function() {
             this.isConnection = true;
-            DHLog.d("DB " + path + " Connected!");
+            DHLog.d('DB ' + path + ' Connected!');
         });
     }
 
@@ -22,7 +22,7 @@ export class DBHelper {
         if (this.connection) {
             this.connection.close((err) => {
                 this.isConnection = false;
-                DHLog.d("DB Closed!");
+                DHLog.d('DB Closed!');
             });
         }
     }

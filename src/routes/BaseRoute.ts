@@ -1,24 +1,24 @@
-import { createHmac, createHash } from "crypto";
-import { NextFunction, Request, Response } from "express";
-import { IResult } from "./interface/IResult";
-import { IRecord } from "../mongo/interface/IRecord";
-import { ResultCodeMsg } from  "./ResultCode";
-import { DHAPI } from "../const/DHAPI";
-import { DHLog } from "../util/DHLog";
-import { IAuth } from "./interface/IAuth";
+import { createHmac, createHash } from 'crypto';
+import { NextFunction, Request, Response } from 'express';
+import { IResult } from './interface/IResult';
+import { IRecord } from '../mongo/interface/IRecord';
+import { ResultCodeMsg } from  './ResultCode';
+import { DHAPI } from '../const/DHAPI';
+import { DHLog } from '../util/DHLog';
+import { IAuth } from './interface/IAuth';
 
 export class BaseRoute {
 
-    public static AP_TITLE: string = "DHHealthPlatform";
+    public static AP_TITLE: string = 'DHHealthPlatform';
     
-    protected static FEED_AUTH: string = "Darren Hsu I Love You";
-    protected static FEED_AUTH_PASS: string = "imdarren";
+    protected static FEED_AUTH: string = 'Darren Hsu I Love You';
+    protected static FEED_AUTH_PASS: string = 'imdarren';
     
     protected title: string;
     private scripts: string[];
 
     constructor() {
-        this.title = "DHHealthPlatform";
+        this.title = 'DHHealthPlatform';
         this.scripts = [];
     }
 
@@ -27,7 +27,7 @@ export class BaseRoute {
      * @param req 
      */
     protected static getFullHostUrl(req: Request): String {
-        return req.protocol + "s://" + req.hostname; 
+        return req.protocol + 's://' + req.hostname; 
     }
 
     /**
@@ -61,8 +61,8 @@ export class BaseRoute {
      * @param req 
      */
     protected checkHeader(req: Request): Boolean {
-        var auth: string = req.get("Authorization");
-        var verfy: string = req.get("verfy");
+        var auth: string = req.get('Authorization');
+        var verfy: string = req.get('verfy');
         return this.checkValue(auth, verfy);
     }
 
@@ -76,8 +76,8 @@ export class BaseRoute {
             return true;
         
         var str = this.hashString(verfy);
-        DHLog.d("verfy:" + str);
-        DHLog.d("auth :" + auth);
+        DHLog.d('verfy:' + str);
+        DHLog.d('auth :' + auth);
         return auth == str;
     }
 
@@ -86,7 +86,7 @@ export class BaseRoute {
      * @param str 
      */
     protected hashString(str: string): string {
-        return createHash("SHA256").update(BaseRoute.FEED_AUTH + str).digest("base64");
+        return createHash('SHA256').update(BaseRoute.FEED_AUTH + str).digest('base64');
     }
 
     /**
@@ -94,11 +94,11 @@ export class BaseRoute {
      * @param req 
      */
     protected printRequestInfo(req: Request) {
-        DHLog.d("<----------------- " + req.method + " ---------------->");
+        DHLog.d('<----------------- ' + req.method + ' ---------------->');
         DHLog.d(req.url);
-        DHLog.d("header:" + JSON.stringify(req.headers));
-        DHLog.d("body:" + JSON.stringify(req.body));
-        DHLog.d("<---------------------------------------->");
+        DHLog.d('header:' + JSON.stringify(req.headers));
+        DHLog.d('body:' + JSON.stringify(req.body));
+        DHLog.d('<---------------------------------------->');
     }
 
     /**
@@ -110,9 +110,9 @@ export class BaseRoute {
     public checkLogin(req: Request, res: Response, next: NextFunction): boolean {
         // // for test data
         // if (!req.session.account) {
-        //     req.session.name = "Darren Hsu";
-        //     req.session.account = "U9d844766ccf8f9ae7dcd16f14e47ca0d";
-        //     req.session.picture = "https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz";
+        //     req.session.name = 'Darren Hsu';
+        //     req.session.account = 'U9d844766ccf8f9ae7dcd16f14e47ca0d';
+        //     req.session.picture = 'https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz';
         // }
 
         var isLogin = false;
@@ -160,7 +160,7 @@ export class BaseRoute {
      * @param options 
      */
     public render(req: Request, res: Response, view: string, options?: Object) {
-        res.locals.BASE_URL = "/";
+        res.locals.BASE_URL = '/';
         res.locals.scripts = this.scripts;
         res.locals.title = this.title;
         res.render(view, options);
@@ -172,7 +172,7 @@ export class BaseRoute {
      * @param result 
      */
     protected sendJsonResult(res: Response ,result: any) {
-        res.setHeader("Content-type", "application/json");
+        res.setHeader('Content-type', 'application/json');
         res.json(result);
         res.end();
     }

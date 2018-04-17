@@ -6,7 +6,7 @@ const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
 class BaseRoute {
     constructor() {
-        this.title = "DHHealthPlatform";
+        this.title = 'DHHealthPlatform';
         this.scripts = [];
     }
     /**
@@ -14,7 +14,7 @@ class BaseRoute {
      * @param req
      */
     static getFullHostUrl(req) {
-        return req.protocol + "s://" + req.hostname;
+        return req.protocol + 's://' + req.hostname;
     }
     /**
      * @description 建立回傳結果物件
@@ -44,8 +44,8 @@ class BaseRoute {
      * @param req
      */
     checkHeader(req) {
-        var auth = req.get("Authorization");
-        var verfy = req.get("verfy");
+        var auth = req.get('Authorization');
+        var verfy = req.get('verfy');
         return this.checkValue(auth, verfy);
     }
     /**
@@ -57,8 +57,8 @@ class BaseRoute {
         if (auth == BaseRoute.FEED_AUTH_PASS)
             return true;
         var str = this.hashString(verfy);
-        DHLog_1.DHLog.d("verfy:" + str);
-        DHLog_1.DHLog.d("auth :" + auth);
+        DHLog_1.DHLog.d('verfy:' + str);
+        DHLog_1.DHLog.d('auth :' + auth);
         return auth == str;
     }
     /**
@@ -66,18 +66,18 @@ class BaseRoute {
      * @param str
      */
     hashString(str) {
-        return crypto_1.createHash("SHA256").update(BaseRoute.FEED_AUTH + str).digest("base64");
+        return crypto_1.createHash('SHA256').update(BaseRoute.FEED_AUTH + str).digest('base64');
     }
     /**
      * @description print request 呼叫內容
      * @param req
      */
     printRequestInfo(req) {
-        DHLog_1.DHLog.d("<----------------- " + req.method + " ---------------->");
+        DHLog_1.DHLog.d('<----------------- ' + req.method + ' ---------------->');
         DHLog_1.DHLog.d(req.url);
-        DHLog_1.DHLog.d("header:" + JSON.stringify(req.headers));
-        DHLog_1.DHLog.d("body:" + JSON.stringify(req.body));
-        DHLog_1.DHLog.d("<---------------------------------------->");
+        DHLog_1.DHLog.d('header:' + JSON.stringify(req.headers));
+        DHLog_1.DHLog.d('body:' + JSON.stringify(req.body));
+        DHLog_1.DHLog.d('<---------------------------------------->');
     }
     /**
      * @description 確認session 的登入狀態
@@ -88,9 +88,9 @@ class BaseRoute {
     checkLogin(req, res, next) {
         // // for test data
         // if (!req.session.account) {
-        //     req.session.name = "Darren Hsu";
-        //     req.session.account = "U9d844766ccf8f9ae7dcd16f14e47ca0d";
-        //     req.session.picture = "https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz";
+        //     req.session.name = 'Darren Hsu';
+        //     req.session.account = 'U9d844766ccf8f9ae7dcd16f14e47ca0d';
+        //     req.session.picture = 'https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz';
         // }
         var isLogin = false;
         if (req.session.account && req.session.name && req.session.picture) {
@@ -130,7 +130,7 @@ class BaseRoute {
      * @param options
      */
     render(req, res, view, options) {
-        res.locals.BASE_URL = "/";
+        res.locals.BASE_URL = '/';
         res.locals.scripts = this.scripts;
         res.locals.title = this.title;
         res.render(view, options);
@@ -141,12 +141,12 @@ class BaseRoute {
      * @param result
      */
     sendJsonResult(res, result) {
-        res.setHeader("Content-type", "application/json");
+        res.setHeader('Content-type', 'application/json');
         res.json(result);
         res.end();
     }
 }
-BaseRoute.AP_TITLE = "DHHealthPlatform";
-BaseRoute.FEED_AUTH = "Darren Hsu I Love You";
-BaseRoute.FEED_AUTH_PASS = "imdarren";
+BaseRoute.AP_TITLE = 'DHHealthPlatform';
+BaseRoute.FEED_AUTH = 'Darren Hsu I Love You';
+BaseRoute.FEED_AUTH_PASS = 'imdarren';
 exports.BaseRoute = BaseRoute;

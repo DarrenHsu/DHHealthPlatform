@@ -1,18 +1,18 @@
-import * as mongoose from "mongoose";
-import * as querystring from "querystring";
-import * as moment from "moment";
-import { DHDateFormat } from "../const/DHDateFormat";
-import { parseIso, format } from "ts-date/locale/en";
-import { NextFunction, Request, Response, Router } from "express";
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "./ResultCode";
-import { BaseRoute } from "./BaseRoute";
-import { DBHelper } from "../mongo/helper/DBHelper";
-import { RecordHelper } from "../mongo/helper/RecordHelper";
-import { UserHelper } from "../mongo/helper/UserHelper";
-import { IRecord } from "../mongo/interface/IRecord";
-import { IUser } from "../mongo/interface/IUser";
-import { DHAPI } from "../const/DHAPI";
-import { DHLog } from "../util/DHLog";
+import * as mongoose from 'mongoose';
+import * as querystring from 'querystring';
+import * as moment from 'moment';
+import { DHDateFormat } from '../const/DHDateFormat';
+import { parseIso, format } from 'ts-date/locale/en';
+import { NextFunction, Request, Response, Router } from 'express';
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
+import { BaseRoute } from './BaseRoute';
+import { DBHelper } from '../mongo/helper/DBHelper';
+import { RecordHelper } from '../mongo/helper/RecordHelper';
+import { UserHelper } from '../mongo/helper/UserHelper';
+import { IRecord } from '../mongo/interface/IRecord';
+import { IUser } from '../mongo/interface/IUser';
+import { DHAPI } from '../const/DHAPI';
+import { DHLog } from '../util/DHLog';
 
 declare type Location = {
     lat: string;
@@ -45,7 +45,7 @@ export class RecordRoute extends BaseRoute {
      * @param router 
      */
     public getRecord(router: Router) {
-        DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PATH);
+        DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PATH);
         router.get(DHAPI.RECORD_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -56,14 +56,14 @@ export class RecordRoute extends BaseRoute {
             });
         });
 
-        router.get(DHAPI.RECORD_PATH + "/:page", (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PATH + '/:page', (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
 
             var page = req.params.page;
             if (!page || page != parseInt(page, 10)) {
-                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+                return res.redirect(DHAPI.ERROR_PATH + '/' + CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
             
             this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
@@ -87,22 +87,22 @@ export class RecordRoute extends BaseRoute {
      * @param router 
      */
     public getPreviewRecord(router: Router) {
-        DHLog.d("[" + RecordRoute.name + ":create] " + DHAPI.RECORD_PREVIEW_PATH);
-        router.get(DHAPI.RECORD_PREVIEW_PATH + "/:id/:auth", (req: Request, res: Response, next: NextFunction) => {
+        DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PREVIEW_PATH);
+        router.get(DHAPI.RECORD_PREVIEW_PATH + '/:id/:auth', (req: Request, res: Response, next: NextFunction) => {
             if (req.params.id == null || req.params.auth == null) {
-                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_PARAMETER_ERROR);
+                return res.redirect(DHAPI.ERROR_PATH + '/' + CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
 
             let recordId = querystring.unescape(req.params.id);
             let auth = querystring.unescape(req.params.auth);
             
             if (!this.checkParam(auth, recordId)) {
-                return res.redirect(DHAPI.ERROR_PATH + "/" + CONNECTION_CODE.CC_AUTH_ERROR);
+                return res.redirect(DHAPI.ERROR_PATH + '/' + CONNECTION_CODE.CC_AUTH_ERROR);
             }
             
             this.recordHelper.findOne(recordId, (code, record) => {
                 if (code != MONGODB_CODE.MC_SUCCESS) {
-                    return res.redirect(DHAPI.ERROR_PATH + "/" + code);
+                    return res.redirect(DHAPI.ERROR_PATH + '/' + code);
                 }
 
                 this.userHelper.find(record.lineUserId, (code, user) => {
@@ -117,9 +117,9 @@ export class RecordRoute extends BaseRoute {
 
         var timeStr = [];
         for (let record of recds) {
-            var dateStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.DATE_FORMAT);
-            var startTimeStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
-            var endTimeStr = moment(record.endTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
+            var dateStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat.DATE_FORMAT);
+            var startTimeStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat.TIME_FORMAT);
+            var endTimeStr = moment(record.endTime).utcOffset('+0000').format(DHDateFormat.TIME_FORMAT);
             timeStr.push(
                 {
                     dateStr: dateStr,
@@ -140,14 +140,14 @@ export class RecordRoute extends BaseRoute {
             records: recds,
             times: timeStr
         };
-        this.render(req, res, "record/index", options);
+        this.render(req, res, 'record/index', options);
     }
 
     public renderPreviewRecord(req: Request, res: Response, next: NextFunction, user: IUser, record: IRecord) {
         this.title = BaseRoute.AP_TITLE;
-        var dateStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.DATE_FORMAT);
-        var startTimeStr = moment(record.startTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
-        var endTimeStr = moment(record.endTime).utcOffset("+0000").format(DHDateFormat.TIME_FORMAT);
+        var dateStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat.DATE_FORMAT);
+        var startTimeStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat.TIME_FORMAT);
+        var endTimeStr = moment(record.endTime).utcOffset('+0000').format(DHDateFormat.TIME_FORMAT);
         let options: Object = {
             auth: this.getAuth(req, DHAPI.RECORD_PATH, false),
             user: user.name,
@@ -162,6 +162,6 @@ export class RecordRoute extends BaseRoute {
             avgSpeed: record.avgSpeed.toFixed(1),
             locations: record.locations
         };
-        this.render(req, res, "record/publicIndex", options);
+        this.render(req, res, 'record/publicIndex', options);
     }
 }

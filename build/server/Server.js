@@ -26,7 +26,7 @@ const BaseRoute_1 = require("../routes/BaseRoute");
 var MongoStore = connectMongo(session);
 class Server {
     constructor() {
-        this.pkgjson = require("../../package.json");
+        this.pkgjson = require('../../package.json');
         DBHelper_1.DBHelper.openDB(this.pkgjson.mongodb[1].server);
         this.app = express();
         this.config();
@@ -44,36 +44,36 @@ class Server {
                     message: ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
                 }
             };
-            res.render("error/index", options);
+            res.render('error/index', options);
         });
     }
     static bootstrap() {
         return new Server();
     }
     config() {
-        this.app.use(express.static(path.join(__dirname, "../../public")));
-        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/js/")));
-        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/jquery/dist/")));
-        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/fullcalendar/dist/")));
-        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/moment/min/")));
-        this.app.use("/scripts", express.static(path.join(__dirname, "../../node_modules/popper.js/dist/")));
-        this.app.use("/styles", express.static(path.join(__dirname, "../../node_modules/bootstrap/dist/css/")));
-        this.app.use("/styles", express.static(path.join(__dirname, "../../node_modules/fullcalendar/dist/")));
-        this.app.set("views", path.join(__dirname, "../../views"));
-        this.app.set("view engine", "pug");
+        this.app.use(express.static(path.join(__dirname, '../../public')));
+        this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/js/')));
+        this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
+        this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/fullcalendar/dist/')));
+        this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/moment/min/')));
+        this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
+        this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/css/')));
+        this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/fullcalendar/dist/')));
+        this.app.set('views', path.join(__dirname, '../../views'));
+        this.app.set('view engine', 'pug');
         this.app.use(compression());
-        this.app.use(logger("dev"));
-        this.app.use(bodyParser.json({ limit: "10mb" }));
+        this.app.use(logger('dev'));
+        this.app.use(bodyParser.json({ limit: '10mb' }));
         this.app.use(bodyParser.urlencoded({
-            limit: "10mb",
+            limit: '10mb',
             extended: true,
             parameterLimit: 50000
         }));
-        this.app.use(cookieParser("SECRET_GOES_HERE"));
+        this.app.use(cookieParser('SECRET_GOES_HERE'));
         this.app.use(methodOverride());
         this.app.use(session({
-            secret: "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567",
-            store: new MongoStore({ url: "mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9" }),
+            secret: '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567',
+            store: new MongoStore({ url: 'mongodb://heroku_bdqnk9d9:ust40bgdnkarqua01oopsr1c24@ds125016.mlab.com:25016/heroku_bdqnk9d9' }),
             resave: false,
             saveUninitialized: true,
             cookie: { maxAge: 60 * 1000 }

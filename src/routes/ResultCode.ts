@@ -39,37 +39,37 @@ export enum MONGODB_CODE {
 }
 
 class ResultMsg {
-    public static LL_SUCCESS = "執行成功";
-    public static LL_PUSH_MSG_ERROR = "發送訊息失敗";
-    public static LL_LOGIN_ERROR = "LINE帳號登入失敗，請您確認您的帳號、密碼是否正確。";
-    public static LL_MOB_PROFILE_NOT_FOUND_ERROR = "請至手機版運動紀錄登入您的LINE帳號後在進行網站登入。";
+    public static LL_SUCCESS = '執行成功';
+    public static LL_PUSH_MSG_ERROR = '發送訊息失敗';
+    public static LL_LOGIN_ERROR = 'LINE帳號登入失敗，請您確認您的帳號、密碼是否正確。';
+    public static LL_MOB_PROFILE_NOT_FOUND_ERROR = '請至手機版運動紀錄登入您的LINE帳號後在進行網站登入。';
 
-    public static CC_SUCCESS = "執行成功";
-    public static CC_PARAMETER_ERROR = "輸入的參數有誤";
-    public static CC_REQUEST_BODY_ERROR = "傳入的資料有誤";
-    public static CC_AUTH_ERROR = "認證失敗";
-    public static CC_GENERAL_ERROR = "系統發生錯誤，不再繼續執行下去!";
-    public static CC_PAGE_NOT_FOUND_ERROR = "找不到此頁面"
+    public static CC_SUCCESS = '執行成功';
+    public static CC_PARAMETER_ERROR = '輸入的參數有誤';
+    public static CC_REQUEST_BODY_ERROR = '傳入的資料有誤';
+    public static CC_AUTH_ERROR = '認證失敗';
+    public static CC_GENERAL_ERROR = '系統發生錯誤，不再繼續執行下去!';
+    public static CC_PAGE_NOT_FOUND_ERROR = '找不到此頁面'
 
-    public static MC_DATA_EXIST = "資料已存在";
-    public static MC_SUCCESS = "執行成功";
-    public static MC_INSERT_ERROR = "新增失敗";
-    public static MC_UPDATE_ERROR = "更新失敗";
-    public static MC_SELECT_ERROR = "查詢失敗";
-    public static MC_DELETE_ERROR = "刪除失敗";
-    public static MC_INSERT_EXIST_ERROR = "新增了重覆的資料";
-    public static MC_UPDATE_NOT_FOUND_ERROR = "找不到可以更新的資料";
-    public static MC_DELETE_NOT_FOUND_ERROR = "找不到可以刪除的資料";
-    public static MC_COUNT_ERROR = "取得數量失敗";
-    public static MC_LIST_NO_DATA_ERROR = "查無任何資料";
-    public static MC_NO_USER_DATA_ERROR = "查無會員資料";
-    public static MC_NO_DATA_ERROR = "無傳入處理資料";
-    public static MC_NO_CONDITION_ERROR = "無傳入選擇條件";
+    public static MC_DATA_EXIST = '資料已存在';
+    public static MC_SUCCESS = '執行成功';
+    public static MC_INSERT_ERROR = '新增失敗';
+    public static MC_UPDATE_ERROR = '更新失敗';
+    public static MC_SELECT_ERROR = '查詢失敗';
+    public static MC_DELETE_ERROR = '刪除失敗';
+    public static MC_INSERT_EXIST_ERROR = '新增了重覆的資料';
+    public static MC_UPDATE_NOT_FOUND_ERROR = '找不到可以更新的資料';
+    public static MC_DELETE_NOT_FOUND_ERROR = '找不到可以刪除的資料';
+    public static MC_COUNT_ERROR = '取得數量失敗';
+    public static MC_LIST_NO_DATA_ERROR = '查無任何資料';
+    public static MC_NO_USER_DATA_ERROR = '查無會員資料';
+    public static MC_NO_DATA_ERROR = '無傳入處理資料';
+    public static MC_NO_CONDITION_ERROR = '無傳入選擇條件';
 
-    public static GC_SUCCESS = "資料已存在";
-    public static GC_AUTH_ERROR = "Google 授權失敗!";
-    public static GC_TOKEN_ERROR = "Google 取得授權碼失敗";
-    public static GC_YT_ERROR = "取得 Youtube 資源失敗";
+    public static GC_SUCCESS = '資料已存在';
+    public static GC_AUTH_ERROR = 'Google 授權失敗!';
+    public static GC_TOKEN_ERROR = 'Google 取得授權碼失敗';
+    public static GC_YT_ERROR = '取得 Youtube 資源失敗';
 }
 
 export class ResultCodeMsg {

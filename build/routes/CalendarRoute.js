@@ -24,7 +24,7 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getCalendar(router) {
-        DHLog_1.DHLog.d("[" + CalendarRoute.name + ":create] " + DHAPI_1.DHAPI.CALENDAR_PATH);
+        DHLog_1.DHLog.d('[' + CalendarRoute.name + ':create] ' + DHAPI_1.DHAPI.CALENDAR_PATH);
         router.get(DHAPI_1.DHAPI.CALENDAR_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -33,7 +33,7 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
         });
     }
     getCalendarFeed(router) {
-        DHLog_1.DHLog.d("[" + CalendarRoute.name + ":create] " + DHAPI_1.DHAPI.CALENDAR_FEED_PATH);
+        DHLog_1.DHLog.d('[' + CalendarRoute.name + ':create] ' + DHAPI_1.DHAPI.CALENDAR_FEED_PATH);
         router.get(DHAPI_1.DHAPI.CALENDAR_FEED_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -49,14 +49,14 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
                 for (let route of rts) {
                     if (!(route.startTime && route.endTime))
                         continue;
-                    var s = moment(route.startTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.DATE_FORMAT + " " + DHDateFormat_1.DHDateFormat.TIME_FORMAT);
-                    var e = moment(route.endTime).utcOffset("+0000").format(DHDateFormat_1.DHDateFormat.DATE_FORMAT + " " + DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+                    var s = moment(route.startTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.DATE_FORMAT + ' ' + DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+                    var e = moment(route.endTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.DATE_FORMAT + ' ' + DHDateFormat_1.DHDateFormat.TIME_FORMAT);
                     var event = {
                         id: route._id,
                         title: route.name,
                         start: s,
                         end: e,
-                        textColor: "#ffffff"
+                        textColor: '#ffffff'
                     };
                     events.push(event);
                 }
@@ -69,7 +69,7 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.CALENDAR_PATH, true)
         };
-        this.render(req, res, "calendar/index", options);
+        this.render(req, res, 'calendar/index', options);
     }
 }
 exports.CalendarRoute = CalendarRoute;

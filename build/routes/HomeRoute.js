@@ -17,7 +17,7 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getIndex(router) {
-        DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.ROOT_PATH);
+        DHLog_1.DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI_1.DHAPI.ROOT_PATH);
         router.get(DHAPI_1.DHAPI.ROOT_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -30,7 +30,7 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getHome(router) {
-        DHLog_1.DHLog.d("[" + HomeRoute.name + ":create] " + DHAPI_1.DHAPI.HOME_PATH);
+        DHLog_1.DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI_1.DHAPI.HOME_PATH);
         router.get(DHAPI_1.DHAPI.HOME_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -46,7 +46,7 @@ class HomeRoute extends BaseRoute_1.BaseRoute {
             name: req.session.name,
             picture: req.session.picture,
         };
-        this.render(req, res, "home/index", options);
+        this.render(req, res, 'home/index', options);
     }
 }
 exports.HomeRoute = HomeRoute;

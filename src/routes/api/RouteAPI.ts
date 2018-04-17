@@ -1,12 +1,12 @@
-import * as mongoose from "mongoose";
-import { NextFunction, Request, Response, Router } from "express";
-import { BaseAPI } from "./BaseAPI";
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from "../ResultCode";
-import { DBHelper } from "../../mongo/helper/DBHelper";
-import { RouteHelper } from "../../mongo/helper/RouteHelper";
-import { IRoute } from "../../mongo/interface/IRoute";
-import { DHAPI } from "../../const/DHAPI";
-import { DHLog } from "../../util/DHLog";
+import * as mongoose from 'mongoose';
+import { NextFunction, Request, Response, Router } from 'express';
+import { BaseAPI } from './BaseAPI';
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from '../ResultCode';
+import { DBHelper } from '../../mongo/helper/DBHelper';
+import { RouteHelper } from '../../mongo/helper/RouteHelper';
+import { IRoute } from '../../mongo/interface/IRoute';
+import { DHAPI } from '../../const/DHAPI';
+import { DHLog } from '../../util/DHLog';
 
 export class RouteAPI extends BaseAPI {
 
@@ -15,7 +15,7 @@ export class RouteAPI extends BaseAPI {
 
     public static create(router: Router) {
         let api = new RouteAPI(DBHelper.connection);
-        DHLog.d("[" + this.name + ":create] " + api.uri);
+        DHLog.d('[' + this.name + ':create] ' + api.uri);
         
         api.get(router);
         api.post(router);
