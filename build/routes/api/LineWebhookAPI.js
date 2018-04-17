@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
 const JwtDecode = require("jwt-decode");
 const axios_1 = require("axios");
+const qs = require("qs");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
@@ -152,7 +153,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
             var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
             /* Get Access Token */
-            var bodyFormData = querystring.stringify({
+            var bodyFormData = qs.stringify({
                 'grant_type': 'authorization_code',
                 'code': code,
                 'redirect_uri': channelId,
