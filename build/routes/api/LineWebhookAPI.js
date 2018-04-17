@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
 const JwtDecode = require("jwt-decode");
-const request = require("request");
+const axios_1 = require("axios");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
@@ -36,7 +36,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     }
     static create(router) {
         let api = new LineWebhookAPI(DBHelper_1.DBHelper.connection);
-        DHLog_1.DHLog.d("[" + this.name + ":create] " + api.uri);
+        DHLog_1.DHLog.d('[' + this.name + ':create] ' + api.uri);
         api.post(router);
         api.postRecord(router);
         api.posthMessage(router);
@@ -56,12 +56,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
      * @param req
      */
     isValidateSignature(req) {
-        if (bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers["x-line-signature"].toString())) {
+        if (bot_sdk_1.validateSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret, req.headers['x-line-signature'].toString())) {
             return true;
         }
         else {
-            DHLog_1.DHLog.ld("x-line-signature = " + req.headers["x-line-signature"]);
-            DHLog_1.DHLog.ld("x-line-signature = " + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
+            DHLog_1.DHLog.ld('x-line-signature = ' + req.headers['x-line-signature']);
+            DHLog_1.DHLog.ld('x-line-signature = ' + LineWebhookAPI.getSignature(JSON.stringify(req.body), this.middlewareConfig.channelSecret));
             return false;
         }
     }
@@ -72,9 +72,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     getChatId(source) {
         if (source && source.type) {
             switch (source.type) {
-                case "user":
+                case 'user':
                     return source.userId;
-                case "room":
+                case 'room':
                     return source.roomId;
                 default:
                     return source.groupId;
@@ -97,9 +97,9 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.helper.add(source, null);
         let client = new bot_sdk_1.Client(this.clientConfig);
         client.getProfile(source.lineUserId).then((profile) => {
-            DHLog_1.DHLog.ld("profile " + JSON.stringify(profile));
+            DHLog_1.DHLog.ld('profile ' + JSON.stringify(profile));
         }).catch((err) => {
-            DHLog_1.DHLog.ld("err " + err);
+            DHLog_1.DHLog.ld('err ' + err);
         });
     }
     /**
@@ -116,14 +116,14 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             return;
         }
         var chat = chats[0];
-        DHLog_1.DHLog.ld("push " + chat.chatId);
-        DHLog_1.DHLog.ld("message" + JSON.stringify(message));
+        DHLog_1.DHLog.ld('push ' + chat.chatId);
+        DHLog_1.DHLog.ld('message' + JSON.stringify(message));
         client.pushMessage(chat.chatId, message).then((value) => {
-            DHLog_1.DHLog.ld("push message success " + JSON.stringify(value));
+            DHLog_1.DHLog.ld('push message success ' + JSON.stringify(value));
             var array = chats.splice(0, 1);
             this.pushMessage(message, chats, callback);
         }).catch((err) => {
-            DHLog_1.DHLog.ld("" + err);
+            DHLog_1.DHLog.ld('' + err);
             var array = chats.splice(0, 1);
             this.pushMessage(message, chats, callback);
         });
@@ -134,73 +134,70 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
      */
     getAuthorization(router) {
         router.get(this.authorizationUrl, (req, res, next) => {
-            DHLog_1.DHLog.ld("step 1 Get Authorization start");
+            DHLog_1.DHLog.ld('step 1 Get Authorization start');
             var error = req.query.error;
             var error_description = req.query.error_description;
             if (error) {
-                DHLog_1.DHLog.ld("error " + error);
-                DHLog_1.DHLog.ld("error " + error_description);
-                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                DHLog_1.DHLog.ld('error ' + error);
+                DHLog_1.DHLog.ld('error ' + error_description);
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
             }
             var state = req.query.state;
             var code = req.query.code;
             if (!code) {
-                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
             }
             var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
             var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
             var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
             /* Get Access Token */
-            var option = {
+            var config = {
                 form: {
-                    "grant_type": "authorization_code",
-                    "code": code,
-                    "redirect_uri": authUrl,
-                    "client_id": channelId,
-                    "client_secret": channelSecret
+                    'grant_type': 'authorization_code',
+                    'code': code,
+                    'redirect_uri': authUrl,
+                    'client_id': channelId,
+                    'client_secret': channelSecret
                 },
                 headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             };
-            DHLog_1.DHLog.ld("step 2 Get accesstoken start " + JSON.stringify(option));
-            request.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, option, (error, response, body) => {
-                if (error) {
-                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+            DHLog_1.DHLog.ld('step 2 Get accesstoken start ' + JSON.stringify(config));
+            axios_1.default.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, config).then((response) => {
+                var json = response.data;
+                if (!json.id_token) {
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
                 }
-                else {
-                    var json = JSON.parse("" + body);
-                    if (!json.id_token) {
-                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
-                    }
-                    let jwt = JwtDecode(json.id_token);
-                    var sub = jwt["sub"];
-                    var name = jwt["name"];
-                    var picture = jwt["picture"];
-                    if (!sub || !name || !picture) {
-                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
-                    }
-                    DHLog_1.DHLog.ld("step 3  callback and check user " + sub);
-                    this.userHelper.find(sub, (code, result) => {
-                        if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
-                            DHLog_1.DHLog.ld("step 4  result " + sub);
-                            if (req.session.account) {
-                                req.session.time++;
-                            }
-                            else {
-                                req.session.account = sub;
-                                req.session.name = name;
-                                req.session.picture = picture;
-                                req.session.time = 1;
-                            }
-                            return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
+                let jwt = JwtDecode(json.id_token);
+                var sub = jwt['sub'];
+                var name = jwt['name'];
+                var picture = jwt['picture'];
+                if (!sub || !name || !picture) {
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
+                }
+                DHLog_1.DHLog.ld('step 3  callback and check user ' + sub);
+                this.userHelper.find(sub, (code, result) => {
+                    if (code == ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
+                        DHLog_1.DHLog.ld('step 4  result ' + sub);
+                        if (req.session.account) {
+                            req.session.time++;
                         }
                         else {
-                            return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                            req.session.account = sub;
+                            req.session.name = name;
+                            req.session.picture = picture;
+                            req.session.time = 1;
                         }
-                    });
-                }
+                        return res.redirect(DHAPI_1.DHAPI.ROOT_PATH);
+                    }
+                    else {
+                        return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_MOB_PROFILE_NOT_FOUND_ERROR);
+                    }
+                });
+            }).catch((error) => {
+                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
             });
         });
     }
@@ -214,7 +211,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 return;
             this.printRequestInfo(req);
             let event = req.body.events[0];
-            if (event.type === "message") {
+            if (event.type === 'message') {
                 var source = event.source;
                 var chatId = this.getChatId(source);
                 this.saveChat(source.userId, chatId, source.type);
@@ -257,7 +254,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
      * @param router
      */
     postRecord(router) {
-        router.get(this.recordUrl + "/:recordId", (req, res, next) => {
+        router.get(this.recordUrl + '/:recordId', (req, res, next) => {
             if (!this.checkHeader(req)) {
                 this.sendAuthFaild(res);
                 return;
@@ -273,7 +270,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     return;
                 }
                 this.chatroomHelper.find(record.lineUserId, (code, chats) => {
-                    let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + "/" + querystring.escape(record.recordId) + "/" + querystring.escape(this.hashString(record.recordId));
+                    let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
                     var message = {
                         type: 'text',
                         text: text
@@ -292,10 +289,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     replyMessageWithToken(token) {
         let client = new bot_sdk_1.Client(this.clientConfig);
         client.replyMessage(token, {
-            type: "text",
-            text: "你好，我是回覆機器人",
+            type: 'text',
+            text: '你好，我是回覆機器人',
         }).catch((err) => {
-            DHLog_1.DHLog.ld("replyMessage error " + err);
+            DHLog_1.DHLog.ld('replyMessage error ' + err);
         });
     }
 }

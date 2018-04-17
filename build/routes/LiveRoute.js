@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
 const google = require("google-auth-library");
-const request = require("request");
+const axios_1 = require("axios");
 const ResultCode_1 = require("./ResultCode");
 const DHAPI_1 = require("../const/DHAPI");
 const GoogleAPI_1 = require("../const/GoogleAPI");
@@ -21,12 +21,12 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
         this.clientId = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_id;
         this.clientSecret = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_secret;
         this.scopes = [
-            "https://www.googleapis.com/auth/youtube",
-            "https://www.googleapis.com/auth/youtube.force-ssl",
-            "https://www.googleapis.com/auth/youtube.upload",
-            "https://www.googleapis.com/auth/youtubepartner",
-            "https://www.googleapis.com/auth/youtubepartner-channel-audit",
-            "https://www.googleapis.com/auth/youtube.readonly"
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.force-ssl',
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtubepartner',
+            'https://www.googleapis.com/auth/youtubepartner-channel-audit',
+            'https://www.googleapis.com/auth/youtube.readonly'
         ];
     }
     static create(router) {
@@ -53,8 +53,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     createAuthHeader(token) {
         var option = {
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
+                Authorization: 'Bearer ' + token
             }
         };
         return option;
@@ -64,18 +63,18 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getGoogleAuth(router) {
-        DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH);
+        DHLog_1.DHLog.d('[' + LiveRoute.name + ':create] ' + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH);
         router.get(GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
             this.oauth2Client.getToken(req.query.code, (err, token) => {
                 if (err) {
-                    DHLog_1.DHLog.d("" + err);
-                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_AUTH_ERROR);
+                    DHLog_1.DHLog.d('' + err);
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.GOOGLE_CODE.GC_AUTH_ERROR);
                 }
                 if (!token) {
-                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
                 this.authHelper.findOne(req.session.account, (code, auth) => {
                     if (auth) {
@@ -107,7 +106,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getLive(router) {
-        DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI_1.DHAPI.LIVE_PATH);
+        DHLog_1.DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI_1.DHAPI.LIVE_PATH);
         router.get(DHAPI_1.DHAPI.LIVE_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -122,8 +121,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
      * @param router
      */
     getListWithToken(router) {
-        DHLog_1.DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI_1.DHAPI.LIVE_PATH);
-        router.get(DHAPI_1.DHAPI.LIVE_PATH + "/:pageToken", (req, res, next) => {
+        DHLog_1.DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI_1.DHAPI.LIVE_PATH);
+        router.get(DHAPI_1.DHAPI.LIVE_PATH + '/:pageToken', (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -157,7 +156,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     redirectGoogleAuth(req, res, next) {
         this.initOAuth2Client(req);
         const url = this.oauth2Client.generateAuthUrl({
-            access_type: "offline",
+            access_type: 'offline',
             scope: this.scopes
         });
         return res.redirect(url);
@@ -173,34 +172,29 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     getYTBroadcastList(token, req, res, next) {
         var ytPageToken = req.session.ytPageToken;
         var url = GoogleAPI_1.GoogleAPI.API_YOUTUBE +
-            "?key=" + this.clientId +
-            "&part=" + querystring.escape("id,snippet,contentDetails,status") +
-            "&maxResults=6" +
-            "&broadcastStatus=all";
+            '?key=' + this.clientId +
+            '&part=' + querystring.escape('id,snippet,contentDetails,status') +
+            '&maxResults=6' +
+            '&broadcastStatus=all';
         if (ytPageToken) {
-            DHLog_1.DHLog.d("ytPageToken " + ytPageToken);
-            url += "&pageToken=" + ytPageToken;
+            DHLog_1.DHLog.d('ytPageToken ' + ytPageToken);
+            url += '&pageToken=' + ytPageToken;
         }
-        request.get(url, this.createAuthHeader(token), (error, response, body) => {
-            if (error) {
-                DHLog_1.DHLog.d("youtube error " + error);
-                return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + "/" + ResultCode_1.GOOGLE_CODE.GC_YT_ERROR);
-            }
-            else {
-                var jsonBody = JSON.parse(body);
-                var items = jsonBody.items;
-                var totalResults = jsonBody.pageInfo.totalResults;
-                var resultsPerPage = jsonBody.pageInfo.resultsPerPage;
-                var prevPageToken = jsonBody.prevPageToken;
-                var nextPageToken = jsonBody.nextPageToken;
-                DHLog_1.DHLog.d("" + body);
-                return this.renderLive(req, res, next, items, nextPageToken, prevPageToken);
-            }
+        axios_1.default.get(url, this.createAuthHeader(token)).then((response) => {
+            var jsonBody = response.data;
+            var items = jsonBody.items;
+            var totalResults = jsonBody.pageInfo.totalResults;
+            var resultsPerPage = jsonBody.pageInfo.resultsPerPage;
+            var prevPageToken = jsonBody.prevPageToken;
+            var nextPageToken = jsonBody.nextPageToken;
+            return this.renderLive(req, res, next, items, nextPageToken, prevPageToken);
+        }).catch((error) => {
+            DHLog_1.DHLog.d('yt error ' + error);
+            return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.GOOGLE_CODE.GC_YT_ERROR);
         });
     }
     renderLive(req, res, next, items, nxtToken, preToken) {
-        DHLog_1.DHLog.d("page index " + req.session.ytIndex);
-        DHLog_1.DHLog.d("page index " + parseInt(req.session.ytIndex));
+        DHLog_1.DHLog.d('video index ' + req.session.ytIndex);
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         let options = {
             auth: this.getAuth(req, DHAPI_1.DHAPI.LIVE_PATH, true),
@@ -212,7 +206,7 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
             nxtToken: nxtToken,
             playIndex: parseInt(req.session.ytIndex)
         };
-        this.render(req, res, "live/index", options);
+        this.render(req, res, 'live/index', options);
     }
 }
 exports.LiveRoute = LiveRoute;

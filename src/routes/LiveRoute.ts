@@ -1,24 +1,24 @@
-import * as mongoose from "mongoose";
-import * as querystring from "querystring";
-import * as bodyParser from "body-parser";
-import * as google from "google-auth-library";
-import * as request from "request";
-import { DHDateFormat } from "../const/DHDateFormat";
-import { parseIso, format } from "ts-date/locale/en";
-import { NextFunction, Request, Response, Router } from "express";
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, GOOGLE_CODE } from "./ResultCode";
-import { DHAPI } from "../const/DHAPI";
-import { GoogleAPI } from "../const/GoogleAPI";
-import { DHLog } from "../util/DHLog";
-import { BaseRoute } from "./BaseRoute";
-import { DBHelper } from "../mongo/helper/DBHelper";
-import { RecordHelper } from "../mongo/helper/RecordHelper";
-import { UserHelper } from "../mongo/helper/UserHelper";
-import { AuthHelper } from "../mongo/helper/AuthHelper";
-import { IRecord } from "../mongo/interface/IRecord";
-import { IUser } from "../mongo/interface/IUser";
-import { IAuth } from "../mongo/interface/IAuth";
-import { urlencoded, json } from "body-parser";
+import * as mongoose from 'mongoose';
+import * as querystring from 'querystring';
+import * as bodyParser from 'body-parser';
+import * as google from 'google-auth-library';
+import Axios from 'axios';
+import { DHDateFormat } from '../const/DHDateFormat';
+import { parseIso, format } from 'ts-date/locale/en';
+import { NextFunction, Request, Response, Router } from 'express';
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, GOOGLE_CODE } from './ResultCode';
+import { DHAPI } from '../const/DHAPI';
+import { GoogleAPI } from '../const/GoogleAPI';
+import { DHLog } from '../util/DHLog';
+import { BaseRoute } from './BaseRoute';
+import { DBHelper } from '../mongo/helper/DBHelper';
+import { RecordHelper } from '../mongo/helper/RecordHelper';
+import { UserHelper } from '../mongo/helper/UserHelper';
+import { AuthHelper } from '../mongo/helper/AuthHelper';
+import { IRecord } from '../mongo/interface/IRecord';
+import { IUser } from '../mongo/interface/IUser';
+import { IAuth } from '../mongo/interface/IAuth';
+import { urlencoded, json } from 'body-parser';
 
 export class LiveRoute extends BaseRoute {
     
@@ -42,12 +42,12 @@ export class LiveRoute extends BaseRoute {
         this.clientId = DHAPI.pkgjson.googleapis.auth.client_id;
         this.clientSecret = DHAPI.pkgjson.googleapis.auth.client_secret;
         this.scopes = [
-            "https://www.googleapis.com/auth/youtube",
-            "https://www.googleapis.com/auth/youtube.force-ssl",
-            "https://www.googleapis.com/auth/youtube.upload",
-            "https://www.googleapis.com/auth/youtubepartner",
-            "https://www.googleapis.com/auth/youtubepartner-channel-audit",
-            "https://www.googleapis.com/auth/youtube.readonly"
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.force-ssl',
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtubepartner',
+            'https://www.googleapis.com/auth/youtubepartner-channel-audit',
+            'https://www.googleapis.com/auth/youtube.readonly'
         ];
     }
     
@@ -83,8 +83,7 @@ export class LiveRoute extends BaseRoute {
     private createAuthHeader(token: string): any {
         var option = {
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
+                Authorization: 'Bearer ' + token
             }
         };
         return option;
@@ -95,7 +94,7 @@ export class LiveRoute extends BaseRoute {
      * @param router 
      */
     public getGoogleAuth(router: Router) {
-        DHLog.d("[" + LiveRoute.name + ":create] " + GoogleAPI.API_GOOGLE_AUTH_PATH);
+        DHLog.d('[' + LiveRoute.name + ':create] ' + GoogleAPI.API_GOOGLE_AUTH_PATH);
         router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -103,12 +102,12 @@ export class LiveRoute extends BaseRoute {
 
             this.oauth2Client.getToken(req.query.code, (err, token) => {
                 if (err) {
-                    DHLog.d("" + err);
-                    return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_AUTH_ERROR);
+                    DHLog.d('' + err);
+                    return res.redirect(DHAPI.ERROR_PATH + '/' + GOOGLE_CODE.GC_AUTH_ERROR);
                 }
 
                 if (!token) {
-                    return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_TOKEN_ERROR);
+                    return res.redirect(DHAPI.ERROR_PATH + '/' + GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
 
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
@@ -144,7 +143,7 @@ export class LiveRoute extends BaseRoute {
      * @param router 
      */
     public getLive(router: Router) {
-        DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI.LIVE_PATH);
+        DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI.LIVE_PATH);
         router.get(DHAPI.LIVE_PATH, (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
@@ -162,8 +161,8 @@ export class LiveRoute extends BaseRoute {
      * @param router 
      */
     public getListWithToken(router: Router) {
-        DHLog.d("[" + LiveRoute.name + ":create] " + DHAPI.LIVE_PATH);
-        router.get(DHAPI.LIVE_PATH + "/:pageToken", (req: Request, res: Response, next: NextFunction) => {
+        DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI.LIVE_PATH);
+        router.get(DHAPI.LIVE_PATH + '/:pageToken', (req: Request, res: Response, next: NextFunction) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -200,7 +199,7 @@ export class LiveRoute extends BaseRoute {
         this.initOAuth2Client(req);
             
         const url = this.oauth2Client.generateAuthUrl({
-            access_type: "offline",
+            access_type: 'offline',
             scope: this.scopes
         });
 
@@ -219,36 +218,32 @@ export class LiveRoute extends BaseRoute {
         var ytPageToken = req.session.ytPageToken;
 
         var url = GoogleAPI.API_YOUTUBE + 
-        "?key=" + this.clientId + 
-        "&part=" + querystring.escape("id,snippet,contentDetails,status") + 
-        "&maxResults=6" + 
-        "&broadcastStatus=all";
-        
-        if (ytPageToken) {
-            DHLog.d("ytPageToken " + ytPageToken);
-            url += "&pageToken=" + ytPageToken;
-        }
+        '?key=' + this.clientId + 
+        '&part=' + querystring.escape('id,snippet,contentDetails,status') + 
+        '&maxResults=6' + 
+        '&broadcastStatus=all';
 
-        request.get(url, this.createAuthHeader(token),  (error, response, body) => {
-            if (error) {
-                DHLog.d("youtube error " + error);
-                return res.redirect(DHAPI.ERROR_PATH + "/" + GOOGLE_CODE.GC_YT_ERROR);
-            }else {
-                var jsonBody = JSON.parse(body);
-                var items = jsonBody.items;
-                var totalResults = jsonBody.pageInfo.totalResults;
-                var resultsPerPage = jsonBody.pageInfo.resultsPerPage;
-                var prevPageToken = jsonBody.prevPageToken;
-                var nextPageToken = jsonBody.nextPageToken;
-                DHLog.d("" + body);
-                return this.renderLive(req, res, next, items, nextPageToken, prevPageToken);
-            }
+        if (ytPageToken) {
+            DHLog.d('ytPageToken ' + ytPageToken);
+            url += '&pageToken=' + ytPageToken;
+        }
+        
+        Axios.get(url, this.createAuthHeader(token)).then((response) => {
+            var jsonBody = response.data;
+            var items = jsonBody.items;
+            var totalResults = jsonBody.pageInfo.totalResults;
+            var resultsPerPage = jsonBody.pageInfo.resultsPerPage;
+            var prevPageToken = jsonBody.prevPageToken;
+            var nextPageToken = jsonBody.nextPageToken;
+            return this.renderLive(req, res, next, items, nextPageToken, prevPageToken);
+        }).catch((error) => {
+            DHLog.d('yt error ' + error);
+            return res.redirect(DHAPI.ERROR_PATH + '/' + GOOGLE_CODE.GC_YT_ERROR);
         });
     }
 
     public renderLive(req: Request, res: Response, next: NextFunction, items: JSON[], nxtToken: string, preToken: string) {
-        DHLog.d("page index " + req.session.ytIndex);
-        DHLog.d("page index " + parseInt(req.session.ytIndex));
+        DHLog.d('video index ' + req.session.ytIndex);
         this.title = BaseRoute.AP_TITLE;
         let options: Object = {
             auth: this.getAuth(req, DHAPI.LIVE_PATH, true),
@@ -260,6 +255,6 @@ export class LiveRoute extends BaseRoute {
             nxtToken: nxtToken,
             playIndex: parseInt(req.session.ytIndex)
         };
-        this.render(req, res, "live/index", options);
+        this.render(req, res, 'live/index', options);
     }
 }
