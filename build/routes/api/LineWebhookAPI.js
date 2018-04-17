@@ -156,7 +156,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             var bodyFormData = qs.stringify({
                 'grant_type': 'authorization_code',
                 'code': code,
-                'redirect_uri': channelId,
+                'redirect_uri': authUrl,
+                'client_id': channelId,
                 'client_secret': channelSecret
             });
             DHLog_1.DHLog.ld('body ' + bodyFormData);
