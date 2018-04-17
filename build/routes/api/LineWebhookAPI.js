@@ -197,6 +197,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     }
                 });
             }).catch((error) => {
+                DHLog_1.DHLog.ld('error ' + error);
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
             });
         });

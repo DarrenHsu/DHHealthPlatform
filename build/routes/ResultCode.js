@@ -44,7 +44,7 @@ class ResultMsg {
 }
 ResultMsg.LL_SUCCESS = "執行成功";
 ResultMsg.LL_PUSH_MSG_ERROR = "發送訊息失敗";
-ResultMsg.LL_LOGIN_ERROR = "LINE帳號登入失敗，請您確認您的帳園密碼是否正確。";
+ResultMsg.LL_LOGIN_ERROR = "LINE帳號登入失敗，請您確認您的帳號、密碼是否正確。";
 ResultMsg.LL_MOB_PROFILE_NOT_FOUND_ERROR = "請至手機版運動紀錄登入您的LINE帳號後在進行網站登入。";
 ResultMsg.CC_SUCCESS = "執行成功";
 ResultMsg.CC_PARAMETER_ERROR = "輸入的參數有誤";

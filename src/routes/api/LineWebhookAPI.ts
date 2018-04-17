@@ -230,6 +230,7 @@ export class LineWebhookAPI extends BaseAPI {
                     }
                 });
             }).catch((error) => {
+                DHLog.ld('error ' + error);
                 return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
             });
         });
