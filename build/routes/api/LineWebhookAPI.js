@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
 const JwtDecode = require("jwt-decode");
-const axios_1 = require("axios");
 const qs = require("qs");
+const axios_1 = require("axios");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
@@ -159,7 +159,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 'redirect_uri': channelId,
                 'client_secret': channelSecret
             });
-            DHLog_1.DHLog.ld('body $(bodyFormData)');
+            DHLog_1.DHLog.ld('body ' + bodyFormData);
             var config = {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'

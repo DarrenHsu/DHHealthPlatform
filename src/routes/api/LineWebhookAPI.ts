@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import * as querystring from 'querystring';
 import * as JwtDecode from 'jwt-decode';
-import Axios from 'axios';
 import * as qs from 'qs';
+import Axios from 'axios';
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from '@line/bot-sdk';
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from '../ResultCode';
 import { NextFunction, Request, Response, Router } from 'express';
@@ -190,7 +190,7 @@ export class LineWebhookAPI extends BaseAPI {
                 'client_secret': channelSecret
             });
 
-            DHLog.ld('body $(bodyFormData)');
+            DHLog.ld('body ' + bodyFormData);
             
             var config = {
                 headers: {
