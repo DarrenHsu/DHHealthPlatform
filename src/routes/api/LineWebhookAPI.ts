@@ -183,12 +183,14 @@ export class LineWebhookAPI extends BaseAPI {
             var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
 
             /* Get Access Token */
-            var bodyFormData = {
+            var bodyFormData = qs.stringify({
                 'grant_type': 'authorization_code',
                 'code': code,
                 'redirect_uri': channelId,
                 'client_secret': channelSecret
-            };
+            });
+
+            DHLog.ld('body $(bodyFormData)');
             
             var config = {
                 headers: {
