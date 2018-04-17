@@ -183,12 +183,12 @@ export class LineWebhookAPI extends BaseAPI {
             var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
 
             /* Get Access Token */
-            var bodyFormData = qs.stringify({
+            var bodyFormData = {
                 'grant_type': 'authorization_code',
                 'code': code,
                 'redirect_uri': channelId,
                 'client_secret': channelSecret
-            });
+            };
             
             var config = {
                 headers: {
@@ -197,7 +197,8 @@ export class LineWebhookAPI extends BaseAPI {
             };
 
             DHLog.ld('step 2 Get accesstoken start ' + JSON.stringify(config));
-            Axios.post(LINEAPI.API_ACCESS_TOKEN, bodyFormData   , config).then((response) => {
+            Axios.post(LINEAPI.API_ACCESS_TOKEN, bodyFormData, config).then((response) => {
+                DHLog.ld('response $(respons.data)');
                 var json = response.data;
                 if (!json.id_token) {
                     return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);

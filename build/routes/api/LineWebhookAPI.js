@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
 const JwtDecode = require("jwt-decode");
 const axios_1 = require("axios");
-const qs = require("qs");
 const bot_sdk_1 = require("@line/bot-sdk");
 const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
@@ -153,12 +152,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
             var channelSecret = DHAPI_1.DHAPI.pkgjson.linelogin.channelSecret;
             /* Get Access Token */
-            var bodyFormData = qs.stringify({
+            var bodyFormData = {
                 'grant_type': 'authorization_code',
                 'code': code,
                 'redirect_uri': channelId,
                 'client_secret': channelSecret
-            });
+            };
             var config = {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -166,6 +165,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             };
             DHLog_1.DHLog.ld('step 2 Get accesstoken start ' + JSON.stringify(config));
             axios_1.default.post(LINEAPI_1.LINEAPI.API_ACCESS_TOKEN, bodyFormData, config).then((response) => {
+                DHLog_1.DHLog.ld('response $(respons.data)');
                 var json = response.data;
                 if (!json.id_token) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
