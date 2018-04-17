@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as querystring from 'querystring';
 import * as JwtDecode from 'jwt-decode';
+import * as qs from 'qs';
 import Axios from 'axios';
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from '@line/bot-sdk';
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from '../ResultCode';
@@ -182,12 +183,12 @@ export class LineWebhookAPI extends BaseAPI {
             var channelSecret = DHAPI.pkgjson.linelogin.channelSecret;
 
             /* Get Access Token */
-            var bodyFormData = {
+            var bodyFormData = qs.stringify({
                 'grant_type': 'authorization_code',
                 'code': code,
                 'redirect_uri': channelId,
                 'client_secret': channelSecret
-            };
+            });
 
             DHLog.ld('body ' + bodyFormData);
             
