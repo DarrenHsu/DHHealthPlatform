@@ -4,6 +4,9 @@ const crypto_1 = require("crypto");
 const ResultCode_1 = require("./ResultCode");
 const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
+/**
+ * @description 路由相關父類別
+ */
 class BaseRoute {
     constructor() {
         this.title = 'DHHealthPlatform';

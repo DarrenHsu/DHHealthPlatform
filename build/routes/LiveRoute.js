@@ -4,14 +4,17 @@ const querystring = require("querystring");
 const google = require("google-auth-library");
 const axios_1 = require("axios");
 const ResultCode_1 = require("./ResultCode");
+const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
 const GoogleAPI_1 = require("../const/GoogleAPI");
 const DHLog_1 = require("../util/DHLog");
-const BaseRoute_1 = require("./BaseRoute");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../mongo/helper/RecordHelper");
 const UserHelper_1 = require("../mongo/helper/UserHelper");
 const AuthHelper_1 = require("../mongo/helper/AuthHelper");
+/**
+ * @description 直播路由控制
+ */
 class LiveRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();

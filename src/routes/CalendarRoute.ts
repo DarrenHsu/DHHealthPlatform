@@ -1,16 +1,23 @@
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
 import { NextFunction, Request, Response, Router, IRoute } from 'express';
-import { DHDateFormat } from '../const/DHDateFormat';
-import { DHAPI } from '../const/DHAPI';
-import { DHLog } from '../util/DHLog';
-import { BaseRoute } from './BaseRoute';
-import { LINEAPI } from '../const/LINEAPI';
-import { DBHelper } from '../mongo/helper/DBHelper';
-import { RouteHelper } from '../mongo/helper/RouteHelper';
-import { UserHelper } from '../mongo/helper/UserHelper';
-import { IEvent } from './interface/IEvent';
 
+import { DHDateFormat }     from '../const/DHDateFormat';
+import { DHAPI }            from '../const/DHAPI';
+import { LINEAPI }          from '../const/LINEAPI';
+
+import { DHLog }            from '../util/DHLog';
+
+import { BaseRoute }        from './BaseRoute';
+import { IEvent }           from './interface/IEvent';
+
+import { DBHelper }         from '../mongo/helper/DBHelper';
+import { RouteHelper }      from '../mongo/helper/RouteHelper';
+import { UserHelper }       from '../mongo/helper/UserHelper';
+
+/**
+ * @description 行事曆路由控制
+ */
 export class CalendarRoute extends BaseRoute {
 
     private routeHelper: RouteHelper;

@@ -1,12 +1,18 @@
 import { createHmac, createHash } from 'crypto';
 import { NextFunction, Request, Response } from 'express';
-import { IResult } from './interface/IResult';
-import { IRecord } from '../mongo/interface/IRecord';
-import { ResultCodeMsg } from  './ResultCode';
-import { DHAPI } from '../const/DHAPI';
-import { DHLog } from '../util/DHLog';
-import { IAuth } from './interface/IAuth';
 
+import { ResultCodeMsg }    from './ResultCode';
+import { IAuth }            from './interface/IAuth';
+import { IResult }          from './interface/IResult';
+
+import { IRecord }          from '../mongo/interface/IRecord';
+
+import { DHAPI }            from '../const/DHAPI';
+import { DHLog }            from '../util/DHLog';
+
+/**
+ * @description 路由相關父類別
+ */
 export class BaseRoute {
 
     public static AP_TITLE: string = 'DHHealthPlatform';

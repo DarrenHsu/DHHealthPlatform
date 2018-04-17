@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const RouteSchema_1 = require("../schemas/RouteSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description 行程資料存取控制
+ */
 class RouteHelper {
     constructor(connection) {
         if (!RouteHelper.model) {

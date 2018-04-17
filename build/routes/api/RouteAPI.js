@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const DHAPI_1 = require("../../const/DHAPI");
+const DHLog_1 = require("../../util/DHLog");
 const BaseAPI_1 = require("./BaseAPI");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const RouteHelper_1 = require("../../mongo/helper/RouteHelper");
-const DHAPI_1 = require("../../const/DHAPI");
-const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description 行程路線相關 api
+ */
 class RouteAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();

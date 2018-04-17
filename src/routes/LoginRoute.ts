@@ -1,10 +1,15 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { LINE_CODE, ResultCodeMsg } from '../routes/ResultCode';
-import { DHLog } from '../util/DHLog';
-import { BaseRoute } from './BaseRoute';
-import { DHAPI } from '../const/DHAPI';
-import { LINEAPI } from '../const/LINEAPI';
 
+import { LINE_CODE, ResultCodeMsg } from '../routes/ResultCode';
+import { BaseRoute }    from './BaseRoute';
+
+import { DHLog }        from '../util/DHLog';
+import { DHAPI }        from '../const/DHAPI';
+import { LINEAPI }      from '../const/LINEAPI';
+
+/**
+ * @description 登入路由控制
+ */
 export class LoginRoute extends BaseRoute {
     
     constructor() {

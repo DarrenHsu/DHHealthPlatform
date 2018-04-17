@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ResultCode_1 = require("./ResultCode");
 const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
-const ResultCode_1 = require("./ResultCode");
+/**
+ * @description 錯誤路由控制
+ */
 class ErrorRoute extends BaseRoute_1.BaseRoute {
     constructor() {
         super();

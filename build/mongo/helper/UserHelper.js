@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UserSchema_1 = require("../schemas/UserSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description 使用者資料存取控制
+ */
 class UserHelper {
     constructor(connection) {
         if (!UserHelper.model) {

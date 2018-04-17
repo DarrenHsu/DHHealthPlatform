@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const RecordSchema_1 = require("../schemas/RecordSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description 紀錄資料存取控制
+ */
 class RecordHelper {
     constructor(connection) {
         if (!RecordHelper.model) {

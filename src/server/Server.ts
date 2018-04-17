@@ -10,26 +10,31 @@ import * as errorHandler from 'errorhandler';
 import * as methodOverride from 'method-override';
 import * as mongoose from 'mongoose';
 
-import { DHLog } from '../util/DHLog';
-import { DBHelper } from  '../mongo/helper/DBHelper';
-
-import { HomeRoute } from '../routes/HomeRoute';
-import { CalendarRoute } from '../routes/CalendarRoute';
-import { LoginRoute } from '../routes/LoginRoute';
-import { RecordRoute } from '../routes/RecordRoute';
-import { LiveRoute } from '../routes/LiveRoute';
-import { ErrorRoute } from '../routes/ErrorRoute';
-
-import { DHAPI } from '../const/DHAPI';
-import { RecordAPI } from '../routes/api/RecordAPI';
-import { UserAPI } from '../routes/api/UserAPI';
-import { RouteAPI } from '../routes/api/RouteAPI';
-import { LineWebhookAPI } from '../routes/api/LineWebhookAPI'
 import { CONNECTION_CODE, ResultCodeMsg } from '../routes/ResultCode';
-import { BaseRoute } from '../routes/BaseRoute';
+
+import { DHLog }            from '../util/DHLog';
+
+import { DHAPI }            from '../const/DHAPI';
+
+import { DBHelper }         from '../mongo/helper/DBHelper';
+
+import { BaseRoute }        from '../routes/BaseRoute';
+import { HomeRoute }        from '../routes/HomeRoute';
+import { CalendarRoute }    from '../routes/CalendarRoute';
+import { LoginRoute }       from '../routes/LoginRoute';
+import { RecordRoute }      from '../routes/RecordRoute';
+import { LiveRoute }        from '../routes/LiveRoute';
+import { ErrorRoute }       from '../routes/ErrorRoute';
+import { RecordAPI }        from '../routes/api/RecordAPI';
+import { UserAPI }          from '../routes/api/UserAPI';
+import { RouteAPI }         from '../routes/api/RouteAPI';
+import { LineWebhookAPI }   from '../routes/api/LineWebhookAPI'
 
 var MongoStore = connectMongo(session);
 
+/**
+ * @description 伺服器主要程式控制
+ */
 export class Server {
     private pkgjson = require('../../package.json');
     public app: express.Application;

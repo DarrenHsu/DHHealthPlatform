@@ -1,12 +1,17 @@
 import * as mongoose from 'mongoose';
-import { IRecord } from '../interface/IRecord';
-import { RecordSchema } from '../schemas/RecordSchema';
-import { IRecordModel } from '../models/model';
-import { BaseHelper } from './BaseHelper';
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog } from '../../util/DHLog';
-import { listenerCount } from 'cluster';
 
+import { BaseHelper }       from './BaseHelper';
+
+import { IRecord }          from '../interface/IRecord';
+import { RecordSchema }     from '../schemas/RecordSchema';
+import { IRecordModel }     from '../models/model';
+
+import { MONGODB_CODE }     from '../../routes/ResultCode';
+import { DHLog }            from '../../util/DHLog';
+
+/**
+ * @description 紀錄資料存取控制
+ */
 export class RecordHelper implements BaseHelper {
     
     private static model: mongoose.Model<IRecordModel>;

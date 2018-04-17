@@ -1,25 +1,31 @@
 import * as mongoose from 'mongoose';
 import * as querystring from 'querystring';
+import { NextFunction, Request, Response, Router } from 'express';
 import * as bodyParser from 'body-parser';
 import * as google from 'google-auth-library';
 import Axios from 'axios';
-import { DHDateFormat } from '../const/DHDateFormat';
 import { parseIso, format } from 'ts-date/locale/en';
-import { NextFunction, Request, Response, Router } from 'express';
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, GOOGLE_CODE } from './ResultCode';
-import { DHAPI } from '../const/DHAPI';
-import { GoogleAPI } from '../const/GoogleAPI';
-import { DHLog } from '../util/DHLog';
-import { BaseRoute } from './BaseRoute';
-import { DBHelper } from '../mongo/helper/DBHelper';
-import { RecordHelper } from '../mongo/helper/RecordHelper';
-import { UserHelper } from '../mongo/helper/UserHelper';
-import { AuthHelper } from '../mongo/helper/AuthHelper';
-import { IRecord } from '../mongo/interface/IRecord';
-import { IUser } from '../mongo/interface/IUser';
-import { IAuth } from '../mongo/interface/IAuth';
-import { urlencoded, json } from 'body-parser';
 
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, GOOGLE_CODE } from './ResultCode';
+
+import { BaseRoute }        from './BaseRoute';
+
+import { DHDateFormat }     from '../const/DHDateFormat';
+import { DHAPI }            from '../const/DHAPI';
+import { GoogleAPI }        from '../const/GoogleAPI';
+import { DHLog }            from '../util/DHLog';
+
+import { DBHelper }         from '../mongo/helper/DBHelper';
+import { RecordHelper }     from '../mongo/helper/RecordHelper';
+import { UserHelper }       from '../mongo/helper/UserHelper';
+import { AuthHelper }       from '../mongo/helper/AuthHelper';
+import { IRecord }          from '../mongo/interface/IRecord';
+import { IUser }            from '../mongo/interface/IUser';
+import { IAuth }            from '../mongo/interface/IAuth';
+
+/**
+ * @description 直播路由控制
+ */
 export class LiveRoute extends BaseRoute {
     
     private userHelper: UserHelper;

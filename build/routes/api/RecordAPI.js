@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseAPI_1 = require("./BaseAPI");
-const DBHelper_1 = require("../../mongo/helper/DBHelper");
-const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
 const DHAPI_1 = require("../../const/DHAPI");
 const DHLog_1 = require("../../util/DHLog");
+const DBHelper_1 = require("../../mongo/helper/DBHelper");
+const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
+/**
+ * @description 紀錄相關 api
+ */
 class RecordAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();

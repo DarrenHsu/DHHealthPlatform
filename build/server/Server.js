@@ -9,21 +9,24 @@ const compression = require("compression");
 const logger = require("morgan");
 const path = require("path");
 const methodOverride = require("method-override");
+const ResultCode_1 = require("../routes/ResultCode");
+const DHAPI_1 = require("../const/DHAPI");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
+const BaseRoute_1 = require("../routes/BaseRoute");
 const HomeRoute_1 = require("../routes/HomeRoute");
 const CalendarRoute_1 = require("../routes/CalendarRoute");
 const LoginRoute_1 = require("../routes/LoginRoute");
 const RecordRoute_1 = require("../routes/RecordRoute");
 const LiveRoute_1 = require("../routes/LiveRoute");
 const ErrorRoute_1 = require("../routes/ErrorRoute");
-const DHAPI_1 = require("../const/DHAPI");
 const RecordAPI_1 = require("../routes/api/RecordAPI");
 const UserAPI_1 = require("../routes/api/UserAPI");
 const RouteAPI_1 = require("../routes/api/RouteAPI");
 const LineWebhookAPI_1 = require("../routes/api/LineWebhookAPI");
-const ResultCode_1 = require("../routes/ResultCode");
-const BaseRoute_1 = require("../routes/BaseRoute");
 var MongoStore = connectMongo(session);
+/**
+ * @description 伺服器主要程式控制
+ */
 class Server {
     constructor() {
         this.pkgjson = require('../../package.json');

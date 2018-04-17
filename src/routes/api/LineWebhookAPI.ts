@@ -1,25 +1,33 @@
 import * as mongoose from 'mongoose';
 import * as querystring from 'querystring';
+import { NextFunction, Request, Response, Router } from 'express';
 import * as JwtDecode from 'jwt-decode';
 import * as qs from 'qs';
 import Axios from 'axios';
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from '@line/bot-sdk';
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from '../ResultCode';
-import { NextFunction, Request, Response, Router } from 'express';
-import { createHmac } from 'crypto';
-import { BaseAPI } from './BaseAPI';
-import { BaseRoute } from './../BaseRoute';
-import { IChatroom } from  '../../mongo/interface/IChatroom';
-import { DBHelper } from '../../mongo/helper/DBHelper';
-import { ChatroomHelper } from '../../mongo/helper/ChatroomHelper';
-import { UserHelper } from '../../mongo/helper/UserHelper';
-import { RecordHelper } from '../../mongo/helper/RecordHelper';
 import { error, print } from 'util';
-import { DHLog } from '../../util/DHLog';
-import { DHAPI } from '../../const/DHAPI';
-import { IRecord } from '../../mongo/interface/IRecord';
-import { LINEAPI } from '../../const/LINEAPI';
+import { createHmac } from 'crypto';
 
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from '../ResultCode';
+
+import { DHLog }            from '../../util/DHLog';
+
+import { DHAPI }            from '../../const/DHAPI';
+import { LINEAPI }          from '../../const/LINEAPI';
+
+import { BaseRoute }        from './../BaseRoute';
+import { BaseAPI }          from './BaseAPI';
+
+import { DBHelper }         from '../../mongo/helper/DBHelper';
+import { IChatroom }        from '../../mongo/interface/IChatroom';
+import { ChatroomHelper }   from '../../mongo/helper/ChatroomHelper';
+import { UserHelper }       from '../../mongo/helper/UserHelper';
+import { RecordHelper }     from '../../mongo/helper/RecordHelper';
+import { IRecord }          from '../../mongo/interface/IRecord';
+
+/**
+ * @description LINE 機器人相關 api
+ */
 export class LineWebhookAPI extends BaseAPI {
     
     protected uri = LINEAPI.API_LINEBOT_PATH;

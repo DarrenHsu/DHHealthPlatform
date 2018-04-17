@@ -1,11 +1,17 @@
 import * as mongoose from 'mongoose';
-import { IUser } from '../interface/IUser';
-import { UserSchema } from '../schemas/UserSchema';
-import { IUserModel } from '../models/model';
-import { BaseHelper } from './BaseHelper';
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog } from '../../util/DHLog';
 
+import { BaseHelper }   from './BaseHelper';
+
+import { IUser }        from '../interface/IUser';
+import { UserSchema }   from '../schemas/UserSchema';
+import { IUserModel }   from '../models/model';
+
+import { MONGODB_CODE } from '../../routes/ResultCode';
+import { DHLog }        from '../../util/DHLog';
+
+/**
+ * @description 使用者資料存取控制
+ */
 export class UserHelper implements BaseHelper {
     
     private static model: mongoose.Model<IUserModel>;

@@ -5,17 +5,20 @@ const JwtDecode = require("jwt-decode");
 const qs = require("qs");
 const axios_1 = require("axios");
 const bot_sdk_1 = require("@line/bot-sdk");
-const ResultCode_1 = require("../ResultCode");
 const crypto_1 = require("crypto");
-const BaseAPI_1 = require("./BaseAPI");
+const ResultCode_1 = require("../ResultCode");
+const DHLog_1 = require("../../util/DHLog");
+const DHAPI_1 = require("../../const/DHAPI");
+const LINEAPI_1 = require("../../const/LINEAPI");
 const BaseRoute_1 = require("./../BaseRoute");
+const BaseAPI_1 = require("./BaseAPI");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
 const UserHelper_1 = require("../../mongo/helper/UserHelper");
 const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
-const DHLog_1 = require("../../util/DHLog");
-const DHAPI_1 = require("../../const/DHAPI");
-const LINEAPI_1 = require("../../const/LINEAPI");
+/**
+ * @description LINE 機器人相關 api
+ */
 class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     constructor(connection) {
         super();

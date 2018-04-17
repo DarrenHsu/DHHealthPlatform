@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const AuthSchema_1 = require("../schemas/AuthSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description 授權資料存取控制
+ */
 class AuthHelper {
     constructor(connection) {
         if (!AuthHelper.model) {

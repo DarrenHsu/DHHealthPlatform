@@ -1,11 +1,17 @@
 import * as mongoose from 'mongoose';
-import { IChatroom } from '../interface/IChatroom';
-import { ChatroomSchema } from '../schemas/ChatroomSchema';
-import { IChatroomModel } from '../models/model';
-import { BaseHelper } from './BaseHelper';
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog } from '../../util/DHLog';
 
+import { BaseHelper }       from './BaseHelper';
+
+import { IChatroom }        from '../interface/IChatroom';
+import { ChatroomSchema }   from '../schemas/ChatroomSchema';
+import { IChatroomModel }   from '../models/model';
+
+import { MONGODB_CODE }     from '../../routes/ResultCode';
+import { DHLog }            from '../../util/DHLog';
+
+/**
+ * @description line chat 資料存取控制
+ */
 export class ChatroomHelper implements BaseHelper {
     
     private static model: mongoose.Model<IChatroomModel>;

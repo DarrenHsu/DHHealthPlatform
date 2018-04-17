@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BaseRoute_1 = require("./BaseRoute");
 const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
+/**
+ * @description 首頁路由控制
+ */
 class HomeRoute extends BaseRoute_1.BaseRoute {
     constructor() {
         super();

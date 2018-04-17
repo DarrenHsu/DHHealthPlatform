@@ -1,13 +1,20 @@
 import * as mongoose from "mongoose";
 import { NextFunction, Request, Response, Router } from "express";
-import { BaseAPI } from "./BaseAPI";
-import { MONGODB_CODE, CONNECTION_CODE, ResultCodeMsg } from "../ResultCode";
-import { DBHelper } from "../../mongo/helper/DBHelper";
-import { UserHelper } from "../../mongo/helper/UserHelper";
-import { IUser } from "../../mongo/interface/IUser";
-import { DHAPI } from "../../const/DHAPI";
-import { DHLog } from "../../util/DHLog";
 
+import { MONGODB_CODE, CONNECTION_CODE, ResultCodeMsg } from "../ResultCode";
+
+import { DHAPI }        from "../../const/DHAPI";
+import { DHLog }        from "../../util/DHLog";
+
+import { BaseAPI }      from "./BaseAPI";
+
+import { DBHelper }     from "../../mongo/helper/DBHelper";
+import { UserHelper }   from "../../mongo/helper/UserHelper";
+import { IUser }        from "../../mongo/interface/IUser";
+
+/**
+ * @description 使用者相關 api 
+ */
 export class UserAPI extends BaseAPI {
     
     protected helper: UserHelper;

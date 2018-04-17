@@ -8,6 +8,9 @@ const BaseRoute_1 = require("./BaseRoute");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
 const RouteHelper_1 = require("../mongo/helper/RouteHelper");
 const UserHelper_1 = require("../mongo/helper/UserHelper");
+/**
+ * @description 行事曆路由控制
+ */
 class CalendarRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();

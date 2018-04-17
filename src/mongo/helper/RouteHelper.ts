@@ -1,11 +1,16 @@
 import * as mongoose from 'mongoose';
-import { IRoute } from '../interface/IRoute';
-import { RouteSchema } from '../schemas/RouteSchema';
-import { IUserModel, IRouteModel, IRecordModel } from '../models/model';
-import { BaseHelper } from './BaseHelper';
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog } from '../../util/DHLog';
 
+import { IUserModel, IRouteModel, IRecordModel } from '../models/model';
+
+import { BaseHelper }   from './BaseHelper';
+import { IRoute }       from '../interface/IRoute';
+import { RouteSchema }  from '../schemas/RouteSchema';
+import { MONGODB_CODE } from '../../routes/ResultCode';
+import { DHLog }        from '../../util/DHLog';
+
+/**
+ * @description 行程資料存取控制
+ */
 export class RouteHelper implements BaseHelper {
     
     private static model: mongoose.Model<IRouteModel>;

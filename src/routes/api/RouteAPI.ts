@@ -1,13 +1,20 @@
 import * as mongoose from 'mongoose';
 import { NextFunction, Request, Response, Router } from 'express';
-import { BaseAPI } from './BaseAPI';
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from '../ResultCode';
-import { DBHelper } from '../../mongo/helper/DBHelper';
-import { RouteHelper } from '../../mongo/helper/RouteHelper';
-import { IRoute } from '../../mongo/interface/IRoute';
-import { DHAPI } from '../../const/DHAPI';
-import { DHLog } from '../../util/DHLog';
 
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from '../ResultCode';
+
+import { DHAPI }        from '../../const/DHAPI';
+import { DHLog }        from '../../util/DHLog';
+
+import { BaseAPI }      from './BaseAPI';
+
+import { DBHelper }     from '../../mongo/helper/DBHelper';
+import { RouteHelper }  from '../../mongo/helper/RouteHelper';
+import { IRoute }       from '../../mongo/interface/IRoute';
+
+/**
+ * @description 行程路線相關 api
+ */
 export class RouteAPI extends BaseAPI {
 
     protected helper: RouteHelper;

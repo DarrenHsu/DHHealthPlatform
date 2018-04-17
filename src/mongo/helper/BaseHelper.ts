@@ -1,8 +1,11 @@
-import { IBase } from '../interface/IBase';
-import { IBaseModel } from '../models/model';
-import { BaseHelper } from './BaseHelper';
+import { BaseHelper }   from './BaseHelper';
+import { IBase }        from '../interface/IBase';
+import { IBaseModel }   from '../models/model';
 import { MONGODB_CODE } from '../../routes/ResultCode';
 
+/**
+ * @description 父類別
+ */
 export interface BaseHelper {
     /**
      * @description 儲存程序

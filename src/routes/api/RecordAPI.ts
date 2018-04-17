@@ -1,13 +1,19 @@
 import * as mongoose from 'mongoose';
 import { NextFunction, Request, Response, Router } from 'express';
-import { BaseAPI } from './BaseAPI';
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from '../ResultCode';
-import { DBHelper } from '../../mongo/helper/DBHelper';
-import { RecordHelper } from '../../mongo/helper/RecordHelper';
-import { IRecord } from '../../mongo/interface/IRecord';
-import { DHAPI } from '../../const/DHAPI';
-import { DHLog } from '../../util/DHLog';
 
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from '../ResultCode';
+import { BaseAPI }      from './BaseAPI';
+
+import { DHAPI }        from '../../const/DHAPI';
+import { DHLog }        from '../../util/DHLog';
+
+import { DBHelper }     from '../../mongo/helper/DBHelper';
+import { RecordHelper } from '../../mongo/helper/RecordHelper';
+import { IRecord }      from '../../mongo/interface/IRecord';
+
+/**
+ * @description 紀錄相關 api 
+ */
 export class RecordAPI extends BaseAPI {
 
     protected helper: RecordHelper;

@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ChatroomSchema_1 = require("../schemas/ChatroomSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description line chat 資料存取控制
+ */
 class ChatroomHelper {
     constructor(connection) {
         if (!ChatroomHelper.model) {

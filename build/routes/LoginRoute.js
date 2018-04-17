@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const DHLog_1 = require("../util/DHLog");
 const BaseRoute_1 = require("./BaseRoute");
+const DHLog_1 = require("../util/DHLog");
 const DHAPI_1 = require("../const/DHAPI");
 const LINEAPI_1 = require("../const/LINEAPI");
+/**
+ * @description 登入路由控制
+ */
 class LoginRoute extends BaseRoute_1.BaseRoute {
     constructor() {
         super();

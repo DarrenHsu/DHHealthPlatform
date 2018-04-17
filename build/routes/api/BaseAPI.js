@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseRoute_1 = require("../BaseRoute");
 const ResultCode_1 = require("../ResultCode");
+const BaseRoute_1 = require("../BaseRoute");
+/**
+ * @description 所有 api 的父類別
+ */
 class BaseAPI extends BaseRoute_1.BaseRoute {
     static create(router) { }
     /**

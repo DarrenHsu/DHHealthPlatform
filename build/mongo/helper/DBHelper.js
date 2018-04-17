@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const q = require("q");
 const mongoose = require("mongoose");
 const DHLog_1 = require("../../util/DHLog");
+/**
+ * @description db 資料存取控制
+ */
 class DBHelper {
     static openDB(path) {
         global.Promise = q.Promise;

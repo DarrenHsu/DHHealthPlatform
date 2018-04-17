@@ -1,7 +1,12 @@
 import * as q from 'q';
+
 import mongoose = require('mongoose');
+
 import { DHLog } from '../../util/DHLog';
 
+/**
+ * @description db 資料存取控制
+ */
 export class DBHelper {
 
     public static connection: mongoose.Connection;

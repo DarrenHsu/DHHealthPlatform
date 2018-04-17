@@ -1,9 +1,14 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { BaseRoute } from './BaseRoute';
-import { DHAPI } from '../const/DHAPI';
-import { LINEAPI } from '../const/LINEAPI';
-import { DHLog } from '../util/DHLog';
 
+import { BaseRoute }    from './BaseRoute';
+
+import { DHAPI }        from '../const/DHAPI';
+import { LINEAPI }      from '../const/LINEAPI';
+import { DHLog }        from '../util/DHLog';
+
+/**
+ * @description 首頁路由控制
+ */
 export class HomeRoute extends BaseRoute {
     
     constructor() {

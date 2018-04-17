@@ -1,24 +1,32 @@
 import * as mongoose from 'mongoose';
 import * as querystring from 'querystring';
 import * as moment from 'moment';
+
 import { DHDateFormat } from '../const/DHDateFormat';
 import { parseIso, format } from 'ts-date/locale/en';
 import { NextFunction, Request, Response, Router } from 'express';
+
 import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
-import { BaseRoute } from './BaseRoute';
-import { DBHelper } from '../mongo/helper/DBHelper';
+
+import { BaseRoute }    from './BaseRoute';
+
+import { DHAPI }        from '../const/DHAPI';
+import { DHLog }        from '../util/DHLog';
+
+import { DBHelper }     from '../mongo/helper/DBHelper';
 import { RecordHelper } from '../mongo/helper/RecordHelper';
-import { UserHelper } from '../mongo/helper/UserHelper';
-import { IRecord } from '../mongo/interface/IRecord';
-import { IUser } from '../mongo/interface/IUser';
-import { DHAPI } from '../const/DHAPI';
-import { DHLog } from '../util/DHLog';
+import { UserHelper }   from '../mongo/helper/UserHelper';
+import { IRecord }      from '../mongo/interface/IRecord';
+import { IUser }        from '../mongo/interface/IUser';
 
 declare type Location = {
     lat: string;
     lng: string;
 };
 
+/**
+ * @description 紀錄路由控制
+ */
 export class RecordRoute extends BaseRoute {
 
     private userHelper: UserHelper;

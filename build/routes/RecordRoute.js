@@ -5,11 +5,14 @@ const moment = require("moment");
 const DHDateFormat_1 = require("../const/DHDateFormat");
 const ResultCode_1 = require("./ResultCode");
 const BaseRoute_1 = require("./BaseRoute");
+const DHAPI_1 = require("../const/DHAPI");
+const DHLog_1 = require("../util/DHLog");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../mongo/helper/RecordHelper");
 const UserHelper_1 = require("../mongo/helper/UserHelper");
-const DHAPI_1 = require("../const/DHAPI");
-const DHLog_1 = require("../util/DHLog");
+/**
+ * @description 紀錄路由控制
+ */
 class RecordRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();

@@ -1,11 +1,17 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { BaseRoute } from './BaseRoute';
-import { DHAPI } from '../const/DHAPI';
-import { DHLog } from '../util/DHLog';
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
-import { IResult } from './interface/IResult';
-import { LINEAPI } from '../const/LINEAPI';
 
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
+
+import { BaseRoute }    from './BaseRoute';
+import { IResult }      from './interface/IResult';
+
+import { DHAPI }        from '../const/DHAPI';
+import { DHLog }        from '../util/DHLog';
+import { LINEAPI }      from '../const/LINEAPI';
+
+/**
+ * @description 錯誤路由控制
+ */
 export class ErrorRoute extends BaseRoute {
     
     constructor() {

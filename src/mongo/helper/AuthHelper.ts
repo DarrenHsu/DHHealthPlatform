@@ -1,11 +1,17 @@
 import * as mongoose from 'mongoose';
-import { IAuth } from '../interface/IAuth';
-import { AuthSchema } from '../schemas/AuthSchema';
-import { IUserModel, IAuthModel } from '../models/model';
-import { BaseHelper } from './BaseHelper';
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog } from '../../util/DHLog';
 
+import { BaseHelper }               from './BaseHelper';
+
+import { IAuth }                    from '../interface/IAuth';
+import { AuthSchema }               from '../schemas/AuthSchema';
+import { IUserModel, IAuthModel }   from '../models/model';
+
+import { MONGODB_CODE }             from '../../routes/ResultCode';
+import { DHLog }                    from '../../util/DHLog';
+
+/**
+ * @description 授權資料存取控制
+ */
 export class AuthHelper implements BaseHelper {
     
     private static model: mongoose.Model<IAuthModel>;
