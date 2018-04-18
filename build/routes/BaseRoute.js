@@ -89,12 +89,12 @@ class BaseRoute {
      * @param next
      */
     checkLogin(req, res, next) {
-        // // for test data
-        // if (!req.session.account) {
-        //     req.session.name = 'Darren Hsu';
-        //     req.session.account = 'U9d844766ccf8f9ae7dcd16f14e47ca0d';
-        //     req.session.picture = 'https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz';
-        // }
+        // for test data
+        if (!req.session.account) {
+            req.session.name = 'Darren Hsu';
+            req.session.account = 'U9d844766ccf8f9ae7dcd16f14e47ca0d';
+            req.session.picture = 'https://profile.line-scdn.net/0h050J5TfDbxoNM0HHHR0QTTF2YXd6HWlSdQAiKS5jNy0lUH0ZZFcneCkxNH8pVH0cYQByLigwOCxz';
+        }
         var isLogin = false;
         if (req.session.account && req.session.name && req.session.picture) {
             isLogin = true;

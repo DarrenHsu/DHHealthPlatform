@@ -14,12 +14,42 @@ block content
   div#PlayRow(class='row')
     div(class='col-md-12 first-live')
       div(class='embed-responsive embed-responsive-16by9')
-        #{items[playIndex].contentDetails.monitorStream.embedHtml}
+        div#player
+        
+        script.
+          var tag = document.createElement('script');
 
-    //- div(class='col-md-4')
-    //-   h4(class='my-3') Project Description
-    //-   p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+          tag.src = "https://www.youtube.com/iframe_api";
+          var firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+          var player;
+          function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+              videoId: '#{items[playIndex].id}',
+              events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+              }
+            });
+          }
+
+          function onPlayerReady(event) {
+            event.target.playVideo();
+          }
+
+          var done = false;
+          function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING && !done) {
+              setTimeout(stopVideo, 6000);
+              done = true;
+            }
+          }
+
+          function stopVideo() {
+            player.stopVideo();
+          }
+          
   div#LiveRow(class='row')
     - var index = 0
     each item in items
