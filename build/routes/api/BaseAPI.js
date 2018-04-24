@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ResultCode_1 = require("../ResultCode");
+const DHLog_1 = require("../../util/DHLog");
 const BaseRoute_1 = require("../BaseRoute");
 /**
  * @description 所有 api 的父類別
@@ -22,6 +23,7 @@ class BaseAPI extends BaseRoute_1.BaseRoute {
                 return;
             }
             this.helper.find(req.params.id, (code, results) => {
+                DHLog_1.DHLog.d("send success");
                 this.sendSuccess(res, code, results);
             });
         });
