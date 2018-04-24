@@ -39,7 +39,6 @@ export class BaseAPI extends BaseRoute {
             }
 
             this.helper.find(req.params.id, (code, results) => {
-                DHLog.d("send success");
                 this.sendSuccess(res, code, results);
             });
         });
