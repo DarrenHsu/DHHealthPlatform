@@ -119,17 +119,17 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 callback();
             return;
         }
-        var chat = chats[0];
-        DHLog_1.DHLog.ld('push ' + chat.chatId);
+        let chat = chats[0];
+        let cids = [];
+        for (var cht in chats) {
+            cids.push(chat.chatId);
+            DHLog_1.DHLog.ld('push ' + chat.chatId);
+        }
         DHLog_1.DHLog.ld('message' + JSON.stringify(message));
-        client.pushMessage(chat.chatId, message).then((value) => {
+        client.multicast(cids, message).then((value) => {
             DHLog_1.DHLog.ld('push message success ' + JSON.stringify(value));
-            var array = chats.splice(0, 1);
-            this.pushMessage(message, chats, callback);
         }).catch((err) => {
             DHLog_1.DHLog.ld('' + err);
-            var array = chats.splice(0, 1);
-            this.pushMessage(message, chats, callback);
         });
     }
     /**
