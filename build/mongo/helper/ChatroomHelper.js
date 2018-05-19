@@ -48,7 +48,7 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
-        ChatroomHelper.model.update({ chatId: data.chatId }, data, { multi: true }, (err, raw) => {
+        ChatroomHelper.model.update({ chatId: data.chatId, lineUserId: data.lineUserId }, data, { multi: true }, (err, raw) => {
             if (err) {
                 DHLog_1.DHLog.d('count error:' + err);
                 if (callback)

@@ -57,7 +57,7 @@ export class ChatroomHelper implements BaseHelper {
             return;
         }
 
-        ChatroomHelper.model.update({chatId: data.chatId}, data, {multi: true}, (err, raw) => {
+        ChatroomHelper.model.update({chatId: data.chatId, lineUserId: data.lineUserId}, data, {multi: true}, (err, raw) => {
             if (err) {
                 DHLog.d('count error:' + err);
                 if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
