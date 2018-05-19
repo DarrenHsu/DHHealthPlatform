@@ -151,7 +151,7 @@ export class LineWebhookAPI extends BaseAPI {
 
         let chat = chats[0];
         let cids: string[] = [];
-        for (var cht in chats) {
+        for (var cht of chats) {
             cids.push(chat.chatId);
             DHLog.ld('push ' + chat.chatId);
         }
