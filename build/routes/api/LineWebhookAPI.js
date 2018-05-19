@@ -119,17 +119,15 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 callback();
             return;
         }
-        let cids = [];
         for (var chat of chats) {
-            cids.push(chat.chatId);
             DHLog_1.DHLog.ld('push ' + chat.chatId);
+            DHLog_1.DHLog.ld('message' + JSON.stringify(message));
+            client.pushMessage(chat.chatId, message).then((value) => {
+                DHLog_1.DHLog.ld('push message success ' + JSON.stringify(value));
+            }).catch((err) => {
+                DHLog_1.DHLog.ld('' + err);
+            });
         }
-        DHLog_1.DHLog.ld('message' + JSON.stringify(message));
-        client.multicast(cids, message).then((value) => {
-            DHLog_1.DHLog.ld('push message success ' + JSON.stringify(value));
-        }).catch((err) => {
-            DHLog_1.DHLog.ld('' + err);
-        });
     }
     /**
      * @description 取得line web login 授權
