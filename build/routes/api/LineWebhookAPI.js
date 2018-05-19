@@ -119,9 +119,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 callback();
             return;
         }
-        let chat = chats[0];
         let cids = [];
-        for (var cht of chats) {
+        for (var chat of chats) {
             cids.push(chat.chatId);
             DHLog_1.DHLog.ld('push ' + chat.chatId);
         }
