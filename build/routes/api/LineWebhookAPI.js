@@ -123,8 +123,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         DHLog_1.DHLog.ld('push ' + chat.chatId);
         // client.pushMessage(chat.chatId, message).then((value) => {
         // DHLog.ld('push message success ' + JSON.stringify(value));
-        var array = chats.splice(0, 1);
-        this.pushMessage(message, array, callback);
+        chats.shift();
+        this.pushMessage(message, chats, callback);
         // }).catch((err) => {
         //     DHLog.ld('' + err);
         //     var array = chats.splice(0, 1);
