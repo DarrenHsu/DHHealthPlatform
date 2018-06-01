@@ -346,11 +346,6 @@ export class LineWebhookAPI extends BaseAPI {
                               label: '否',
                               data: 'action=no&itemid=123'
                             },
-                            {
-                              type: 'uri',
-                              label: 'View detail',
-                              uri: 'http://example.com/page/123'
-                            }
                         ]
                     }
                   }
