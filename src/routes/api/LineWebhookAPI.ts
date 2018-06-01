@@ -323,7 +323,7 @@ export class LineWebhookAPI extends BaseAPI {
             let lineUserId = body.lineUserId;
             let title = body.title;
             let msg = body.msg;
-            let image = BaseRoute.getFullHostUrl(req) + "/images/sport.jpg";
+            let image = BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
             DHLog.ld(JSON.stringify(body));
 
             this.chatroomHelper.find(lineUserId, (code, chats) => {
