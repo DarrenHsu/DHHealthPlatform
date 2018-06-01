@@ -320,28 +320,29 @@ export class LineWebhookAPI extends BaseAPI {
 
             let body = req.body;
             let lineUserId = body.lineUserId;
+            let title = body.title;
             let msg = body.msg;
             DHLog.ld(JSON.stringify(body));
 
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message: TemplateMessage = {
                     type: 'template',
-                    altText: msg,
+                    altText: title,
                     template: {
                         type: 'buttons',
-                        thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
-                        title: '選單',
+                        thumbnailImageUrl: BaseRoute.getFullHostUrl + "/images/sport.jpg",
+                        title: title,
                         text: '請選擇以下的選項',
                         actions: [
                             {
                               type: 'postback',
-                              label: 'Buy',
-                              data: 'action=buy&itemid=123'
+                              label: '是',
+                              data: 'action=ok&itemid=123'
                             },
                             {
                               type: 'postback',
-                              label: 'Add to cart',
-                              data: 'action=add&itemid=123'
+                              label: '否',
+                              data: 'action=no&itemid=123'
                             },
                             {
                               type: 'uri',
