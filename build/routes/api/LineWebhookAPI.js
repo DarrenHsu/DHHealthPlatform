@@ -274,12 +274,12 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message = {
                     type: 'template',
-                    altText: 'This is a buttons template',
+                    altText: msg,
                     template: {
                         type: 'buttons',
                         thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
-                        title: 'Menu',
-                        text: 'Please select',
+                        title: '選單',
+                        text: '請選擇以下的選項',
                         actions: [
                             {
                                 type: 'postback',
