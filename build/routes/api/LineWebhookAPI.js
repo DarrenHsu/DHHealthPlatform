@@ -272,6 +272,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             let lineUserId = body.lineUserId;
             let title = body.title;
             let msg = body.msg;
+            let image = BaseRoute_1.BaseRoute.getFullHostUrl(req) + "/images/sport.jpg";
             DHLog_1.DHLog.ld(JSON.stringify(body));
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message = {
@@ -279,7 +280,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     altText: title,
                     template: {
                         type: 'buttons',
-                        thumbnailImageUrl: BaseRoute_1.BaseRoute.getFullHostUrl + "/images/sport.jpg",
+                        thumbnailImageUrl: image,
                         title: title,
                         text: '請選擇以下的選項',
                         actions: [
