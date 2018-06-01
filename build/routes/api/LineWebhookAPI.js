@@ -27,6 +27,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.messageUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
         this.authorizationUrl = LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
         this.profileUrl = LINEAPI_1.LINEAPI.API_LINE_PROFILE_PATH;
+        this.templeteUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_TEMPLETE_PATH;
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
@@ -44,6 +45,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.post(router);
         api.postRecord(router);
         api.posthMessage(router);
+        api.postTemplete(router);
         api.getAuthorization(router);
     }
     /**
@@ -248,6 +250,54 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 var message = {
                     type: 'text',
                     text: msg
+                };
+                this.pushMessage(message, chats, () => {
+                    this.sendSuccess(res, ResultCode_1.LINE_CODE.LL_SUCCESS);
+                });
+            });
+        });
+    }
+    postTemplete(router) {
+        router.post(this.templeteUrl, (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                this.sendAuthFaild(res);
+                return;
+            }
+            if (!req.body) {
+                this.sendBodyFaild(res);
+                return;
+            }
+            let body = req.body;
+            let lineUserId = body.lineUserId;
+            let msg = body.msg;
+            DHLog_1.DHLog.ld(JSON.stringify(body));
+            this.chatroomHelper.find(lineUserId, (code, chats) => {
+                var message = {
+                    type: 'template',
+                    altText: 'This is a buttons template',
+                    template: {
+                        type: 'buttons',
+                        thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                        title: 'Menu',
+                        text: 'Please select',
+                        actions: [
+                            {
+                                type: 'postback',
+                                label: 'Buy',
+                                data: 'action=buy&itemid=123'
+                            },
+                            {
+                                type: 'postback',
+                                label: 'Add to cart',
+                                data: 'action=add&itemid=123'
+                            },
+                            {
+                                type: 'uri',
+                                label: 'View detail',
+                                uri: 'http://example.com/page/123'
+                            }
+                        ]
+                    }
                 };
                 this.pushMessage(message, chats, () => {
                     this.sendSuccess(res, ResultCode_1.LINE_CODE.LL_SUCCESS);

@@ -4,7 +4,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import * as JwtDecode from 'jwt-decode';
 import * as qs from 'qs';
 import Axios from 'axios';
-import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage } from '@line/bot-sdk';
+import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage, Message } from '@line/bot-sdk';
 import { error, print } from 'util';
 import { createHmac } from 'crypto';
 
@@ -35,7 +35,8 @@ export class LineWebhookAPI extends BaseAPI {
     private messageUrl = LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
     private authorizationUrl = LINEAPI.API_LINE_AUTH_PATH;
     private profileUrl = LINEAPI.API_LINE_PROFILE_PATH;
-
+    private templeteUrl = LINEAPI.API_LINEBOT_PUSH_TEMPLETE_PATH;
+    
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
 
@@ -67,6 +68,7 @@ export class LineWebhookAPI extends BaseAPI {
         api.post(router);
         api.postRecord(router);
         api.posthMessage(router);
+        api.postTemplete(router);
         api.getAuthorization(router);
     }
 
@@ -142,7 +144,7 @@ export class LineWebhookAPI extends BaseAPI {
      * @param chats 
      * @param callback 
      */
-    private pushMessage(message: TextMessage, chats: IChatroom[], callback?: () => void) {
+    private pushMessage(message: Message, chats: IChatroom[], callback?: () => void) {
         let client = new Client(this.clientConfig);
         if (chats.length == 0)  {
             if (callback) callback();
@@ -296,6 +298,59 @@ export class LineWebhookAPI extends BaseAPI {
                     type: 'text',
                     text: msg
                 }
+
+                this.pushMessage(message, chats, () => {
+                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
+                });
+            });
+        });
+    }
+
+    protected postTemplete(router: Router) {
+        router.post(this.templeteUrl, (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                this.sendAuthFaild(res);
+                return;
+            }
+
+            if (!req.body) {
+                this.sendBodyFaild(res);
+                return;
+            }
+
+            let body = req.body;
+            let lineUserId = body.lineUserId;
+            let msg = body.msg;
+            DHLog.ld(JSON.stringify(body));
+
+            this.chatroomHelper.find(lineUserId, (code, chats) => {
+                var message: TemplateMessage = {
+                    type: 'template',
+                    altText: 'This is a buttons template',
+                    template: {
+                        type: 'buttons',
+                        thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                        title: 'Menu',
+                        text: 'Please select',
+                        actions: [
+                            {
+                              type: 'postback',
+                              label: 'Buy',
+                              data: 'action=buy&itemid=123'
+                            },
+                            {
+                              type: 'postback',
+                              label: 'Add to cart',
+                              data: 'action=add&itemid=123'
+                            },
+                            {
+                              type: 'uri',
+                              label: 'View detail',
+                              uri: 'http://example.com/page/123'
+                            }
+                        ]
+                    }
+                  }
 
                 this.pushMessage(message, chats, () => {
                     this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
