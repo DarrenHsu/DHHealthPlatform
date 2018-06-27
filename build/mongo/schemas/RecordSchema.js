@@ -15,6 +15,7 @@ exports.RecordSchema = new mongoose_1.Schema({
     avgSpeed: Number,
     maxSpeed: Number,
     altitude: Number,
+    step: Number,
     locations: [[Number, Number]],
     imglocations: [Number],
     createdAt: {

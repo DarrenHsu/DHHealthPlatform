@@ -48,6 +48,7 @@ export class RecordHelper implements BaseHelper {
                 res.avgSpeed = data.avgSpeed;
                 res.maxSpeed = data.maxSpeed;
                 res.altitude = data.altitude;
+                res.step = data.step;
                 res.locations = data.locations;
                 res.imglocations = data.imglocations;
                 res.modifyAt = new Date();

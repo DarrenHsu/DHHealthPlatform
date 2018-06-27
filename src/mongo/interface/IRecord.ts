@@ -11,6 +11,7 @@ export interface IRecord extends IBase {
     avgSpeed?: number;
     maxSpeed?: number;
     altitude?: number;
+    step?: number;
     locations?: [[number, number]];
     imglocations?: number[];
     modifyAt?: Date;    
