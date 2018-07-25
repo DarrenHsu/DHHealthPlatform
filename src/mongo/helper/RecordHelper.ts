@@ -122,12 +122,12 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        this.modelFind({lineUserId: lineUserId}, callback);
+        this.modelFind(RecordHelper.model, {lineUserId: lineUserId}, callback);
     }
 
     /* --------------- model 處理程序 ------------------ */
-    private modelFind(conditions: Object, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {
-        RecordHelper.model.find(conditions , (err, ress) => {
+    private modelFind(model: mongoose.Model<any>, conditions: Object, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {
+        model.find(conditions , (err, ress) => {
             if (err) {
                 DHLog.d('find error:' + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);

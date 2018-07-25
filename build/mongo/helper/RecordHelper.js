@@ -114,11 +114,11 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        this.modelFind({ lineUserId: lineUserId }, callback);
+        this.modelFind(RecordHelper.model, { lineUserId: lineUserId }, callback);
     }
     /* --------------- model 處理程序 ------------------ */
-    modelFind(conditions, callback) {
-        RecordHelper.model.find(conditions, (err, ress) => {
+    modelFind(model, conditions, callback) {
+        model.find(conditions, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d('find error:' + err);
                 if (callback)
