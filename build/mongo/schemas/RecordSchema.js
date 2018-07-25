@@ -8,7 +8,7 @@ exports.RecordSchema = new mongoose_1.Schema({
     },
     name: String,
     recordId: {
-        String,
+        type: String,
         required: true,
         index: true
     },

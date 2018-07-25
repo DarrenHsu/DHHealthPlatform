@@ -7,7 +7,7 @@ export var RecordSchema: Schema = new Schema({
     },
     name: String,
     recordId: {
-        String,
+        type: String,
         required: true,
         index: true
     },
