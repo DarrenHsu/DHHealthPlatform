@@ -1,11 +1,9 @@
-import { createHmac, createHash } from 'crypto';
+import { createHash } from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 
 import { ResultCodeMsg }    from './ResultCode';
 import { IAuth }            from './interface/IAuth';
 import { IResult }          from './interface/IResult';
-
-import { IRecord }          from '../mongo/interface/IRecord';
 
 import { DHAPI }            from '../const/DHAPI';
 import { DHLog }            from '../util/DHLog';

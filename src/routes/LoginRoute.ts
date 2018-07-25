@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { LINE_CODE, ResultCodeMsg } from '../routes/ResultCode';
 import { BaseRoute }    from './BaseRoute';
 
 import { DHLog }        from '../util/DHLog';

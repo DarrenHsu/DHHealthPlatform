@@ -1,9 +1,13 @@
+import * as mongoose from 'mongoose';
+
 import { NextFunction, Request, Response, Router } from 'express';
 
 import { BaseRoute }    from './BaseRoute';
 
+import { RecordHelper } from '../mongo/helper/RecordHelper';
+
+import { DBHelper }     from '../mongo/helper/DBHelper';
 import { DHAPI }        from '../const/DHAPI';
-import { LINEAPI }      from '../const/LINEAPI';
 import { DHLog }        from '../util/DHLog';
 
 /**
@@ -11,12 +15,16 @@ import { DHLog }        from '../util/DHLog';
  */
 export class HomeRoute extends BaseRoute {
     
-    constructor() {
+    private recordHelper: RecordHelper;
+
+    constructor(connection: mongoose.Connection) {
         super();
+
+        this.recordHelper = new RecordHelper(connection);
     }
 
     public static create(router: Router) {
-        var app = new HomeRoute();
+        var app = new HomeRoute(DBHelper.connection);
 
         app.getIndex(router);
         app.getHome(router);
@@ -32,7 +40,7 @@ export class HomeRoute extends BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            
+
             this.renderHome(req, res, next);
         });
     }
@@ -47,7 +55,7 @@ export class HomeRoute extends BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            
+
             this.renderHome(req, res, next);
         });
     }

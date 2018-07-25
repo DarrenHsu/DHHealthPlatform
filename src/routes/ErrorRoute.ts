@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
+import { CONNECTION_CODE } from './ResultCode';
 
 import { BaseRoute }    from './BaseRoute';
 import { IResult }      from './interface/IResult';
 
 import { DHAPI }        from '../const/DHAPI';
 import { DHLog }        from '../util/DHLog';
-import { LINEAPI }      from '../const/LINEAPI';
 
 /**
  * @description 錯誤路由控制

@@ -1,14 +1,13 @@
 import * as mongoose from 'mongoose';
 import * as querystring from 'querystring';
-import { NextFunction, Request, Response, Router } from 'express';
+import { Request, Router } from 'express';
 import * as JwtDecode from 'jwt-decode';
 import * as qs from 'qs';
 import Axios from 'axios';
 import { MiddlewareConfig, Client, middleware, JSONParseError, SignatureValidationFailed, TemplateMessage, WebhookEvent, ClientConfig, validateSignature, TextMessage, Message } from '@line/bot-sdk';
-import { error, print } from 'util';
 import { createHmac } from 'crypto';
 
-import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg, LINE_CODE } from '../ResultCode';
+import { MONGODB_CODE, LINE_CODE } from '../ResultCode';
 
 import { DHLog }            from '../../util/DHLog';
 
@@ -23,7 +22,6 @@ import { IChatroom }        from '../../mongo/interface/IChatroom';
 import { ChatroomHelper }   from '../../mongo/helper/ChatroomHelper';
 import { UserHelper }       from '../../mongo/helper/UserHelper';
 import { RecordHelper }     from '../../mongo/helper/RecordHelper';
-import { IRecord }          from '../../mongo/interface/IRecord';
 
 /**
  * @description LINE 機器人相關 api

@@ -1,17 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseRoute_1 = require("./BaseRoute");
+const RecordHelper_1 = require("../mongo/helper/RecordHelper");
+const DBHelper_1 = require("../mongo/helper/DBHelper");
 const DHAPI_1 = require("../const/DHAPI");
 const DHLog_1 = require("../util/DHLog");
 /**
  * @description 首頁路由控制
  */
 class HomeRoute extends BaseRoute_1.BaseRoute {
-    constructor() {
+    constructor(connection) {
         super();
+        this.recordHelper = new RecordHelper_1.RecordHelper(connection);
     }
     static create(router) {
-        var app = new HomeRoute();
+        var app = new HomeRoute(DBHelper_1.DBHelper.connection);
         app.getIndex(router);
         app.getHome(router);
     }

@@ -1,10 +1,9 @@
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
-import { NextFunction, Request, Response, Router, IRoute } from 'express';
+import { NextFunction, Request, Response, Router} from 'express';
 
 import { DHDateFormat }     from '../const/DHDateFormat';
 import { DHAPI }            from '../const/DHAPI';
-import { LINEAPI }          from '../const/LINEAPI';
 
 import { DHLog }            from '../util/DHLog';
 
