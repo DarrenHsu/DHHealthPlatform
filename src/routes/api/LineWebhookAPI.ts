@@ -290,8 +290,7 @@ export class LineWebhookAPI extends BaseAPI {
             let body = req.body;
             let lineUserId = body.lineUserId;
             let msg = body.msg;
-            DHLog.ld(JSON.stringify(body));
-
+            
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message: TextMessage = {
                     type: 'text',
@@ -320,10 +319,8 @@ export class LineWebhookAPI extends BaseAPI {
             let body = req.body;
             let lineUserId = body.lineUserId;
             let title = body.title;
-            let msg = body.msg;
             let image = BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
-            DHLog.ld(JSON.stringify(body));
-
+            
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message: TemplateMessage = {
                     type: 'template',
