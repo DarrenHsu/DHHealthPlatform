@@ -3,10 +3,14 @@ import { Schema } from "mongoose";
 export var RecordSchema: Schema = new Schema({
     lineUserId: {
         type: String,
-        required: true        
+        required: true
     },
     name: String,
-    recordId: String,
+    recordId: {
+        String,
+        required: true,
+        index: true
+    },
     locality: String,
     distance: Number,
     startTime: Date,

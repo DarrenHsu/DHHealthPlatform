@@ -7,7 +7,11 @@ exports.RecordSchema = new mongoose_1.Schema({
         required: true
     },
     name: String,
-    recordId: String,
+    recordId: {
+        String,
+        required: true,
+        index: true
+    },
     locality: String,
     distance: Number,
     startTime: Date,
