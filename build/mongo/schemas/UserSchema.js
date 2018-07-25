@@ -12,7 +12,8 @@ exports.UserSchema = new mongoose_1.Schema({
     },
     lineUserId: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
     pictureUrl: String,
     modifyAt: Date,

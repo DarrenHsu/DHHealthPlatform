@@ -11,7 +11,8 @@ export var UserSchema: Schema = new Schema({
     },
     lineUserId: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
     pictureUrl: String,
     modifyAt: Date,

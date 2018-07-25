@@ -1,3 +1,4 @@
+/* $ tsc --target ES6 */
 {
   "compilerOptions": {
     /* Basic Options */
