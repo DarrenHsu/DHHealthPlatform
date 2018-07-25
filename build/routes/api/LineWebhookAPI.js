@@ -323,14 +323,36 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                     this.sendFaild(res, code);
                     return;
                 }
-                this.chatroomHelper.find(record.lineUserId, (code, chats) => {
-                    let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
-                    var message = {
-                        type: 'text',
-                        text: text
-                    };
-                    this.pushMessage(message, chats, () => {
-                        this.sendSuccess(res, code);
+                this.userHelper.find(record.lineUserId, (code, users) => {
+                    let user = users[0];
+                    this.chatroomHelper.find(record.lineUserId, (code, chats) => {
+                        let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
+                        let image = BaseRoute_1.BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
+                        var message = {
+                            type: 'template',
+                            altText: '以下為' + user.name + '的運動記錄',
+                            template: {
+                                type: 'buttons',
+                                thumbnailImageUrl: image,
+                                title: '以下為' + user.name + '的運動記錄',
+                                text: '請給他一個讚哦',
+                                actions: [
+                                    {
+                                        type: 'postback',
+                                        label: '讚',
+                                        data: 'action=ok&itemid=123'
+                                    },
+                                    {
+                                        type: 'uri',
+                                        label: '詳細內容',
+                                        uri: text
+                                    }
+                                ]
+                            }
+                        };
+                        this.pushMessage(message, chats, () => {
+                            this.sendSuccess(res, code);
+                        });
                     });
                 });
             });
