@@ -277,6 +277,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message = {
                     type: 'template',
+                    altText: title,
                     template: {
                         type: 'buttons',
                         thumbnailImageUrl: image,
@@ -325,20 +326,22 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                 this.userHelper.find(record.lineUserId, (code, users) => {
                     let user = users[0];
                     this.chatroomHelper.find(record.lineUserId, (code, chats) => {
-                        let text = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
+                        let recordUri = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
+                        let title = '以下為「' + user.name + '」的運動記錄';
                         let image = BaseRoute_1.BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
                         var message = {
                             type: 'template',
+                            altText: title,
                             template: {
                                 type: 'buttons',
                                 thumbnailImageUrl: image,
-                                title: '以下為「' + user.name + '」的運動記錄',
+                                title: title,
                                 text: '請給他一個讚哦',
                                 actions: [
                                     {
                                         type: 'uri',
                                         label: '詳細內容',
-                                        uri: text
+                                        uri: recordUri
                                     },
                                     {
                                         type: 'postback',
