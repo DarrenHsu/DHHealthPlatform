@@ -129,7 +129,7 @@ class RecordHelper {
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
-        }).sort({ startTime: -1 });
+        }).sort(null);
     }
     modelFindOne(conditions, callback) {
         RecordHelper.model.findOne(conditions, (err, res) => {
