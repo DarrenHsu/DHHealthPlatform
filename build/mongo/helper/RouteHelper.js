@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ConcreteHelper_1 = require("./ConcreteHelper");
 const RouteSchema_1 = require("../schemas/RouteSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 /**
  * @description 行程資料存取控制
  */
-class RouteHelper {
+class RouteHelper extends ConcreteHelper_1.ConcreteHelper {
     constructor(connection) {
+        super(connection);
         if (!RouteHelper.model) {
             RouteHelper.model = connection.model('route', RouteSchema_1.RouteSchema);
         }
@@ -71,7 +73,7 @@ class RouteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        this.modelRemove({ _id: id }, callback);
+        this.modelRemove(RouteHelper.model, { _id: id }, callback);
     }
     find(lineUserId, callback) {
         if (!lineUserId) {
@@ -80,36 +82,7 @@ class RouteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        this.modelFind({ lineUserId: lineUserId }, callback);
-    }
-    /* --------------- model 處理程序 ------------------ */
-    modelFind(conditions, callback) {
-        RouteHelper.model.find(conditions, (err, ress) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find ' + ress.length);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        });
-    }
-    modelRemove(conditions, callback) {
-        RouteHelper.model.remove(conditions, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelFind(RouteHelper.model, { lineUserId: lineUserId }, null, callback);
     }
 }
 exports.RouteHelper = RouteHelper;

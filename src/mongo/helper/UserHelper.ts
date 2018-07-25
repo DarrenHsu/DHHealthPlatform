@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { BaseHelper }   from './BaseHelper';
+import { ConcreteHelper }   from './ConcreteHelper';
 
 import { IUser }        from '../interface/IUser';
 import { UserSchema }   from '../schemas/UserSchema';
@@ -12,11 +12,13 @@ import { DHLog }        from '../../util/DHLog';
 /**
  * @description 使用者資料存取控制
  */
-export class UserHelper implements BaseHelper {
+export class UserHelper extends ConcreteHelper {
     
     private static model: mongoose.Model<IUserModel>;
     
     constructor(connection: mongoose.Connection) {
+        super(connection);
+
         if (!UserHelper.model)  {
             UserHelper.model = connection.model<IUserModel>('user', UserSchema);
         }
@@ -94,15 +96,7 @@ export class UserHelper implements BaseHelper {
             return;
         }
 
-        UserHelper.model.remove({_id: id} , (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);                    
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelRemove(UserHelper.model, {_id: id}, callback);
     }
 
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IUserModel[]) => void) {

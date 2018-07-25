@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { BaseHelper }       from './BaseHelper';
+import { ConcreteHelper }       from './ConcreteHelper';
 
 import { IRecord }          from '../interface/IRecord';
 import { RecordSchema }     from '../schemas/RecordSchema';
@@ -8,16 +8,17 @@ import { IRecordModel }     from '../models/model';
 
 import { MONGODB_CODE }     from '../../routes/ResultCode';
 import { DHLog }            from '../../util/DHLog';
-import { IBase } from '../interface/IBase';
 
 /**
  * @description 紀錄資料存取控制
  */
-export class RecordHelper implements BaseHelper {
+export class RecordHelper extends ConcreteHelper {
     
     private static model: mongoose.Model<IRecordModel>;
 
     constructor(connection: mongoose.Connection) {
+        super(connection);
+
         if (!RecordHelper.model)  {
             RecordHelper.model = connection.model<IRecordModel>('record', RecordSchema);
         }
@@ -102,7 +103,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        this.modelRemove({_id: id}, callback);
+        this.modelRemove(RecordHelper.model, {_id: id}, callback);
     }
 
     public findOne(recordId: string, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
@@ -112,7 +113,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        this.modelFindOne({recordId: recordId}, callback);
+        this.modelFindOne(RecordHelper.model, {recordId: recordId}, callback);
     }
     
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
@@ -122,43 +123,6 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        this.modelFind(RecordHelper.model, {lineUserId: lineUserId}, callback);
-    }
-
-    /* --------------- model 處理程序 ------------------ */
-    private modelFind(model: mongoose.Model<any>, conditions: Object, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {
-        model.find(conditions , (err, ress) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + ress.length);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        }).sort(null);
-    }
-
-    private modelFindOne(conditions: Object, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
-        RecordHelper.model.findOne(conditions , (err, res) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + res);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-            }
-        });
-    }
-
-    private modelRemove(conditions: Object, callback?: (code: MONGODB_CODE) => void) {
-        RecordHelper.model.remove(conditions, (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelFind(RecordHelper.model, {lineUserId: lineUserId}, {startTime: -1}, callback);
     }
 }

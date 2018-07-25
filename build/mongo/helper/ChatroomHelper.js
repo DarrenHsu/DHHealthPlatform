@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ConcreteHelper_1 = require("./ConcreteHelper");
 const ChatroomSchema_1 = require("../schemas/ChatroomSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 /**
  * @description line chat 資料存取控制
  */
-class ChatroomHelper {
+class ChatroomHelper extends ConcreteHelper_1.ConcreteHelper {
     constructor(connection) {
+        super(connection);
         if (!ChatroomHelper.model) {
             ChatroomHelper.model = connection.model('chat', ChatroomSchema_1.ChatroomSchema);
         }
@@ -84,18 +86,7 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        ChatroomHelper.model.remove({ _id: id }, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelRemove(ChatroomHelper.model, { _id: id }, callback);
     }
     find(lineUserId, callback) {
         if (!lineUserId) {
@@ -104,18 +95,7 @@ class ChatroomHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        ChatroomHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find ' + ress.length);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        });
+        this.modelFind(ChatroomHelper.model, { lineUserId: lineUserId }, null, callback);
     }
 }
 exports.ChatroomHelper = ChatroomHelper;

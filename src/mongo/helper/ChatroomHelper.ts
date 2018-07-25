@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { BaseHelper }       from './BaseHelper';
+import { ConcreteHelper }       from './ConcreteHelper';
 
 import { IChatroom }        from '../interface/IChatroom';
 import { ChatroomSchema }   from '../schemas/ChatroomSchema';
@@ -12,11 +12,13 @@ import { DHLog }            from '../../util/DHLog';
 /**
  * @description line chat 資料存取控制
  */
-export class ChatroomHelper implements BaseHelper {
+export class ChatroomHelper extends ConcreteHelper {
     
     private static model: mongoose.Model<IChatroomModel>;
 
     constructor(connection: mongoose.Connection) {
+        super(connection);
+        
         if (!ChatroomHelper.model)  {
             ChatroomHelper.model = connection.model<IChatroomModel>('chat', ChatroomSchema);
         }
@@ -89,15 +91,7 @@ export class ChatroomHelper implements BaseHelper {
             return;
         }
 
-        ChatroomHelper.model.remove({_id : id}, (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelRemove(ChatroomHelper.model, {_id : id}, callback);
     }
 
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IChatroomModel[]) => void) {
@@ -107,14 +101,6 @@ export class ChatroomHelper implements BaseHelper {
             return;
         }
 
-        ChatroomHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + ress.length);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        });
+        this.modelFind(ChatroomHelper.model, {lineUserId: lineUserId}, null, callback);
     }
 }

@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ConcreteHelper_1 = require("./ConcreteHelper");
 const RecordSchema_1 = require("../schemas/RecordSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 /**
  * @description 紀錄資料存取控制
  */
-class RecordHelper {
+class RecordHelper extends ConcreteHelper_1.ConcreteHelper {
     constructor(connection) {
+        super(connection);
         if (!RecordHelper.model) {
             RecordHelper.model = connection.model('record', RecordSchema_1.RecordSchema);
         }
@@ -96,7 +98,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        this.modelRemove({ _id: id }, callback);
+        this.modelRemove(RecordHelper.model, { _id: id }, callback);
     }
     findOne(recordId, callback) {
         if (!recordId) {
@@ -105,7 +107,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        this.modelFindOne({ recordId: recordId }, callback);
+        this.modelFindOne(RecordHelper.model, { recordId: recordId }, callback);
     }
     find(lineUserId, callback) {
         if (!lineUserId) {
@@ -114,50 +116,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        this.modelFind(RecordHelper.model, { lineUserId: lineUserId }, callback);
-    }
-    /* --------------- model 處理程序 ------------------ */
-    modelFind(model, conditions, callback) {
-        model.find(conditions, (err, ress) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find ' + ress.length);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        }).sort(null);
-    }
-    modelFindOne(conditions, callback) {
-        RecordHelper.model.findOne(conditions, (err, res) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find ' + res);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
-            }
-        });
-    }
-    modelRemove(conditions, callback) {
-        RecordHelper.model.remove(conditions, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelFind(RecordHelper.model, { lineUserId: lineUserId }, { startTime: -1 }, callback);
     }
 }
 exports.RecordHelper = RecordHelper;

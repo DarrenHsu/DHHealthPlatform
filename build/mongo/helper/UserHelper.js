@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ConcreteHelper_1 = require("./ConcreteHelper");
 const UserSchema_1 = require("../schemas/UserSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 /**
  * @description 使用者資料存取控制
  */
-class UserHelper {
+class UserHelper extends ConcreteHelper_1.ConcreteHelper {
     constructor(connection) {
+        super(connection);
         if (!UserHelper.model) {
             UserHelper.model = connection.model('user', UserSchema_1.UserSchema);
         }
@@ -89,18 +91,7 @@ class UserHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        UserHelper.model.remove({ _id: id }, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelRemove(UserHelper.model, { _id: id }, callback);
     }
     find(lineUserId, callback) {
         if (!lineUserId) {

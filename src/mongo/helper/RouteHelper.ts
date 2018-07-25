@@ -1,21 +1,23 @@
 import * as mongoose from 'mongoose';
 
-import { IUserModel, IRouteModel, IRecordModel } from '../models/model';
+import { IRouteModel} from '../models/model';
 
-import { BaseHelper }   from './BaseHelper';
-import { IRoute }       from '../interface/IRoute';
-import { RouteSchema }  from '../schemas/RouteSchema';
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog }        from '../../util/DHLog';
+import { ConcreteHelper }   from './ConcreteHelper';
+import { IRoute }           from '../interface/IRoute';
+import { RouteSchema }      from '../schemas/RouteSchema';
+import { MONGODB_CODE }     from '../../routes/ResultCode';
+import { DHLog }            from '../../util/DHLog';
 
 /**
  * @description 行程資料存取控制
  */
-export class RouteHelper implements BaseHelper {
+export class RouteHelper extends ConcreteHelper {
     
     private static model: mongoose.Model<IRouteModel>;
 
     constructor(connection: mongoose.Connection) {
+        super(connection);
+
         if (!RouteHelper.model)  {
             RouteHelper.model = connection.model<IRouteModel>('route', RouteSchema);
         }
@@ -77,7 +79,7 @@ export class RouteHelper implements BaseHelper {
             return;
         }
 
-        this.modelRemove({_id: id}, callback);
+        this.modelRemove(RouteHelper.model, {_id: id}, callback);
     }
 
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
@@ -87,31 +89,6 @@ export class RouteHelper implements BaseHelper {
             return;
         }
 
-        this.modelFind({lineUserId: lineUserId}, callback);
-    }
-
-    /* --------------- model 處理程序 ------------------ */
-    private modelFind(conditions: Object, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
-        RouteHelper.model.find(conditions, (err, ress) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + ress.length);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        });
-    }
-
-    private modelRemove(conditions: Object, callback?: (code: MONGODB_CODE) => void) {
-        RouteHelper.model.remove(conditions, (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelFind(RouteHelper.model, {lineUserId: lineUserId}, null, callback);
     }
 }
