@@ -1,30 +1,22 @@
-import * as mongoose from 'mongoose';
+import * as mongoose        from 'mongoose';
 
 import { BaseHelper }       from './BaseHelper';
 
 import { MONGODB_CODE }     from '../../routes/ResultCode';
 import { DHLog }            from '../../util/DHLog';
-import { IBase } from '../interface/IBase';
+import { IBase }            from '../interface/IBase';
 
 /**
  * @description 紀錄資料存取控制
  */
 export class ConcreteHelper implements BaseHelper {
     
-    constructor(connection: mongoose.Connection) {
-    }
+    constructor(connection: mongoose.Connection) {}
 
-    public save(id: string, data: IBase, callback?: (code: MONGODB_CODE, result: IBase) => void) {
-    }
-
-    public add(data: IBase, callback: (code: MONGODB_CODE, result: IBase) => void) {
-    }
-
-    public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
-    }
-
-    public find(id: string, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {
-    }
+    public save(id: string, data: IBase, callback?: (code: MONGODB_CODE, result: IBase) => void) {}
+    public add(data: IBase, callback: (code: MONGODB_CODE, result: IBase) => void) {}
+    public remove(id: string, callback?: (code: MONGODB_CODE) => void) {}
+    public find(id: string, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {}
 
     /* --------------- model 處理程序 ------------------ */
     protected modelFind(model: mongoose.Model<any>, conditions: Object, sort: Object, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {

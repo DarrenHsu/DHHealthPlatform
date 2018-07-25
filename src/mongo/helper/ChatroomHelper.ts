@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose';
+import * as mongoose        from 'mongoose';
 
-import { ConcreteHelper }       from './ConcreteHelper';
+import { ConcreteHelper }   from './ConcreteHelper';
 
 import { IChatroom }        from '../interface/IChatroom';
 import { ChatroomSchema }   from '../schemas/ChatroomSchema';

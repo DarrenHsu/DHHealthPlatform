@@ -1,13 +1,13 @@
-import * as mongoose from 'mongoose';
+import * as mongoose        from 'mongoose';
 
 import { ConcreteHelper }   from './ConcreteHelper';
 
-import { IUser }        from '../interface/IUser';
-import { UserSchema }   from '../schemas/UserSchema';
-import { IUserModel }   from '../models/model';
+import { IUser }            from '../interface/IUser';
+import { UserSchema }       from '../schemas/UserSchema';
+import { IUserModel }       from '../models/model';
 
-import { MONGODB_CODE } from '../../routes/ResultCode';
-import { DHLog }        from '../../util/DHLog';
+import { MONGODB_CODE }     from '../../routes/ResultCode';
+import { DHLog }            from '../../util/DHLog';
 
 /**
  * @description 使用者資料存取控制

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const q = require("q");
 const mongoose = require("mongoose");
+const q = require("q");
 const DHLog_1 = require("../../util/DHLog");
 /**
  * @description db 資料存取控制

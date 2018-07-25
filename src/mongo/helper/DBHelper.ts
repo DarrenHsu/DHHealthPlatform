@@ -1,7 +1,5 @@
-import * as q from 'q';
-
 import mongoose = require('mongoose');
-
+import * as q    from 'q';
 import { DHLog } from '../../util/DHLog';
 
 /**

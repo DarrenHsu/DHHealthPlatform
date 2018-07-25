@@ -1,22 +1,24 @@
-import * as mongoose from 'mongoose';
+import * as mongoose    from 'mongoose';
 
-import { BaseHelper }               from './BaseHelper';
+import { ConcreteHelper }   from './ConcreteHelper';
 
-import { IAuth }                    from '../interface/IAuth';
-import { AuthSchema }               from '../schemas/AuthSchema';
-import { IUserModel, IAuthModel }   from '../models/model';
+import { IAuth }        from '../interface/IAuth';
+import { AuthSchema }   from '../schemas/AuthSchema';
+import { IAuthModel }   from '../models/model';
 
-import { MONGODB_CODE }             from '../../routes/ResultCode';
-import { DHLog }                    from '../../util/DHLog';
+import { MONGODB_CODE } from '../../routes/ResultCode';
+import { DHLog }        from '../../util/DHLog';
 
 /**
  * @description 授權資料存取控制
  */
-export class AuthHelper implements BaseHelper {
+export class AuthHelper extends ConcreteHelper {
     
     private static model: mongoose.Model<IAuthModel>;
     
     constructor(connection: mongoose.Connection) {
+        super(connection);
+
         if (!AuthHelper.model)  {
             AuthHelper.model = connection.model<IAuthModel>('Auth', AuthSchema);
         }
@@ -90,15 +92,7 @@ export class AuthHelper implements BaseHelper {
             return;
         }
 
-        AuthHelper.model.remove({_id: id} , (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);                    
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelRemove(AuthHelper.model, {_id: id}, callback);
     }
 
     public findOne(lineUserId: string, callback?: (code: MONGODB_CODE, results: IAuthModel) => void) {
@@ -108,15 +102,7 @@ export class AuthHelper implements BaseHelper {
             return;
         }
 
-        AuthHelper.model.findOne({lineUserId: lineUserId}, (err, res) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
-            }else {
-                DHLog.d('find auth');
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, res);
-            }
-        });
+        this.modelFindOne(AuthHelper.model, {lineUserId: lineUserId}, callback);
     }
 
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IAuthModel[]) => void) {

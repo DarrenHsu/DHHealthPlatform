@@ -1,13 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ConcreteHelper_1 = require("./ConcreteHelper");
 const AuthSchema_1 = require("../schemas/AuthSchema");
 const ResultCode_1 = require("../../routes/ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 /**
  * @description 授權資料存取控制
  */
-class AuthHelper {
+class AuthHelper extends ConcreteHelper_1.ConcreteHelper {
     constructor(connection) {
+        super(connection);
         if (!AuthHelper.model) {
             AuthHelper.model = connection.model('Auth', AuthSchema_1.AuthSchema);
         }
@@ -85,18 +87,7 @@ class AuthHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        AuthHelper.model.remove({ _id: id }, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_NOT_FOUND_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelRemove(AuthHelper.model, { _id: id }, callback);
     }
     findOne(lineUserId, callback) {
         if (!lineUserId) {
@@ -105,18 +96,7 @@ class AuthHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        AuthHelper.model.findOne({ lineUserId: lineUserId }, (err, res) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find auth');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, res);
-            }
-        });
+        this.modelFindOne(AuthHelper.model, { lineUserId: lineUserId }, callback);
     }
     find(lineUserId, callback) {
         if (!lineUserId) {

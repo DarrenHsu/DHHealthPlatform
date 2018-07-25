@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose';
+import * as mongoose        from 'mongoose';
 
-import { IRouteModel} from '../models/model';
+import { IRouteModel}       from '../models/model';
 
 import { ConcreteHelper }   from './ConcreteHelper';
 import { IRoute }           from '../interface/IRoute';

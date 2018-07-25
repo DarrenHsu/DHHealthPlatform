@@ -6,16 +6,11 @@ const DHLog_1 = require("../../util/DHLog");
  * @description 紀錄資料存取控制
  */
 class ConcreteHelper {
-    constructor(connection) {
-    }
-    save(id, data, callback) {
-    }
-    add(data, callback) {
-    }
-    remove(id, callback) {
-    }
-    find(id, callback) {
-    }
+    constructor(connection) { }
+    save(id, data, callback) { }
+    add(data, callback) { }
+    remove(id, callback) { }
+    find(id, callback) { }
     /* --------------- model 處理程序 ------------------ */
     modelFind(model, conditions, sort, callback) {
         model.find(conditions, (err, ress) => {
