@@ -100,6 +100,7 @@ class UserHelper extends ConcreteHelper_1.ConcreteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
+        DHLog_1.DHLog.d('id ' + lineUserId);
         UserHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d('find error:' + err);

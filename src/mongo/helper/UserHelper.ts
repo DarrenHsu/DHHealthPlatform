@@ -106,6 +106,8 @@ export class UserHelper extends ConcreteHelper {
             return;
         }
 
+        DHLog.d('id ' + lineUserId);
+
         UserHelper.model.find({lineUserId: lineUserId}, (err, ress) => {
             if (err) {
                 DHLog.d('find error:' + err);
