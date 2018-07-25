@@ -381,28 +381,29 @@ export class LineWebhookAPI extends BaseAPI {
                 this.userHelper.find(record.lineUserId, (code, users) => {
                     let user = users[0];
                     this.chatroomHelper.find(record.lineUserId, (code, chats) => {
-                        let text = BaseRoute.getFullHostUrl(req) + DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
-                        
+
+                        let recordUri = BaseRoute.getFullHostUrl(req) + DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
+                        let title = '以下為「' + user.name + '」的運動記錄';                        
                         let image = BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
                         
                         var message: TemplateMessage = {
                             type: 'template',
-                            altText: '以下為' + user.name + '的運動記錄',
+                            altText: title,
                             template: {
                                 type: 'buttons',
                                 thumbnailImageUrl: image,
-                                title: '以下為' + user.name + '的運動記錄',
+                                title: title,
                                 text: '請給他一個讚哦',
                                 actions: [
-                                    {
-                                      type: 'postback',
-                                      label: '讚',
-                                      data: 'action=ok&itemid=123'
+                                    { 
+                                        type: 'uri',
+                                        label: '詳細內容',
+                                        uri: recordUri 
                                     },
                                     {
-                                      type: 'uri',
-                                      label: '詳細內容',
-                                      uri: text
+                                        type: 'postback',
+                                        label: '讚',
+                                        data: 'action=ok&itemid=123'
                                     }
                                 ]
                             }

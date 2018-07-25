@@ -277,7 +277,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             this.chatroomHelper.find(lineUserId, (code, chats) => {
                 var message = {
                     type: 'template',
-                    altText: title,
                     template: {
                         type: 'buttons',
                         thumbnailImageUrl: image,
@@ -330,22 +329,21 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                         let image = BaseRoute_1.BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
                         var message = {
                             type: 'template',
-                            altText: '以下為' + user.name + '的運動記錄',
                             template: {
                                 type: 'buttons',
                                 thumbnailImageUrl: image,
-                                title: '以下為' + user.name + '的運動記錄',
+                                title: '以下為「' + user.name + '」的運動記錄',
                                 text: '請給他一個讚哦',
                                 actions: [
-                                    {
-                                        type: 'postback',
-                                        label: '讚',
-                                        data: 'action=ok&itemid=123'
-                                    },
                                     {
                                         type: 'uri',
                                         label: '詳細內容',
                                         uri: text
+                                    },
+                                    {
+                                        type: 'postback',
+                                        label: '讚',
+                                        data: 'action=ok&itemid=123'
                                     }
                                 ]
                             }
