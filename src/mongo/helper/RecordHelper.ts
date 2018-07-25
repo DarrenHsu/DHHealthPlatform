@@ -8,6 +8,7 @@ import { IRecordModel }     from '../models/model';
 
 import { MONGODB_CODE }     from '../../routes/ResultCode';
 import { DHLog }            from '../../util/DHLog';
+import { IBase } from '../interface/IBase';
 
 /**
  * @description 紀錄資料存取控制
@@ -125,7 +126,7 @@ export class RecordHelper implements BaseHelper {
     }
 
     /* --------------- model 處理程序 ------------------ */
-    private modelFind(conditions: Object, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
+    private modelFind(conditions: Object, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {
         RecordHelper.model.find(conditions , (err, ress) => {
             if (err) {
                 DHLog.d('find error:' + err);
