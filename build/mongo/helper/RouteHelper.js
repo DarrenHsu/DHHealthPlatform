@@ -71,18 +71,7 @@ class RouteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        RouteHelper.model.remove({ _id: id }, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelRemove({ _id: id }, callback);
     }
     find(lineUserId, callback) {
         if (!lineUserId) {
@@ -91,7 +80,11 @@ class RouteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        RouteHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
+        this.modelFind({ lineUserId: lineUserId }, callback);
+    }
+    /* --------------- model 處理程序 ------------------ */
+    modelFind(conditions, callback) {
+        RouteHelper.model.find(conditions, (err, ress) => {
             if (err) {
                 DHLog_1.DHLog.d('find error:' + err);
                 if (callback)
@@ -101,6 +94,20 @@ class RouteHelper {
                 DHLog_1.DHLog.d('find ' + ress.length);
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+            }
+        });
+    }
+    modelRemove(conditions, callback) {
+        RouteHelper.model.remove(conditions, (err) => {
+            if (err) {
+                DHLog_1.DHLog.d('remove by id error：' + err);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
+            }
+            else {
+                DHLog_1.DHLog.d('remove by id success');
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
             }
         });
     }

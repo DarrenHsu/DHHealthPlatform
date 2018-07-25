@@ -101,15 +101,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        RecordHelper.model.remove({_id : id}, (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelRemove({_id: id}, callback);
     }
 
     public findOne(recordId: string, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
@@ -119,15 +111,7 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        RecordHelper.model.findOne({recordId: recordId} , (err, res) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + res);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-            }
-        });
+        this.modelFindOne({recordId: recordId}, callback);
     }
     
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
@@ -137,7 +121,12 @@ export class RecordHelper implements BaseHelper {
             return;
         }
 
-        RecordHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
+        this.modelFind({lineUserId: lineUserId}, callback);
+    }
+
+    /* --------------- model 處理程序 ------------------ */
+    private modelFind(conditions: Object, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
+        RecordHelper.model.find(conditions , (err, ress) => {
             if (err) {
                 DHLog.d('find error:' + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -146,5 +135,29 @@ export class RecordHelper implements BaseHelper {
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
             }
         }).sort({ startTime : -1 });
+    }
+
+    private modelFindOne(conditions: Object, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
+        RecordHelper.model.findOne(conditions , (err, res) => {
+            if (err) {
+                DHLog.d('find error:' + err);
+                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+            }else {
+                DHLog.d('find ' + res);
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+            }
+        });
+    }
+
+    private modelRemove(conditions: Object, callback?: (code: MONGODB_CODE) => void) {
+        RecordHelper.model.remove(conditions, (err) => {
+            if (err) {
+                DHLog.d('remove by id error：' + err);
+                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
+            }else {
+                DHLog.d('remove by id success');
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
+            }
+        });
     }
 }

@@ -167,6 +167,7 @@ export class RecordRoute extends BaseRoute {
             distance: record.distance.toFixed(1),
             maxSpeed: record.maxSpeed.toFixed(1),
             avgSpeed: record.avgSpeed.toFixed(1),
+            step: record.step,
             locations: record.locations
         };
         this.render(req, res, 'record/publicIndex', options);

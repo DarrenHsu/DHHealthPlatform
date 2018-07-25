@@ -77,15 +77,7 @@ export class RouteHelper implements BaseHelper {
             return;
         }
 
-        RouteHelper.model.remove({_id : id}, (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        this.modelRemove({_id: id}, callback);
     }
 
     public find(lineUserId: string, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
@@ -95,7 +87,12 @@ export class RouteHelper implements BaseHelper {
             return;
         }
 
-        RouteHelper.model.find({lineUserId: lineUserId} , (err, ress) => {
+        this.modelFind({lineUserId: lineUserId}, callback);
+    }
+
+    /* --------------- model 處理程序 ------------------ */
+    private modelFind(conditions: Object, callback?: (code: MONGODB_CODE, results: IRouteModel[]) => void) {
+        RouteHelper.model.find(conditions, (err, ress) => {
             if (err) {
                 DHLog.d('find error:' + err);
                 if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
@@ -106,4 +103,15 @@ export class RouteHelper implements BaseHelper {
         });
     }
 
+    private modelRemove(conditions: Object, callback?: (code: MONGODB_CODE) => void) {
+        RouteHelper.model.remove(conditions, (err) => {
+            if (err) {
+                DHLog.d('remove by id error：' + err);
+                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
+            }else {
+                DHLog.d('remove by id success');
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
+            }
+        });
+    }
 }

@@ -96,18 +96,7 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
             return;
         }
-        RecordHelper.model.remove({ _id: id }, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
-        });
+        this.modelRemove({ _id: id }, callback);
     }
     findOne(recordId, callback) {
         if (!recordId) {
@@ -116,7 +105,34 @@ class RecordHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        RecordHelper.model.findOne({ recordId: recordId }, (err, res) => {
+        this.modelFindOne({ recordId: recordId }, callback);
+    }
+    find(lineUserId, callback) {
+        if (!lineUserId) {
+            DHLog_1.DHLog.d('id error：' + lineUserId);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
+            return;
+        }
+        this.modelFind({ lineUserId: lineUserId }, callback);
+    }
+    /* --------------- model 處理程序 ------------------ */
+    modelFind(conditions, callback) {
+        RecordHelper.model.find(conditions, (err, ress) => {
+            if (err) {
+                DHLog_1.DHLog.d('find error:' + err);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+            }
+            else {
+                DHLog_1.DHLog.d('find ' + ress.length);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+            }
+        }).sort({ startTime: -1 });
+    }
+    modelFindOne(conditions, callback) {
+        RecordHelper.model.findOne(conditions, (err, res) => {
             if (err) {
                 DHLog_1.DHLog.d('find error:' + err);
                 if (callback)
@@ -129,25 +145,19 @@ class RecordHelper {
             }
         });
     }
-    find(lineUserId, callback) {
-        if (!lineUserId) {
-            DHLog_1.DHLog.d('id error：' + lineUserId);
-            if (callback)
-                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
-            return;
-        }
-        RecordHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
+    modelRemove(conditions, callback) {
+        RecordHelper.model.remove(conditions, (err) => {
             if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
+                DHLog_1.DHLog.d('remove by id error：' + err);
                 if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
             }
             else {
-                DHLog_1.DHLog.d('find ' + ress.length);
+                DHLog_1.DHLog.d('remove by id success');
                 if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
             }
-        }).sort({ startTime: -1 });
+        });
     }
 }
 exports.RecordHelper = RecordHelper;
