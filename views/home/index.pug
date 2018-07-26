@@ -14,7 +14,11 @@ block content
 
     function loadImage() {
       var url = $('.carousel-item.active').find('img').attr('url'); 
-      $('.carousel-item.active').find('img').attr('src', url);
+      var img =  $('.carousel-item.active').find('img');
+      img.attr('src', url);
+      var height = img.height();
+      var width = img.width();
+      alert("" + height + "," + width);
     }
 
   div#RecordCarousel(class='carousel slide' data-ride='carousel')
