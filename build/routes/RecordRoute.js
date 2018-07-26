@@ -28,11 +28,15 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     }
     delRecord(router) {
         DHLog_1.DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI_1.DHAPI.RECORD_PATH);
-        router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:action/:id', (req, res, next) => {
+        router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:action/:id/:page', (req, res, next) => {
             DHLog_1.DHLog.d("host " + req.headers.host);
+            if (req.headers.host != DHAPI_1.DHAPI.PROD_HOST && req.headers.host != DHAPI_1.DHAPI.DEV_HOST) {
+                res.redirect("/whatup");
+                return;
+            }
             if (req.params.action && req.params.action == 'del') {
                 this.recordHelper.removeWith({ recordId: req.params.id }, (Code) => {
-                    res.redirect('/records');
+                    res.redirect('/records/' + req.params.page);
                 });
             }
         });

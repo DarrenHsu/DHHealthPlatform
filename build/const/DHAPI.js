@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class DHAPI {
 }
 DHAPI.pkgjson = require('../../package.json');
+DHAPI.PROD_HOST = 'dhhealthplatform.herokuapp.com';
+DHAPI.DEV_HOST = 'localhost:5000';
 DHAPI.ROOT_PATH = '/';
 DHAPI.HOME_PATH = '/home';
 DHAPI.LOGIN_PATH = '/login';
