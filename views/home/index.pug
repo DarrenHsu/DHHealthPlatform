@@ -17,7 +17,7 @@ block content
       $('.carousel-item.active').find('img').attr('src', url);
     }
 
-  div#RecordCarousel(class='carousel slide' data-ride='carousel')
+  div#RecordCarousel(class='carousel slide' height='300px' data-ride='carousel')
     div(class='carousel-inner')
 
       div(class='carousel-item active')
@@ -26,7 +26,7 @@ block content
       - var locIndex = 1;
       each location in imgLocation
         div(class='carousel-item' + (locIndex == 0 ? ' action' : ''))
-          img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=90&heading=5&pitch=0' alt=locIndex + ' slide' )
+          img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=120&heading=0&pitch=0' alt=locIndex + ' slide' )
         - locIndex++;
         
       a(class='carousel-control-prev' href='#RecordCarousel' role='button' data-slide='prev')
