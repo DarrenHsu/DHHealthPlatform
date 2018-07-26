@@ -2,6 +2,9 @@ export class DHAPI {
 
     public static pkgjson =                         require('../../package.json');
 
+    public static PROD_HOST =                       'dhhealthplatform.herokuapp.com';
+    public static DEV_HOST =                        'localhost:5000';
+
     public static ROOT_PATH =                       '/';
 
     public static HOME_PATH =                       '/home';
