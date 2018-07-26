@@ -56,20 +56,21 @@ block content
     
       - index++
 
-  //- div#ModalCenter(class='modal fade' tabindex='-1' role='dialog' aria-labelledby='ModalCenterTitle' aria-hidden='true')
-  //-   div(class='modal-dialog modal-dialog-centered' role='document')
-  //-     div(class='modal-content')
-  //-       div(class='modal-header')
-  //-         h5#ModalTitle(class='modal-title') 提示訊息
-  //-         button(type='button' class='close' data-dismiss='modal' aria-label='Close')
-  //-           span(aria-hidden='true') &times;
+  //- Delete div
+  div#ModalCenter(class='modal fade' tabindex='-1' role='dialog' aria-labelledby='ModalCenterTitle' aria-hidden='true')
+    div(class='modal-dialog modal-dialog-centered' role='document')
+      div(class='modal-content')
+        div(class='modal-header')
+          h5#ModalTitle(class='modal-title') 提示訊息
+          button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+            span(aria-hidden='true') &times;
         
-  //-       div(class='modal-body')
-  //-         span 是否確定刪除此影片?
+        div(class='modal-body')
+          span 是否確定刪除此影片?
         
-  //-       div(class='modal-footer')
-  //-         button(type='button' class='btn btn-secondary' data-dismiss='modal') 取消
-  //-         button(type='button' class='btn btn-danger') 刪除
+        div(class='modal-footer')
+          button(type='button' class='btn btn-secondary' data-dismiss='modal') 取消
+          button(type='button' class='btn btn-danger') 刪除
       
   
   include ../layout/paginationSimple

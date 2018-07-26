@@ -22,7 +22,7 @@ block content
           //- Header
           div(class='card-header')
             span #{record.name}
-            button(type='button' class='close' aria-label='Close')
+            button(type='button' class='close' aria-label='Close' data-toggle='modal' data-target='#ModalCenter' data-id=record.recordId data-title=record.name)
               span(aria-hidden='true') &times;
           
           //- Body: Map
@@ -45,6 +45,9 @@ block content
                         img(class='records-icon' src='/images/home/distance.png') 
                         span(class='records-value') #{record.distance.toFixed(1)} 公里
                       li 
+                        img(class='records-icon' src='/images/home/step.png') 
+                        span(class='records-value') #{record.step} 步
+                      li 
                         img(class='records-icon' src='/images/home/calories.png') 
                         span(class='records-value') 1,400 卡
 
@@ -55,8 +58,38 @@ block content
                     div(class='btn-group-vertical' role='group' aria-label='Basic example')
                       button(type='button' class='btn btn-success btn-sm') 發送至Line
       - timeIndex++
-              
+    
+    //- Delete div
+    div#ModalCenter(class='modal fade' tabindex='-1' role='dialog' aria-labelledby='ModalCenterTitle' aria-hidden='true')
+      div(class='modal-dialog modal-dialog-centered' role='document')
+        div(class='modal-content')
+          div(class='modal-header')
+            h5#ModalTitle(class='modal-title') 提示訊息
+            button(type='button' class='close' data-dismiss='modal' aria-label='Close')
+              span(aria-hidden='true') &times;
+          
+          div(class='modal-body')
+            span 是否確定刪除此影片?
+          
+          div(class='modal-footer')
+            button(type='button' class='btn btn-secondary' data-dismiss='modal') 取消
+            button(type='button' class='btn btn-danger') 刪除
+            
   include ../layout/pagination
+
+  script.
+    $('#ModalCenter').on('show.bs.modal', function(e) {
+      var button = $(e.relatedTarget);
+      var recordId = button.data('id');
+      var recordName = button.data('title');
+      var content = '確定是否刪除「' + recordName + '」這部影片?';
+      var modal = $(this);
+      modal.find('.modal-body').text(content);
+      modal.find('.modal-footer').find('.btn-danger').on('click', function(e) {
+        console.log(recordId);
+        $('#ModalCenter').modal('hide');
+      });
+    });
 
   script.
     var coordinates = [];
