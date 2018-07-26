@@ -20,9 +20,11 @@ block content
   div#RecordCarousel(class='carousel slide' data-ride='carousel')
     div(class='carousel-inner')
 
+      - var timeIndex = 0;
       each location in imgLocation
-        div(class='carousel-item active')
+        div(class='carousel-item ' + (timeIndex == 0 ? 'action' : ''))
           img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=20&heading=75&pitch=5' alt='First slide')
+        - timeIndex += 1;
         
       a(class='carousel-control-prev' href='#RecordCarousel' role='button' data-slide='prev')
         span(class='carousel-control-prev-icon' aria-hidden='true')
