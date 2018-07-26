@@ -20,10 +20,13 @@ block content
   div#RecordCarousel(class='carousel slide' data-ride='carousel')
     div(class='carousel-inner')
 
-      - var locIndex = 0;
+      div(class='carousel-item active')
+        img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=23.558215,120.471724&fov=20&heading=75&pitch=5' alt='First slide')
+      
+      - var locIndex = 1;
       each location in imgLocation
         div(class='carousel-item' + (locIndex == 0 ? ' action' : ''))
-          img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=20&heading=75&pitch=5' alt='First slide')
+          img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=20&heading=75&pitch=5' alt=locIndex + ' slide' )
         - locIndex++;
         
       a(class='carousel-control-prev' href='#RecordCarousel' role='button' data-slide='prev')
