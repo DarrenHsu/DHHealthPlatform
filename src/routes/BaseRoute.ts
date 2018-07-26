@@ -180,4 +180,12 @@ export class BaseRoute {
         res.json(result);
         res.end();
     }
+
+    /**
+     * @description 確認 host 是不是自家用
+     * @param req 
+     */
+    protected isCorrectHost(req: Request): boolean {
+        return req.headers.host == DHAPI.PROD_HOST || req.headers.host == DHAPI.DEV_HOST;
+    }
 }

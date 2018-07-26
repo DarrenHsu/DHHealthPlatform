@@ -51,12 +51,11 @@ export class RecordRoute extends BaseRoute {
     public delRecord(router: Router) {
         DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PATH);
         router.get(DHAPI.RECORD_PATH + '/:action/:id/:page', (req: Request, res: Response, next: NextFunction) => {
-            DHLog.d("host " + req.headers.host);
-            if (req.headers.host != DHAPI.PROD_HOST && req.headers.host != DHAPI.DEV_HOST) {
+            if (!this.isCorrectHost(req)) {
                 res.redirect("/whatup");
                 return;
             }
-
+            
             if (req.params.action && req.params.action == 'del') {
                 this.recordHelper.removeWith({recordId: req.params.id}, (Code) => {
                     res.redirect('/records/' + req.params.page);

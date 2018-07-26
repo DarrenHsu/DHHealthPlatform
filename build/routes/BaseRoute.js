@@ -148,6 +148,13 @@ class BaseRoute {
         res.json(result);
         res.end();
     }
+    /**
+     * @description 確認 host 是不是自家用
+     * @param req
+     */
+    isCorrectHost(req) {
+        return req.headers.host == DHAPI_1.DHAPI.PROD_HOST || req.headers.host == DHAPI_1.DHAPI.DEV_HOST;
+    }
 }
 BaseRoute.AP_TITLE = 'DHHealthPlatform';
 BaseRoute.FEED_AUTH = 'Darren Hsu I Love You';

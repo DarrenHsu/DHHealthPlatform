@@ -29,8 +29,7 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     delRecord(router) {
         DHLog_1.DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI_1.DHAPI.RECORD_PATH);
         router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:action/:id/:page', (req, res, next) => {
-            DHLog_1.DHLog.d("host " + req.headers.host);
-            if (req.headers.host != DHAPI_1.DHAPI.PROD_HOST && req.headers.host != DHAPI_1.DHAPI.DEV_HOST) {
+            if (!this.isCorrectHost(req)) {
                 res.redirect("/whatup");
                 return;
             }
