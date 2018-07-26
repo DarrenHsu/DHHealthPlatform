@@ -26,7 +26,7 @@ block content
       - var locIndex = 1;
       each location in imgLocation
         div(class='carousel-item' + (locIndex == 0 ? ' action' : ''))
-          img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=20&heading=75&pitch=5' alt=locIndex + ' slide' )
+          img(class='d-block w-100 home-carousel-item' src='' url='https://maps.googleapis.com/maps/api/streetview?key=AIzaSyBywZw3mj57BST--BC9k2LxamMD0-Xz4-g&size=1024x300&location=' + location.lat + ',' + location.lon + '&fov=20&heading=45&pitch=5' alt=locIndex + ' slide' )
         - locIndex++;
         
       a(class='carousel-control-prev' href='#RecordCarousel' role='button' data-slide='prev')
