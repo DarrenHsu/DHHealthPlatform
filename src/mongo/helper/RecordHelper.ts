@@ -125,4 +125,14 @@ export class RecordHelper extends ConcreteHelper {
 
         this.modelFind(RecordHelper.model, {lineUserId: lineUserId}, {startTime: -1}, callback);
     }
+
+    public findWith(conditions: Object, sort: Object, callback?: (code: MONGODB_CODE, results: IRecordModel[]) => void) {
+        if (!conditions) {
+            DHLog.d('condition is null');
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
+            return;
+        }
+
+        this.modelFind(RecordHelper.model, conditions, sort, callback);
+    }
 }

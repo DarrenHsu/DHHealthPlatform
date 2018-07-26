@@ -118,5 +118,14 @@ class RecordHelper extends ConcreteHelper_1.ConcreteHelper {
         }
         this.modelFind(RecordHelper.model, { lineUserId: lineUserId }, { startTime: -1 }, callback);
     }
+    findWith(conditions, sort, callback) {
+        if (!conditions) {
+            DHLog_1.DHLog.d('condition is null');
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
+            return;
+        }
+        this.modelFind(RecordHelper.model, conditions, sort, callback);
+    }
 }
 exports.RecordHelper = RecordHelper;
