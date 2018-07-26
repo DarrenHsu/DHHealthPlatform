@@ -11,6 +11,7 @@ block content
     strong 影片：
     span #{items[playIndex].snippet.title}
   
+  //- Play Video Div
   div#PlayRow(class='row')
     div(class='col-md-12 first-live')
       div(class='embed-responsive embed-responsive-16by9')
@@ -37,6 +38,7 @@ block content
             event.target.playVideo();
           }
           
+  //- Video list div
   div#LiveRow(class='row')
     - var index = 0
     each item in items
@@ -66,7 +68,6 @@ block content
             span(aria-hidden='true') &times;
         
         div(class='modal-body')
-          span 是否確定刪除此影片?
         
         div(class='modal-footer')
           button(type='button' class='btn btn-secondary' data-dismiss='modal') 取消
@@ -84,7 +85,6 @@ block content
       var modal = $(this);
       modal.find('.modal-body').text(content);
       modal.find('.modal-footer').find('.btn-danger').on('click', function(e) {
-        console.log(videoId);
         $('#ModalCenter').modal('hide');
       });
     });

@@ -100,6 +100,15 @@ class RecordHelper extends ConcreteHelper_1.ConcreteHelper {
         }
         this.modelRemove(RecordHelper.model, { _id: id }, callback);
     }
+    removeWith(conditions, callback) {
+        if (!conditions) {
+            DHLog_1.DHLog.d('conditions error');
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR);
+            return;
+        }
+        this.modelRemove(RecordHelper.model, conditions, callback);
+    }
     findOne(recordId, callback) {
         if (!recordId) {
             DHLog_1.DHLog.d('recordId error：' + recordId);

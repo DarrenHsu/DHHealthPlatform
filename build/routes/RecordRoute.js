@@ -24,6 +24,18 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
         var app = new RecordRoute(DBHelper_1.DBHelper.connection);
         app.getPreviewRecord(router);
         app.getRecord(router);
+        app.delRecord(router);
+    }
+    delRecord(router) {
+        DHLog_1.DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI_1.DHAPI.RECORD_PATH);
+        router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:action/:id', (req, res, next) => {
+            DHLog_1.DHLog.d("host " + req.headers.host);
+            if (req.params.action && req.params.action == 'del') {
+                this.recordHelper.removeWith({ recordId: req.params.id }, (Code) => {
+                    res.redirect('/records');
+                });
+            }
+        });
     }
     /**
      * @description 顯示紀錄頁面

@@ -106,6 +106,16 @@ export class RecordHelper extends ConcreteHelper {
         this.modelRemove(RecordHelper.model, {_id: id}, callback);
     }
 
+    public removeWith(conditions: Object, callback?: (code: MONGODB_CODE) => void) {
+        if (!conditions) {
+            DHLog.d('conditions error');
+            if (callback) callback(MONGODB_CODE.MC_NO_CONDITION_ERROR);
+            return;
+        }
+
+        this.modelRemove(RecordHelper.model, conditions, callback);
+    }
+
     public findOne(recordId: string, callback?: (code: MONGODB_CODE, results: IRecord) => void) {
         if (!recordId) {
             DHLog.d('recordId error：' + recordId);

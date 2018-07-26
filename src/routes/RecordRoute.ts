@@ -17,6 +17,7 @@ import { RecordHelper } from '../mongo/helper/RecordHelper';
 import { UserHelper }   from '../mongo/helper/UserHelper';
 import { IRecord }      from '../mongo/interface/IRecord';
 import { IUser }        from '../mongo/interface/IUser';
+import { Code } from '../../node_modules/@types/bson';
 
 declare type Location = {
     lat: string;
@@ -45,6 +46,19 @@ export class RecordRoute extends BaseRoute {
         
         app.getPreviewRecord(router);
         app.getRecord(router);
+        app.delRecord(router);
+    }
+
+    public delRecord(router: Router) {
+        DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PATH);
+        router.get(DHAPI.RECORD_PATH + '/:action/:id', (req: Request, res: Response, next: NextFunction) => {
+            DHLog.d("host " + req.headers.host);
+            if (req.params.action && req.params.action == 'del') {
+                this.recordHelper.removeWith({recordId: req.params.id}, (Code) => {
+                    res.redirect('/records');
+                });
+            }
+        });
     }
 
     /**
