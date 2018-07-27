@@ -8,19 +8,27 @@ script(src='/javascripts/calendar/theme-chooser.js')
 
 script.
   $(document).ready(function() {
-    $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay'
+    initThemeChooser({
+      init: function(themeSystem) {
+        $('#calendar').fullCalendar({
+          themeSystem: themeSystem,
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+          },
+          defaultDate: new Date(),
+          navLinks: true, // can click day/week names to navigate views
+          editable: false,
+          eventLimit: false, // allow 'more' link when too many events
+          events: '/calendar/feed',
+          eventClick: function(calEvent, jsEvent, view) {
+            alert('Event: ' + calEvent.id);
+          }
+        });
       },
-      defaultDate: new Date(),
-      navLinks: true, // can click day/week names to navigate views
-      editable: false,
-      eventLimit: false, // allow 'more' link when too many events
-      events: '/calendar/feed',
-      eventClick: function(calEvent, jsEvent, view) {
-         alert('Event: ' + calEvent.id);
+      change: function(themeSystem) {
+        $('#calendar').fullCalendar('option', 'themeSystem', themeSystem);
       }
     });
   });

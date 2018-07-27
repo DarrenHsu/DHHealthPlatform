@@ -20,7 +20,8 @@ function initThemeChooser(settings) {
           setTheme(themeSystem, this.value);
         });
   
-      setTheme(themeSystem, $select.val());
+      // setTheme(themeSystem, $select.val());
+      setTheme('jquery-ui', 'humanity');
     }
   
   
@@ -62,7 +63,7 @@ function initThemeChooser(settings) {
       if (themeSystem === 'jquery-ui') {
         return 'https://code.jquery.com/ui/1.12.1/themes/' + themeName + '/jquery-ui.css';
       }
-      else if (themeSystem === 'bootstrap3') {
+      else if (themeSystem === 'bootstrap3') {  
         if (themeName) {
           return 'https://bootswatch.com/3/' + themeName + '/bootstrap.min.css';
         }

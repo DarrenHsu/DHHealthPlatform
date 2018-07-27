@@ -57,11 +57,14 @@ class Server {
         this.app.use(express.static(path.join(__dirname, '../../public')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/js/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
+        this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/jquery-ui-dist/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/fullcalendar/dist/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/moment/min/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
         this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/css/')));
         this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/fullcalendar/dist/')));
+        this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/jquery-ui-dist/')));
+        this.app.use('/images', express.static(path.join(__dirname, '../../node_modules/jquery-ui-dist/images/')));
         this.app.set('views', path.join(__dirname, '../../views'));
         this.app.set('view engine', 'pug');
         this.app.use(compression());
