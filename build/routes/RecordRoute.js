@@ -105,6 +105,8 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         var timeStr = [];
         for (let record of recds) {
+            if (!record.step)
+                record.step = 0;
             var dateStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.DATE_FORMAT);
             var startTimeStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
             var endTimeStr = moment(record.endTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
