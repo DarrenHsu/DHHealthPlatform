@@ -6,13 +6,10 @@ import * as connectMongo from 'connect-mongo';
 import * as compression from 'compression';
 import * as logger from 'morgan';
 import * as path from 'path';
-import * as errorHandler from 'errorhandler';
+import * as fileupload from 'express-fileupload';
 import * as methodOverride from 'method-override';
-import * as mongoose from 'mongoose';
 
 import { CONNECTION_CODE, ResultCodeMsg } from '../routes/ResultCode';
-
-import { DHLog }            from '../util/DHLog';
 
 import { DHAPI }            from '../const/DHAPI';
 
@@ -49,21 +46,7 @@ export class Server {
         this.config();
         this.routes();
         this.api();
-
-        this.app.use((req, res) => {
-            res.locals.title = BaseRoute.AP_TITLE;
-            var options = {
-                auth: {
-                    path: DHAPI.ERROR_PATH,
-                    checkLogin: false
-                }, 
-                result: {
-                    code: CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR,
-                    message: ResultCodeMsg.getMsg(CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
-                }
-            }
-            res.render('error/index', options);
-        })
+        this.error();
     }
 
     public config() {
@@ -71,17 +54,13 @@ export class Server {
 
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/js/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/jquery/dist/')));
-
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/jquery-ui-dist/')));
-        
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/fullcalendar/dist/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/moment/min/')));
         this.app.use('/scripts', express.static(path.join(__dirname, '../../node_modules/popper.js/dist/')));
-
         this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/bootstrap/dist/css/')));
         this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/fullcalendar/dist/')));
         this.app.use('/styles', express.static(path.join(__dirname, '../../node_modules/jquery-ui-dist/')));
-        
         this.app.use('/images', express.static(path.join(__dirname, '../../node_modules/jquery-ui-dist/images/')));
         
         this.app.set('views', path.join(__dirname, '../../views'));
@@ -104,6 +83,7 @@ export class Server {
             saveUninitialized: true,
             cookie: {maxAge: 60 * 1000}
         }));
+        this.app.use(fileupload());
     }
 
     private routes() {
@@ -128,5 +108,22 @@ export class Server {
         LineWebhookAPI.create(router);
 
         this.app.use(router);
+    }
+
+    public error() {
+        this.app.use((req, res) => {
+            res.locals.title = BaseRoute.AP_TITLE;
+            var options = {
+                auth: {
+                    path: DHAPI.ERROR_PATH,
+                    checkLogin: false
+                }, 
+                result: {
+                    code: CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR,
+                    message: ResultCodeMsg.getMsg(CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
+                }
+            }
+            res.render('error/index', options);
+        });
     }
 }

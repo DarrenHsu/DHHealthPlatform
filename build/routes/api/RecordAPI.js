@@ -5,6 +5,7 @@ const DHAPI_1 = require("../../const/DHAPI");
 const DHLog_1 = require("../../util/DHLog");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
+const ResultCode_1 = require("../ResultCode");
 /**
  * @description 紀錄相關 api
  */
@@ -21,6 +22,24 @@ class RecordAPI extends BaseAPI_1.BaseAPI {
         api.post(router);
         api.put(router);
         api.delete(router);
+        api.uploadFile(router);
+    }
+    uploadFile(router) {
+        DHLog_1.DHLog.d('[api:create] ' + DHAPI_1.DHAPI.API_RECORD_FILE_UPLOAD_PATH);
+        router.post(DHAPI_1.DHAPI.API_RECORD_FILE_UPLOAD_PATH, (req, res, next) => {
+            if (!this.checkHeader(req)) {
+                this.sendAuthFaild(res);
+                return;
+            }
+            if (!req.files) {
+                DHLog_1.DHLog.d("fileupload: file not found");
+                this.sendFaild(res, ResultCode_1.CONNECTION_CODE.CC_FILEUPLOAD_ERROR);
+            }
+            else {
+                DHLog_1.DHLog.d("fileupload: " + req.files.foo);
+                this.sendSuccess(res, ResultCode_1.CONNECTION_CODE.CC_FILEUPLOAD_SUCCESS);
+            }
+        });
     }
 }
 exports.RecordAPI = RecordAPI;

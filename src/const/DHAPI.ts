@@ -27,6 +27,7 @@ export class DHAPI {
 
     public static API_PATH =                        DHAPI.ROOT_PATH + 'api';
     public static API_RECORD_PATH =                 DHAPI.API_PATH + '/record';
+    public static API_RECORD_FILE_UPLOAD_PATH =     DHAPI.API_PATH + '/record/fileupload';
     public static API_USER_PATH =                   DHAPI.API_PATH + '/user';
     public static API_ROUTE_PATH =                  DHAPI.API_PATH + '/route';
 }

@@ -8,6 +8,7 @@ const connectMongo = require("connect-mongo");
 const compression = require("compression");
 const logger = require("morgan");
 const path = require("path");
+const fileupload = require("express-fileupload");
 const methodOverride = require("method-override");
 const ResultCode_1 = require("../routes/ResultCode");
 const DHAPI_1 = require("../const/DHAPI");
@@ -35,20 +36,7 @@ class Server {
         this.config();
         this.routes();
         this.api();
-        this.app.use((req, res) => {
-            res.locals.title = BaseRoute_1.BaseRoute.AP_TITLE;
-            var options = {
-                auth: {
-                    path: DHAPI_1.DHAPI.ERROR_PATH,
-                    checkLogin: false
-                },
-                result: {
-                    code: ResultCode_1.CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR,
-                    message: ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
-                }
-            };
-            res.render('error/index', options);
-        });
+        this.error();
     }
     static bootstrap() {
         return new Server();
@@ -84,6 +72,7 @@ class Server {
             saveUninitialized: true,
             cookie: { maxAge: 60 * 1000 }
         }));
+        this.app.use(fileupload());
     }
     routes() {
         let router = express.Router();
@@ -102,6 +91,22 @@ class Server {
         RouteAPI_1.RouteAPI.create(router);
         LineWebhookAPI_1.LineWebhookAPI.create(router);
         this.app.use(router);
+    }
+    error() {
+        this.app.use((req, res) => {
+            res.locals.title = BaseRoute_1.BaseRoute.AP_TITLE;
+            var options = {
+                auth: {
+                    path: DHAPI_1.DHAPI.ERROR_PATH,
+                    checkLogin: false
+                },
+                result: {
+                    code: ResultCode_1.CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR,
+                    message: ResultCode_1.ResultCodeMsg.getMsg(ResultCode_1.CONNECTION_CODE.CC_PAGE_NOT_FOUND_ERROR)
+                }
+            };
+            res.render('error/index', options);
+        });
     }
 }
 exports.Server = Server;

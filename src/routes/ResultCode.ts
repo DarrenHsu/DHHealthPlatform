@@ -7,10 +7,12 @@ export enum LINE_CODE {
 
 export enum CONNECTION_CODE {
     CC_SUCCESS = 0,
+    CC_FILEUPLOAD_SUCCESS = 10,
     CC_PARAMETER_ERROR = -201,
     CC_REQUEST_BODY_ERROR = -202,
     CC_AUTH_ERROR = -203,
     CC_GENERAL_ERROR = -999,
+    CC_FILEUPLOAD_ERROR = -10,
     CC_PAGE_NOT_FOUND_ERROR = -1000
 }
 
@@ -45,6 +47,8 @@ class ResultMsg {
     public static LL_MOB_PROFILE_NOT_FOUND_ERROR = '請至手機版運動紀錄登入您的LINE帳號後在進行網站登入。';
 
     public static CC_SUCCESS = '執行成功';
+    public static CC_FILEUPLOAD_SUCCESS = '檔案上傳成功';
+    public static CC_FILEUPLOAD_ERROR = '檔案上傳失敗';
     public static CC_PARAMETER_ERROR = '輸入的參數有誤';
     public static CC_REQUEST_BODY_ERROR = '傳入的資料有誤';
     public static CC_AUTH_ERROR = '認證失敗';
@@ -86,6 +90,10 @@ export class ResultCodeMsg {
 
             case CONNECTION_CODE.CC_SUCCESS:
                 return ResultMsg.CC_SUCCESS;
+            case CONNECTION_CODE.CC_FILEUPLOAD_SUCCESS:
+                return ResultMsg.CC_FILEUPLOAD_SUCCESS;
+            case CONNECTION_CODE.CC_FILEUPLOAD_ERROR:
+                return ResultMsg.CC_FILEUPLOAD_ERROR;
             case CONNECTION_CODE.CC_PARAMETER_ERROR:
                 return ResultMsg.CC_PARAMETER_ERROR;
             case CONNECTION_CODE.CC_REQUEST_BODY_ERROR:
