@@ -17,6 +17,7 @@ import { RecordHelper } from '../mongo/helper/RecordHelper';
 import { UserHelper }   from '../mongo/helper/UserHelper';
 import { IRecord }      from '../mongo/interface/IRecord';
 import { IUser }        from '../mongo/interface/IUser';
+import { Code } from '../../node_modules/@types/bson';
 
 declare type Location = {
     lat: string;
@@ -75,8 +76,10 @@ export class RecordRoute extends BaseRoute {
                 return;
             }
 
-            this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
-                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            this.userHelper.find(req.session.account, (Code, users) => {
+                this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
+                    this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, users[0], results);
+                });
             });
         });
 
@@ -90,8 +93,10 @@ export class RecordRoute extends BaseRoute {
                 return res.redirect(DHAPI.ERROR_PATH + '/' + CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
             
-            this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
-                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            this.userHelper.find(req.session.account, (Code, users) => {
+                this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
+                    this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, users[0], results);
+                });
             });
         });
     }
@@ -136,23 +141,28 @@ export class RecordRoute extends BaseRoute {
         });
     }
 
-    public renderRecord(req: Request, res: Response, next: NextFunction, tCount: number, pCount: number,  pIndex: number, recds: IRecord[]) {
+    public renderRecord(req: Request, res: Response, next: NextFunction, tCount: number, pCount: number,  pIndex: number, user: IUser, recds: IRecord[]) {
         this.title = BaseRoute.AP_TITLE;
 
         var timeStr = [];
+        var recordResult = [];
         for (let record of recds) {
             if (!record.step) record.step = 0;
 
             var dateStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat.DATE_FORMAT);
             var startTimeStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat.TIME_FORMAT);
             var endTimeStr = moment(record.endTime).utcOffset('+0000').format(DHDateFormat.TIME_FORMAT);
-            timeStr.push(
-                {
-                    dateStr: dateStr,
-                    startTimeStr: startTimeStr,
-                    endTimeStr: endTimeStr
-                }
-            );
+            var minutes = moment(record.endTime).diff(moment(record.startTime), 'minutes');
+            var calories = (record.avgSpeed * user.weight / 60.0) * minutes
+            timeStr.push({
+                dateStr: dateStr,
+                startTimeStr: startTimeStr,
+                endTimeStr: endTimeStr
+            });
+            recordResult.push({
+                record: record,
+                calories: calories
+            })
         }
 
         let options: Object = {
@@ -163,7 +173,7 @@ export class RecordRoute extends BaseRoute {
             count: this.displayCount,
             previous: pIndex > 1,
             next: pIndex < pCount,
-            records: recds,
+            recordResult: recordResult,
             times: timeStr
         };
         this.render(req, res, 'record/index', options);

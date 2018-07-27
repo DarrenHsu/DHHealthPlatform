@@ -14,5 +14,5 @@ export interface IRecord extends IBase {
     step?: number;
     locations?: [[number, number]];
     imglocations?: number[];
-    modifyAt?: Date;    
+    modifyAt?: Date;
 }

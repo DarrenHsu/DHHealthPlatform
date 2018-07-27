@@ -3,10 +3,10 @@ extends ./layout/body
 block content
   include ../layout/pagination
 
-  - var ls = [records.length]
+  - var ls = [recordResult.length]
   - var index = 0
-    while index < records.length
-      - var record = records[index]
+    while index < recordResult.length
+      - var record = recordResult[index].record
       - var j = '';
       each location in record.locations
         - j += (j != '' ? ',' : '') + '{lat:' + location[0] + ', lng:' + location[1] + '}'
@@ -15,7 +15,9 @@ block content
   
   div#RecordRow(class='row')
     - var timeIndex = 0;
-    each record in records
+    each rs in recordResult
+      - var record = rs.record;
+      - var calories = rs.calories;
       div(class='col-lg-6 col-md-6 portfolio-item')
         div(class='card h-100')
           
@@ -49,7 +51,7 @@ block content
                         span(class='records-value') #{record.step} 步
                       li 
                         img(class='records-icon' src='/images/home/calories.png') 
-                        span(class='records-value') 1,400 卡
+                        span(class='records-value') #{calories.toFixed(0)} 卡
 
               //- Body: Options
               div(class='col-lg-4')

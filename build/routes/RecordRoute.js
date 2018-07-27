@@ -50,8 +50,10 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
-            this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
-                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            this.userHelper.find(req.session.account, (Code, users) => {
+                this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
+                    this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, users[0], results);
+                });
             });
         });
         router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:page', (req, res, next) => {
@@ -62,8 +64,10 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             if (!page || page != parseInt(page, 10)) {
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
             }
-            this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
-                this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, results);
+            this.userHelper.find(req.session.account, (Code, users) => {
+                this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
+                    this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, users[0], results);
+                });
             });
         });
     }
@@ -101,19 +105,26 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             });
         });
     }
-    renderRecord(req, res, next, tCount, pCount, pIndex, recds) {
+    renderRecord(req, res, next, tCount, pCount, pIndex, user, recds) {
         this.title = BaseRoute_1.BaseRoute.AP_TITLE;
         var timeStr = [];
+        var recordResult = [];
         for (let record of recds) {
             if (!record.step)
                 record.step = 0;
             var dateStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.DATE_FORMAT);
             var startTimeStr = moment(record.startTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
             var endTimeStr = moment(record.endTime).utcOffset('+0000').format(DHDateFormat_1.DHDateFormat.TIME_FORMAT);
+            var minutes = moment(record.endTime).diff(moment(record.startTime), 'minutes');
+            var calories = (record.avgSpeed * user.weight / 60.0) * minutes;
             timeStr.push({
                 dateStr: dateStr,
                 startTimeStr: startTimeStr,
                 endTimeStr: endTimeStr
+            });
+            recordResult.push({
+                record: record,
+                calories: calories
             });
         }
         let options = {
@@ -124,7 +135,7 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             count: this.displayCount,
             previous: pIndex > 1,
             next: pIndex < pCount,
-            records: recds,
+            recordResult: recordResult,
             times: timeStr
         };
         this.render(req, res, 'record/index', options);
