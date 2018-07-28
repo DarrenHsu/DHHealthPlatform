@@ -134,6 +134,10 @@ export class RecordRoute extends BaseRoute {
                     return res.redirect(DHAPI.ERROR_PATH + '/' + code);
                 }
 
+                if (!record) {
+                    return res.redirect(DHAPI.ERROR_PATH + '/' + MONGODB_CODE.MC_RECORD_NO_DATA_ERROR);
+                }
+
                 this.userHelper.find(record.lineUserId, (code, user) => {
                     this.renderPreviewRecord(req, res, next, user[0], record);
                 });

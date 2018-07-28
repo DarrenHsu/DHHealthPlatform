@@ -11,9 +11,9 @@ export enum CONNECTION_CODE {
     CC_PARAMETER_ERROR = -201,
     CC_REQUEST_BODY_ERROR = -202,
     CC_AUTH_ERROR = -203,
-    CC_GENERAL_ERROR = -999,
-    CC_FILEUPLOAD_ERROR = -10,
-    CC_PAGE_NOT_FOUND_ERROR = -1000
+    CC_GENERAL_ERROR = -999,    
+    CC_PAGE_NOT_FOUND_ERROR = -1000,
+    CC_FILEUPLOAD_ERROR = -1001,
 }
 
 export enum GOOGLE_CODE {
@@ -35,6 +35,7 @@ export enum MONGODB_CODE {
     MC_DELETE_NOT_FOUND_ERROR = -7,
     MC_COUNT_ERROR = -8,
     MC_LIST_NO_DATA_ERROR = -9,
+    MC_RECORD_NO_DATA_ERROR = -10,
     MC_NO_USER_DATA_ERROR = -97,
     MC_NO_DATA_ERROR = -98,
     MC_NO_CONDITION_ERROR = -99
@@ -69,6 +70,7 @@ class ResultMsg {
     public static MC_NO_USER_DATA_ERROR = '查無會員資料';
     public static MC_NO_DATA_ERROR = '無傳入處理資料';
     public static MC_NO_CONDITION_ERROR = '無傳入選擇條件';
+    public static MC_RECORD_NO_DATA_ERROR = '找不到此紀錄哦';
 
     public static GC_SUCCESS = '資料已存在';
     public static GC_AUTH_ERROR = 'Google 授權失敗!';
@@ -138,6 +140,8 @@ export class ResultCodeMsg {
                 return ResultMsg.MC_LIST_NO_DATA_ERROR;
             case MONGODB_CODE.MC_NO_USER_DATA_ERROR:
                 return ResultMsg.MC_NO_USER_DATA_ERROR;
+            case MONGODB_CODE.MC_RECORD_NO_DATA_ERROR:
+                return ResultMsg.MC_RECORD_NO_DATA_ERROR;
 
             case MONGODB_CODE.MC_NO_DATA_ERROR:
                 return ResultMsg.MC_NO_DATA_ERROR;

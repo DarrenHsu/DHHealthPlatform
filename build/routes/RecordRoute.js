@@ -99,6 +99,9 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
                 if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + code);
                 }
+                if (!record) {
+                    return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.MONGODB_CODE.MC_RECORD_NO_DATA_ERROR);
+                }
                 this.userHelper.find(record.lineUserId, (code, user) => {
                     this.renderPreviewRecord(req, res, next, user[0], record);
                 });
