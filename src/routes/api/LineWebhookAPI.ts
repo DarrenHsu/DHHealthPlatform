@@ -32,7 +32,6 @@ export class LineWebhookAPI extends BaseAPI {
     private recordUrl = LINEAPI.API_LINEBOT_PUSH_RECORD_PATH;
     private messageUrl = LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
     private authorizationUrl = LINEAPI.API_LINE_AUTH_PATH;
-    private profileUrl = LINEAPI.API_LINE_PROFILE_PATH;
     private templeteUrl = LINEAPI.API_LINEBOT_PUSH_TEMPLETE_PATH;
     
     private clientConfig: ClientConfig;
