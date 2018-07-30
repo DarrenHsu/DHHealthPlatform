@@ -20,38 +20,32 @@ export class ConcreteHelper implements BaseHelper {
 
     /* --------------- model 處理程序 ------------------ */
     protected modelFind(model: mongoose.Model<any>, conditions: Object, sort: Object, callback?: (code: MONGODB_CODE, results: IBase[]) => void) {
-        model.find(conditions , (err, ress) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + ress.length);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        }).sort(sort);
+        model.find(conditions).sort(sort).then((ress) => {
+            DHLog.d('find ' + ress.length);
+            if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
+        }).catch((err) => {
+            DHLog.d('find error:' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+        });
     }
 
     protected modelFindOne(model: mongoose.Model<any>, conditions: Object, callback?: (code: MONGODB_CODE, results: IBase) => void) {
-        model.findOne(conditions , (err, res) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-            }else {
-                DHLog.d('find ' + res);
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-            }
+        model.findOne(conditions).then((res) => {
+            DHLog.d('find ' + res);
+            if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+        }).catch((err) => {
+            DHLog.d('find error:' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
 
     protected modelRemove(model: mongoose.Model<any>, conditions: Object, callback?: (code: MONGODB_CODE) => void) {
-        model.remove(conditions, (err) => {
-            if (err) {
-                DHLog.d('remove by id error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
-            }else {
-                DHLog.d('remove by id success');
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
-            }
-        });
+        model.remove(conditions).then((res) => {
+            DHLog.d('remove by id success');
+            if (callback) callback(MONGODB_CODE.MC_SUCCESS);                    
+        }).catch((err) => {
+            DHLog.d('remove by id error：' + err);
+            if (callback) callback(MONGODB_CODE.MC_DELETE_ERROR);               
+        })
     }
 }

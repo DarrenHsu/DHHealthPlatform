@@ -13,45 +13,36 @@ class ConcreteHelper {
     find(id, callback) { }
     /* --------------- model 處理程序 ------------------ */
     modelFind(model, conditions, sort, callback) {
-        model.find(conditions, (err, ress) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find ' + ress.length);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-            }
-        }).sort(sort);
+        model.find(conditions).sort(sort).then((ress) => {
+            DHLog_1.DHLog.d('find ' + ress.length);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
+        }).catch((err) => {
+            DHLog_1.DHLog.d('find error:' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+        });
     }
     modelFindOne(model, conditions, callback) {
-        model.findOne(conditions, (err, res) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-            }
-            else {
-                DHLog_1.DHLog.d('find ' + res);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
-            }
+        model.findOne(conditions).then((res) => {
+            DHLog_1.DHLog.d('find ' + res);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+        }).catch((err) => {
+            DHLog_1.DHLog.d('find error:' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
     modelRemove(model, conditions, callback) {
-        model.remove(conditions, (err) => {
-            if (err) {
-                DHLog_1.DHLog.d('remove by id error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
-            }
-            else {
-                DHLog_1.DHLog.d('remove by id success');
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
-            }
+        model.remove(conditions).then((res) => {
+            DHLog_1.DHLog.d('remove by id success');
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS);
+        }).catch((err) => {
+            DHLog_1.DHLog.d('remove by id error：' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_DELETE_ERROR);
         });
     }
 }

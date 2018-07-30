@@ -31,13 +31,7 @@ export class ChatroomHelper extends ConcreteHelper {
             return;
         }
         
-        ChatroomHelper.model.findByIdAndUpdate(id, data, (err, res) => {
-            if (err) {
-                DHLog.d('find by id and update error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-                return;
-            }
-
+        ChatroomHelper.model.findByIdAndUpdate(id, data).then((res) => {
             if (res) {
                 DHLog.d('update:' + res._id);
                 res.type = data.type;
@@ -49,6 +43,9 @@ export class ChatroomHelper extends ConcreteHelper {
                 DHLog.d('not update');
                 if (callback) callback(MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
+        }).catch((err) => {
+            DHLog.d('find by id and update error：' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
 
@@ -59,35 +56,23 @@ export class ChatroomHelper extends ConcreteHelper {
             return;
         }
 
-        ChatroomHelper.model.update({chatId: data.chatId, lineUserId: data.lineUserId}, data, {multi: true}, (err, raw) => {
-            if (err) {
-                DHLog.d('count error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
-                return;
-            }
-            
-            DHLog.d('raw:' + JSON.stringify(raw));
+        ChatroomHelper.model.update({chatId: data.chatId, lineUserId: data.lineUserId}, data, {multi: true}).then((raw) => {
             if (raw && (raw.n > 0 || raw.nModified > 0)) {
                 DHLog.d('update exist data');
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, data);
-            }else {
-                new ChatroomHelper.model(data).save().then((res) => {
-                    DHLog.d('add data:' + JSON.stringify(res));
-                    if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                }).catch((err) => {
-                    DHLog.d('add error' + err);
-                    if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                })
-                // new ChatroomHelper.model(data).save((err, res, count) => {
-                //     if (err) {
-                //         DHLog.d('add error' + err);
-                //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                //     }else {
-                //         DHLog.d('add data:' + JSON.stringify(res));
-                //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                //     }
-                // });
+                return;
             }
+
+            new ChatroomHelper.model(data).save().then((res) => {
+                DHLog.d('add data:' + JSON.stringify(res));
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+            }).catch((err) => {
+                DHLog.d('add error' + err);
+                if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+            })
+        }).catch((err) => {
+            DHLog.d('count error:' + err);
+            if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
         });        
     }
 

@@ -24,7 +24,7 @@ export interface BaseHelper {
 
     /**
      * @description 刪除程序
-     * @param id 
+     * @param id
      */
     remove(id: string);
     remove(id: string, callback: (code: MONGODB_CODE) => void);

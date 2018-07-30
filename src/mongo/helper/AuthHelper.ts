@@ -31,13 +31,7 @@ export class AuthHelper extends ConcreteHelper {
             return;
         }
         
-        AuthHelper.model.findByIdAndUpdate(id, data, (err, res) => {
-            if (err) {
-                DHLog.d('find by id and update error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-                return;
-            }
-
+        AuthHelper.model.findByIdAndUpdate(id, data).then((res) => {
             if (res) {
                 DHLog.d('find');
                 res.googleToken = data.googleToken;
@@ -51,7 +45,10 @@ export class AuthHelper extends ConcreteHelper {
                 DHLog.d('not find');
                 if (callback) callback(MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
-        });
+        }).catch((err) => {
+            DHLog.d('find by id and update error：' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+        })
     }
     
     public add(data: IAuth, callback: (code: MONGODB_CODE, result: IAuthModel) => void) {
@@ -79,15 +76,6 @@ export class AuthHelper extends ConcreteHelper {
                     DHLog.d('add error:' + err);
                     if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
                 });
-                // new AuthHelper.model(data).save((err, res, count) => {
-                //     if (err) {
-                //         DHLog.d('add error:' + err);
-                //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                //     }else {
-                //         DHLog.d('add data: ' + JSON.stringify(res));
-                //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                //     }
-                // });
             }
         });
     }

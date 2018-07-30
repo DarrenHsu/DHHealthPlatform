@@ -92,24 +92,20 @@ class UserHelper extends ConcreteHelper_1.ConcreteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        DHLog_1.DHLog.d('id ' + lineUserId);
-        UserHelper.model.find({ lineUserId: lineUserId }, (err, ress) => {
-            if (err) {
-                DHLog_1.DHLog.d('find error:' + err);
+        UserHelper.model.find({ lineUserId: lineUserId }).then((ress) => {
+            DHLog_1.DHLog.d('find ' + ress.length);
+            if (ress.length == 0) {
                 if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
+                    callback(ResultCode_1.MONGODB_CODE.MC_NO_USER_DATA_ERROR, null);
             }
             else {
-                DHLog_1.DHLog.d('find ' + ress.length);
-                if (ress.length == 0) {
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_NO_USER_DATA_ERROR, null);
-                }
-                else {
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
-                }
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, ress);
             }
+        }).catch((err) => {
+            DHLog_1.DHLog.d('find error:' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
 }

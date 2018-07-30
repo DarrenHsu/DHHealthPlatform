@@ -21,13 +21,7 @@ class ChatroomHelper extends ConcreteHelper_1.ConcreteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
-        ChatroomHelper.model.findByIdAndUpdate(id, data, (err, res) => {
-            if (err) {
-                DHLog_1.DHLog.d('find by id and update error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-                return;
-            }
+        ChatroomHelper.model.findByIdAndUpdate(id, data).then((res) => {
             if (res) {
                 DHLog_1.DHLog.d('update:' + res._id);
                 res.type = data.type;
@@ -41,6 +35,10 @@ class ChatroomHelper extends ConcreteHelper_1.ConcreteHelper {
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
+        }).catch((err) => {
+            DHLog_1.DHLog.d('find by id and update error：' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
     add(data, callback) {
@@ -50,39 +48,26 @@ class ChatroomHelper extends ConcreteHelper_1.ConcreteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_DATA_ERROR, null);
             return;
         }
-        ChatroomHelper.model.update({ chatId: data.chatId, lineUserId: data.lineUserId }, data, { multi: true }, (err, raw) => {
-            if (err) {
-                DHLog_1.DHLog.d('count error:' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
-                return;
-            }
-            DHLog_1.DHLog.d('raw:' + JSON.stringify(raw));
+        ChatroomHelper.model.update({ chatId: data.chatId, lineUserId: data.lineUserId }, data, { multi: true }).then((raw) => {
             if (raw && (raw.n > 0 || raw.nModified > 0)) {
                 DHLog_1.DHLog.d('update exist data');
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, data);
+                return;
             }
-            else {
-                new ChatroomHelper.model(data).save().then((res) => {
-                    DHLog_1.DHLog.d('add data:' + JSON.stringify(res));
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
-                }).catch((err) => {
-                    DHLog_1.DHLog.d('add error' + err);
-                    if (callback)
-                        callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
-                });
-                // new ChatroomHelper.model(data).save((err, res, count) => {
-                //     if (err) {
-                //         DHLog.d('add error' + err);
-                //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                //     }else {
-                //         DHLog.d('add data:' + JSON.stringify(res));
-                //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                //     }
-                // });
-            }
+            new ChatroomHelper.model(data).save().then((res) => {
+                DHLog_1.DHLog.d('add data:' + JSON.stringify(res));
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_SUCCESS, res);
+            }).catch((err) => {
+                DHLog_1.DHLog.d('add error' + err);
+                if (callback)
+                    callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
+            });
+        }).catch((err) => {
+            DHLog_1.DHLog.d('count error:' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_COUNT_ERROR, null);
         });
     }
     remove(id, callback) {

@@ -30,13 +30,7 @@ export class RouteHelper extends ConcreteHelper {
             return;
         }
         
-        RouteHelper.model.findByIdAndUpdate(id, data, (err, res) => {
-            if (err) {
-                DHLog.d('find by id and update error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-                return;
-            }
-
+        RouteHelper.model.findByIdAndUpdate(id, data).then((res) => {
             if (res) {
                 DHLog.d('find');
                 res.name = data.name;
@@ -51,6 +45,9 @@ export class RouteHelper extends ConcreteHelper {
                 DHLog.d('not find');
                 if (callback) callback(MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
+        }).catch((err) => {
+            DHLog.d('find by id and update error：' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
 
@@ -68,15 +65,6 @@ export class RouteHelper extends ConcreteHelper {
             DHLog.d('add error' + err);
             if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
         });
-        // new RouteHelper.model(data).save((err, res, count) => {
-        //     if (err) {
-        //         DHLog.d('add error' + err);
-        //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-        //     }else {
-        //         DHLog.d('add data:' + JSON.stringify(res));
-        //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-        //     }
-        // });
     }
 
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {

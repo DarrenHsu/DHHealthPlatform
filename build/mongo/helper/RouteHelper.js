@@ -21,13 +21,7 @@ class RouteHelper extends ConcreteHelper_1.ConcreteHelper {
                 callback(ResultCode_1.MONGODB_CODE.MC_NO_CONDITION_ERROR, null);
             return;
         }
-        RouteHelper.model.findByIdAndUpdate(id, data, (err, res) => {
-            if (err) {
-                DHLog_1.DHLog.d('find by id and update error：' + err);
-                if (callback)
-                    callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
-                return;
-            }
+        RouteHelper.model.findByIdAndUpdate(id, data).then((res) => {
             if (res) {
                 DHLog_1.DHLog.d('find');
                 res.name = data.name;
@@ -44,6 +38,10 @@ class RouteHelper extends ConcreteHelper_1.ConcreteHelper {
                 if (callback)
                     callback(ResultCode_1.MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
+        }).catch((err) => {
+            DHLog_1.DHLog.d('find by id and update error：' + err);
+            if (callback)
+                callback(ResultCode_1.MONGODB_CODE.MC_SELECT_ERROR, null);
         });
     }
     add(data, callback) {
@@ -62,15 +60,6 @@ class RouteHelper extends ConcreteHelper_1.ConcreteHelper {
             if (callback)
                 callback(ResultCode_1.MONGODB_CODE.MC_INSERT_ERROR, null);
         });
-        // new RouteHelper.model(data).save((err, res, count) => {
-        //     if (err) {
-        //         DHLog.d('add error' + err);
-        //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-        //     }else {
-        //         DHLog.d('add data:' + JSON.stringify(res));
-        //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-        //     }
-        // });
     }
     remove(id, callback) {
         if (!id) {

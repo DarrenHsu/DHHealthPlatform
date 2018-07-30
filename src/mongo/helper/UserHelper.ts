@@ -99,20 +99,16 @@ export class UserHelper extends ConcreteHelper {
             return;
         }
 
-        DHLog.d('id ' + lineUserId);
-
-        UserHelper.model.find({lineUserId: lineUserId}, (err, ress) => {
-            if (err) {
-                DHLog.d('find error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
-            }else {
-                DHLog.d('find ' + ress.length);
-                if (ress.length == 0) {
-                    if (callback) callback(MONGODB_CODE.MC_NO_USER_DATA_ERROR, null);
-                } else  {
-                    if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
-                }
+        UserHelper.model.find({lineUserId: lineUserId}).then((ress) => {
+            DHLog.d('find ' + ress.length);
+            if (ress.length == 0) {
+                if (callback) callback(MONGODB_CODE.MC_NO_USER_DATA_ERROR, null);
+            } else  {
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, ress);
             }
-        });
+        }).catch((err) => {
+            DHLog.d('find error:' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);                    
+        })
     }
 }
