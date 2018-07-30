@@ -31,15 +31,9 @@ export class UserHelper extends ConcreteHelper {
             return;
         }
         
-        UserHelper.model.findByIdAndUpdate(id, data, (err, res) => {
-            if (err) {
-                DHLog.d('find by id and update error：' + err);
-                if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
-                return;
-            }
-
+        UserHelper.model.findByIdAndUpdate(id, data).then((res) => {
             if (res) {
-                DHLog.d('find');
+                DHLog.d('find one and update');
                 res.name = data.name;
                 res.age = data.age;
                 res.height = data.height;
@@ -55,7 +49,10 @@ export class UserHelper extends ConcreteHelper {
                 DHLog.d('not find');
                 if (callback) callback(MONGODB_CODE.MC_UPDATE_NOT_FOUND_ERROR, null);
             }
-        });
+        }).catch((err) => {
+            DHLog.d('find by id and update error：' + err);
+            if (callback) callback(MONGODB_CODE.MC_SELECT_ERROR, null);
+        })
     }
     
     public add(data: IUser, callback: (code: MONGODB_CODE, result: IUserModel) => void) {
@@ -65,35 +62,24 @@ export class UserHelper extends ConcreteHelper {
             return;
         }
 
-        UserHelper.model.count({lineUserId: data.lineUserId}, (err, count) => {
-            if (err) {
-                DHLog.d('count error:' + err);
-                if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
-                return;
-            }
-            
+        UserHelper.model.count({lineUserId: data.lineUserId}).then((count) => {
             if (count > 0) {
                 DHLog.d('data exist!');
                 if (callback) callback(MONGODB_CODE.MC_DATA_EXIST, null);
-            }else {
-                new UserHelper.model(data).save().then((res) => {
-                    DHLog.d('add data: ' + JSON.stringify(res));
-                    if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                }).catch((err) => {
-                    DHLog.d('add error:' + err);
-                    if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                })
-                // new UserHelper.model(data).save((err, res, count) => {
-                //     if (err) {
-                //         DHLog.d('add error:' + err);
-                //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                //     }else {
-                //         DHLog.d('add data: ' + JSON.stringify(res));
-                //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                //     }
-                // });
+                return;
             }
-        });
+                
+            new UserHelper.model(data).save().then((res) => {
+                DHLog.d('add data: ' + JSON.stringify(res));
+                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+            }).catch((err) => {
+                DHLog.d('add error:' + err);
+                if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+            })
+        }).catch((err) => {
+            DHLog.d('count error:' + err);
+            if (callback) callback(MONGODB_CODE.MC_COUNT_ERROR, null);
+        })
     }
 
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
