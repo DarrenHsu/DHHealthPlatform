@@ -101,40 +101,39 @@ export class LiveRoute extends BaseRoute {
                 return;
             }
 
-            this.oauth2Client.getToken(req.query.code, (err, token) => {
-                if (err) {
-                    DHLog.d('' + err);
-                    return res.redirect(DHAPI.ERROR_PATH + '/' + GOOGLE_CODE.GC_AUTH_ERROR);
-                }
-
-                if (!token) {
+            this.oauth2Client.getToken(req.query.code).then((value) => {
+                if (!value) {
                     return res.redirect(DHAPI.ERROR_PATH + '/' + GOOGLE_CODE.GC_TOKEN_ERROR);
                 }
 
                 this.authHelper.findOne(req.session.account, (code, auth) =>{
                     if (auth) {
-                        auth.googleToken = token.access_token;
-                        auth.googleTokenExpire = new Date(token.expiry_date);
+                        auth.googleToken = value.tokens.access_token;
+                        auth.googleTokenExpire = new Date(value.tokens.expiry_date);
                         
                         this.authHelper.save(auth._id, auth, (code, auth) => {
                             this.getYTBroadcastList(auth.googleToken, req, res, next);
                         });
-                    }else {
-                        this.initOAuth2Client(req);
-
-                        var newAuth: IAuth = {
-                            lineUserId: req.session.account,
-                            googleToken: token.access_token,
-                            googleTokenExpire: new Date(token.expiry_date),
-                            lineToken: null,
-                            lineTokenExpire: null
-                        };
-
-                        this.authHelper.add(newAuth, (code, auth) => {
-                            this.getYTBroadcastList(auth.googleToken, req, res, next);
-                        });
+                        return;
                     }
+                        
+                    this.initOAuth2Client(req);
+
+                    var newAuth: IAuth = {
+                        lineUserId: req.session.account,
+                        googleToken: value.tokens.access_token,
+                        googleTokenExpire: new Date(value.tokens.expiry_date),
+                        lineToken: null,
+                        lineTokenExpire: null
+                    };
+
+                    this.authHelper.add(newAuth, (code, auth) => {
+                        this.getYTBroadcastList(auth.googleToken, req, res, next);
+                    });
                 });
+            }).catch((err) => {
+                DHLog.d('' + err);
+                return res.redirect(DHAPI.ERROR_PATH + '/' + GOOGLE_CODE.GC_AUTH_ERROR);
             });
         });
     }
