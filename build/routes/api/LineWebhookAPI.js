@@ -26,7 +26,6 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.recordUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_RECORD_PATH;
         this.messageUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
         this.authorizationUrl = LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
-        this.profileUrl = LINEAPI_1.LINEAPI.API_LINE_PROFILE_PATH;
         this.templeteUrl = LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_TEMPLETE_PATH;
         this.helper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
