@@ -83,15 +83,22 @@ export class RecordHelper extends ConcreteHelper {
                 DHLog.d('update exist data');
                 if (callback) callback(MONGODB_CODE.MC_SUCCESS, data);
             }else {
-                new RecordHelper.model(data).save((err, res, count) => {
-                    if (err) {
-                        DHLog.d('add error' + err);
-                        if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-                    }else {
-                        DHLog.d('add data:' + JSON.stringify(res));
-                        if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-                    }
+                new RecordHelper.model(data).save().then((res) => {
+                    DHLog.d('add data:' + JSON.stringify(res));
+                    if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+                }).catch((err) => {
+                    DHLog.d('add error' + err);
+                    if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
                 });
+                // new RecordHelper.model(data).save((err, res, count) => {
+                //     if (err) {
+                //         DHLog.d('add error' + err);
+                //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+                //     }else {
+                //         DHLog.d('add data:' + JSON.stringify(res));
+                //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+                //     }
+                // });
             }
         });
     }

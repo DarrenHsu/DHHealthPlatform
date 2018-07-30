@@ -61,15 +61,22 @@ export class RouteHelper extends ConcreteHelper {
             return;
         }
         
-        new RouteHelper.model(data).save((err, res, count) => {
-            if (err) {
-                DHLog.d('add error' + err);
-                if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
-            }else {
-                DHLog.d('add data:' + JSON.stringify(res));
-                if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
-            }
+        new RouteHelper.model(data).save().then((res) => {
+            DHLog.d('add data:' + JSON.stringify(res));
+            if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+        }).catch((err) => {
+            DHLog.d('add error' + err);
+            if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
         });
+        // new RouteHelper.model(data).save((err, res, count) => {
+        //     if (err) {
+        //         DHLog.d('add error' + err);
+        //         if (callback) callback(MONGODB_CODE.MC_INSERT_ERROR, null);
+        //     }else {
+        //         DHLog.d('add data:' + JSON.stringify(res));
+        //         if (callback) callback(MONGODB_CODE.MC_SUCCESS, res);
+        //     }
+        // });
     }
 
     public remove(id: string, callback?: (code: MONGODB_CODE) => void) {
