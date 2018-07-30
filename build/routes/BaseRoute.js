@@ -60,8 +60,6 @@ class BaseRoute {
         if (auth == BaseRoute.FEED_AUTH_PASS)
             return true;
         var str = this.hashString(verfy);
-        DHLog_1.DHLog.d('verfy:' + str);
-        DHLog_1.DHLog.d('auth :' + auth);
         return auth == str;
     }
     /**

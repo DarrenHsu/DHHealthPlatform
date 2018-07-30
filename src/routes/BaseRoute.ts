@@ -80,8 +80,6 @@ export class BaseRoute {
             return true;
         
         var str = this.hashString(verfy);
-        DHLog.d('verfy:' + str);
-        DHLog.d('auth :' + auth);
         return auth == str;
     }
 
