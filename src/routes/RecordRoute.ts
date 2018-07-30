@@ -51,7 +51,7 @@ export class RecordRoute extends BaseRoute {
 
     public delRecord(router: Router) {
         DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PATH);
-        router.get(DHAPI.RECORD_PATH + '/:action/:id/:page', (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PATH + '/:action/:id/:page', (req, res, next) => {
             if (!this.isCorrectHost(req)) {
                 res.redirect("/whatup");
                 return;
@@ -71,7 +71,7 @@ export class RecordRoute extends BaseRoute {
      */
     public getRecord(router: Router) {
         DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PATH);
-        router.get(DHAPI.RECORD_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -83,7 +83,7 @@ export class RecordRoute extends BaseRoute {
             });
         });
 
-        router.get(DHAPI.RECORD_PATH + '/:page', (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PATH + '/:page', (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -117,7 +117,7 @@ export class RecordRoute extends BaseRoute {
      */
     public getPreviewRecord(router: Router) {
         DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI.RECORD_PREVIEW_PATH);
-        router.get(DHAPI.RECORD_PREVIEW_PATH + '/:id/:auth', (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.RECORD_PREVIEW_PATH + '/:id/:auth', (req, res, next) => {
             if (req.params.id == null || req.params.auth == null) {
                 return res.redirect(DHAPI.ERROR_PATH + '/' + CONNECTION_CODE.CC_PARAMETER_ERROR);
             }

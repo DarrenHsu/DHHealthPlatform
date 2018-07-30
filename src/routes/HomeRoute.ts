@@ -39,7 +39,7 @@ export class HomeRoute extends BaseRoute {
      */
     public getIndex(router: Router) {
         DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI.ROOT_PATH);
-        router.get(DHAPI.ROOT_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.ROOT_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -68,7 +68,7 @@ export class HomeRoute extends BaseRoute {
      */
     public getHome(router: Router) {
         DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI.HOME_PATH);
-        router.get(DHAPI.HOME_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.HOME_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }

@@ -29,7 +29,7 @@ export class ErrorRoute extends BaseRoute {
      */
     public getError(router: Router) {
         DHLog.d('[' + ErrorRoute.name + ':create] ' + DHAPI.ERROR_PATH);
-        router.get(DHAPI.ERROR_PATH + '/:errorCode', (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.ERROR_PATH + '/:errorCode', (req, res, next) => {
             var errorCode = req.params.errorCode;
             if (!errorCode) {
                 var result = BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR);

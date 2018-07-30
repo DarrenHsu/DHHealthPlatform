@@ -28,7 +28,7 @@ export class LoginRoute extends BaseRoute {
      */
     public getLoginProcess(router: Router) {
         DHLog.d('[' + LoginRoute.name + ':create] ' + DHAPI.LOGIN_PROCESS_PATH);
-        router.get(DHAPI.LOGIN_PROCESS_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.LOGIN_PROCESS_PATH, (req, res, next) => {
             var act = req.session.account;
             
             if (!act) {
@@ -63,7 +63,7 @@ export class LoginRoute extends BaseRoute {
      */
     public getLogout(router: Router) {
         DHLog.d('[' + LoginRoute.name + ':create] ' + DHAPI.LOGIN_KILL_PATH);
-        router.get(DHAPI.LOGIN_KILL_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.LOGIN_KILL_PATH, (req, res, next) => {
             if (req.session.account) {
                 DHLog.d(req.session.account + ' logout');
             }

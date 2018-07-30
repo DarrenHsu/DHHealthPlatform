@@ -96,7 +96,7 @@ export class LiveRoute extends BaseRoute {
      */
     public getGoogleAuth(router: Router) {
         DHLog.d('[' + LiveRoute.name + ':create] ' + GoogleAPI.API_GOOGLE_AUTH_PATH);
-        router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(GoogleAPI.API_GOOGLE_AUTH_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -145,7 +145,7 @@ export class LiveRoute extends BaseRoute {
      */
     public getLive(router: Router) {
         DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI.LIVE_PATH);
-        router.get(DHAPI.LIVE_PATH, (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.LIVE_PATH, (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
@@ -163,7 +163,7 @@ export class LiveRoute extends BaseRoute {
      */
     public getListWithToken(router: Router) {
         DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI.LIVE_PATH);
-        router.get(DHAPI.LIVE_PATH + '/:pageToken', (req: Request, res: Response, next: NextFunction) => {
+        router.get(DHAPI.LIVE_PATH + '/:pageToken', (req, res, next) => {
             if (!this.checkLogin(req, res, next)) {
                 return;
             }
