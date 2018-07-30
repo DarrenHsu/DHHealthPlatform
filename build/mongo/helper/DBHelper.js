@@ -10,7 +10,7 @@ class DBHelper {
     static openDB(path) {
         global.Promise = q.Promise;
         mongoose.Promise = global.Promise;
-        this.connection = mongoose.createConnection(path, { useMongoClient: true });
+        this.connection = mongoose.createConnection(path, { useNewUrlParser: true });
         this.connection.on('error', console.error.bind(console, 'Connection Error:'));
         this.connection.once('open', function () {
             this.isConnection = true;
