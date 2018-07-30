@@ -176,15 +176,15 @@ export class LiveRoute extends BaseRoute {
 
     private doAuthAndList(req: Request, res: Response, next: NextFunction) {
         this.authHelper.findOne(req.session.account, (code, auth) => {
-            if (auth) {
-                var now = new Date();
-                if (now > auth.googleTokenExpire) {
-                    this.redirectGoogleAuth(req, res, next);
-                }else {
-                    this.getYTBroadcastList(auth.googleToken, req, res, next);
-                }
-            }else {
+            if (!auth) {
+                return this.redirectGoogleAuth(req, res, next);
+            }
+
+            var now = new Date();
+            if (now > auth.googleTokenExpire) {
                 this.redirectGoogleAuth(req, res, next);
+            }else {
+                this.getYTBroadcastList(auth.googleToken, req, res, next);
             }
         });
     }

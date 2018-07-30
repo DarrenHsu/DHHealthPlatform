@@ -134,17 +134,15 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     }
     doAuthAndList(req, res, next) {
         this.authHelper.findOne(req.session.account, (code, auth) => {
-            if (auth) {
-                var now = new Date();
-                if (now > auth.googleTokenExpire) {
-                    this.redirectGoogleAuth(req, res, next);
-                }
-                else {
-                    this.getYTBroadcastList(auth.googleToken, req, res, next);
-                }
+            if (!auth) {
+                return this.redirectGoogleAuth(req, res, next);
+            }
+            var now = new Date();
+            if (now > auth.googleTokenExpire) {
+                this.redirectGoogleAuth(req, res, next);
             }
             else {
-                this.redirectGoogleAuth(req, res, next);
+                this.getYTBroadcastList(auth.googleToken, req, res, next);
             }
         });
     }
