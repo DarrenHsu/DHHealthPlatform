@@ -43,7 +43,7 @@
     }
   },
   "dependencies": {
-    "@line/bot-sdk": "^5.2.0",
+    "@line/bot-sdk": "^6.1.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "bootstrap": "4.0.0",
