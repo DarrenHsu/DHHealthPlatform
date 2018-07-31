@@ -14,7 +14,7 @@ import { DHLog }            from '../../util/DHLog';
 import { DHAPI }            from '../../const/DHAPI';
 import { LINEAPI }          from '../../const/LINEAPI';
 
-import { BaseRoute }        from './../BaseRoute';
+import { BaseRoute }        from '../BaseRoute';
 import { BaseAPI }          from './BaseAPI';
 
 import { DBHelper }         from '../../mongo/helper/DBHelper';
@@ -22,6 +22,8 @@ import { IChatroom }        from '../../mongo/interface/IChatroom';
 import { ChatroomHelper }   from '../../mongo/helper/ChatroomHelper';
 import { UserHelper }       from '../../mongo/helper/UserHelper';
 import { RecordHelper }     from '../../mongo/helper/RecordHelper';
+import { ProfileHelper }    from '../../mongo/helper/ProfileHelper';
+import { Code } from '../../../node_modules/@types/bson';
 
 /**
  * @description LINE 機器人相關 api
@@ -40,6 +42,7 @@ export class LineWebhookAPI extends BaseAPI {
     private userHelper: UserHelper;
     private chatroomHelper: ChatroomHelper;
     private recordHelper: RecordHelper;
+    private profileHelper: ProfileHelper;
 
     constructor(connection: mongoose.Connection) {
         super();
@@ -48,6 +51,7 @@ export class LineWebhookAPI extends BaseAPI {
         this.recordHelper = new RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper(connection);
         this.userHelper = new UserHelper(connection);
+        this.profileHelper = new ProfileHelper(connection);
 
         this.clientConfig = {
             channelAccessToken: DHAPI.pkgjson.linebot.channelAccessToken
@@ -134,6 +138,7 @@ export class LineWebhookAPI extends BaseAPI {
             case "user":
                 client.getProfile(source.lineUserId).then((profile) => {
                     DHLog.ld('user profile ' + JSON.stringify(profile));
+                    this.profileHelper.add({lineUserId: profile.userId, pictureUrl: profile.pictureUrl, displayName: profile.displayName}, null);
                 }).catch((err) => {
                     DHLog.ld('user profile error ' + err);
                 });
@@ -141,6 +146,7 @@ export class LineWebhookAPI extends BaseAPI {
             case "room":
                 client.getRoomMemberProfile(chatId, lineUserId).then((profile) => {
                     DHLog.ld('room profile ' + JSON.stringify(profile));
+                    this.profileHelper.add({lineUserId: profile.userId, pictureUrl: profile.pictureUrl, displayName: profile.displayName}, null);
                 }).catch((err) => {
                     DHLog.ld('room profile error ' + err);
                 });
@@ -148,6 +154,7 @@ export class LineWebhookAPI extends BaseAPI {
             default:
                 client.getGroupMemberProfile(chatId, lineUserId).then((profile) => {
                     DHLog.ld('group profile ' + JSON.stringify(profile));
+                    this.profileHelper.add({lineUserId: profile.userId, pictureUrl: profile.pictureUrl, displayName: profile.displayName}, null);
                 }).catch((err) => {
                     DHLog.ld('group profile error ' + err);
                 })

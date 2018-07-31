@@ -10,12 +10,13 @@ const ResultCode_1 = require("../ResultCode");
 const DHLog_1 = require("../../util/DHLog");
 const DHAPI_1 = require("../../const/DHAPI");
 const LINEAPI_1 = require("../../const/LINEAPI");
-const BaseRoute_1 = require("./../BaseRoute");
+const BaseRoute_1 = require("../BaseRoute");
 const BaseAPI_1 = require("./BaseAPI");
 const DBHelper_1 = require("../../mongo/helper/DBHelper");
 const ChatroomHelper_1 = require("../../mongo/helper/ChatroomHelper");
 const UserHelper_1 = require("../../mongo/helper/UserHelper");
 const RecordHelper_1 = require("../../mongo/helper/RecordHelper");
+const ProfileHelper_1 = require("../../mongo/helper/ProfileHelper");
 /**
  * @description LINE 機器人相關 api
  */
@@ -31,6 +32,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         this.recordHelper = new RecordHelper_1.RecordHelper(connection);
         this.chatroomHelper = new ChatroomHelper_1.ChatroomHelper(connection);
         this.userHelper = new UserHelper_1.UserHelper(connection);
+        this.profileHelper = new ProfileHelper_1.ProfileHelper(connection);
         this.clientConfig = {
             channelAccessToken: DHAPI_1.DHAPI.pkgjson.linebot.channelAccessToken
         };
@@ -106,6 +108,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             case "user":
                 client.getProfile(source.lineUserId).then((profile) => {
                     DHLog_1.DHLog.ld('user profile ' + JSON.stringify(profile));
+                    this.profileHelper.add({ lineUserId: profile.userId, pictureUrl: profile.pictureUrl, displayName: profile.displayName }, null);
                 }).catch((err) => {
                     DHLog_1.DHLog.ld('user profile error ' + err);
                 });
@@ -113,6 +116,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             case "room":
                 client.getRoomMemberProfile(chatId, lineUserId).then((profile) => {
                     DHLog_1.DHLog.ld('room profile ' + JSON.stringify(profile));
+                    this.profileHelper.add({ lineUserId: profile.userId, pictureUrl: profile.pictureUrl, displayName: profile.displayName }, null);
                 }).catch((err) => {
                     DHLog_1.DHLog.ld('room profile error ' + err);
                 });
@@ -120,6 +124,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             default:
                 client.getGroupMemberProfile(chatId, lineUserId).then((profile) => {
                     DHLog_1.DHLog.ld('group profile ' + JSON.stringify(profile));
+                    this.profileHelper.add({ lineUserId: profile.userId, pictureUrl: profile.pictureUrl, displayName: profile.displayName }, null);
                 }).catch((err) => {
                     DHLog_1.DHLog.ld('group profile error ' + err);
                 });
