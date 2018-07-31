@@ -102,11 +102,29 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         DHLog_1.DHLog.ld("lineUserId " + lineUserId + ",chatId " + chatId + " ,type " + type);
         this.helper.add(source, null);
         let client = new bot_sdk_1.Client(this.clientConfig);
-        client.getProfile(source.lineUserId).then((profile) => {
-            DHLog_1.DHLog.ld('profile ' + JSON.stringify(profile));
-        }).catch((err) => {
-            DHLog_1.DHLog.ld('profile error ' + err);
-        });
+        switch (type) {
+            case "user":
+                client.getProfile(source.lineUserId).then((profile) => {
+                    DHLog_1.DHLog.ld('user profile ' + JSON.stringify(profile));
+                }).catch((err) => {
+                    DHLog_1.DHLog.ld('user profile error ' + err);
+                });
+                break;
+            case "room":
+                client.getRoomMemberProfile(chatId, lineUserId).then((profile) => {
+                    DHLog_1.DHLog.ld('room profile ' + JSON.stringify(profile));
+                }).catch((err) => {
+                    DHLog_1.DHLog.ld('room profile error ' + err);
+                });
+                break;
+            default:
+                client.getGroupMemberProfile(chatId, lineUserId).then((profile) => {
+                    DHLog_1.DHLog.ld('group profile ' + JSON.stringify(profile));
+                }).catch((err) => {
+                    DHLog_1.DHLog.ld('group profile error ' + err);
+                });
+                break;
+        }
     }
     /**
      * @description 內部呼叫發送機制

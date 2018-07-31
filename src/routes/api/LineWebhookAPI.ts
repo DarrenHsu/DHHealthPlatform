@@ -130,11 +130,29 @@ export class LineWebhookAPI extends BaseAPI {
         this.helper.add(source, null);
         
         let client = new Client(this.clientConfig);
-        client.getProfile(source.lineUserId).then((profile) => {
-            DHLog.ld('profile ' + JSON.stringify(profile));
-        }).catch((err) => {
-            DHLog.ld('profile error ' + err);
-        });
+        switch(type) {
+            case "user":
+                client.getProfile(source.lineUserId).then((profile) => {
+                    DHLog.ld('user profile ' + JSON.stringify(profile));
+                }).catch((err) => {
+                    DHLog.ld('user profile error ' + err);
+                });
+                break;
+            case "room":
+                client.getRoomMemberProfile(chatId, lineUserId).then((profile) => {
+                    DHLog.ld('room profile ' + JSON.stringify(profile));
+                }).catch((err) => {
+                    DHLog.ld('room profile error ' + err);
+                });
+                break;
+            default:
+                client.getGroupMemberProfile(chatId, lineUserId).then((profile) => {
+                    DHLog.ld('group profile ' + JSON.stringify(profile));
+                }).catch((err) => {
+                    DHLog.ld('group profile error ' + err);
+                })
+            break;
+        }
     }
 
     /**
