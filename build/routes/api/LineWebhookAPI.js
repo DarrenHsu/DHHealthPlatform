@@ -99,12 +99,13 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             lineUserId: lineUserId,
             type: type
         };
+        DHLog_1.DHLog.ld("lineUserId " + lineUserId + ",chatId " + chatId + " ,type " + type);
         this.helper.add(source, null);
         let client = new bot_sdk_1.Client(this.clientConfig);
         client.getProfile(source.lineUserId).then((profile) => {
             DHLog_1.DHLog.ld('profile ' + JSON.stringify(profile));
         }).catch((err) => {
-            DHLog_1.DHLog.ld('err ' + err);
+            DHLog_1.DHLog.ld('profile error ' + err);
         });
     }
     /**
