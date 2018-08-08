@@ -12,4 +12,5 @@ export class LINEAPI {
     public static API_LINEBOT_PUSH_RECORD_PATH =    LINEAPI.API_LINEBOT_PATH + '/push/record';
     public static API_LINEBOT_PUSH_MESSAGE_PATH =   LINEAPI.API_LINEBOT_PATH + '/push/message';
     public static API_LINEBOT_PUSH_TEMPLETE_PATH =  LINEAPI.API_LINEBOT_PATH + '/push/templete';
+    public static API_LINEBOT_PUSH_FLEX_PATH =      LINEAPI.API_LINEBOT_PATH + '/push/flex';
 }

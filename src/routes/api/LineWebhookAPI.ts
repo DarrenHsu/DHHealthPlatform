@@ -4,7 +4,7 @@ import { Request, Router } from 'express';
 import * as JwtDecode from 'jwt-decode';
 import * as qs from 'qs';
 import Axios from 'axios';
-import { MiddlewareConfig, Client, TemplateMessage, ClientConfig, validateSignature, TextMessage, Message } from '@line/bot-sdk';
+import { MiddlewareConfig, Client, TemplateMessage, ClientConfig, validateSignature, TextMessage, Message, FlexMessage } from '@line/bot-sdk';
 import { createHmac } from 'crypto';
 
 import { MONGODB_CODE, LINE_CODE } from '../ResultCode';
@@ -30,10 +30,6 @@ import { ProfileHelper }    from '../../mongo/helper/ProfileHelper';
 export class LineWebhookAPI extends BaseAPI {
     
     protected uri = LINEAPI.API_LINEBOT_PATH;
-    private recordUrl = LINEAPI.API_LINEBOT_PUSH_RECORD_PATH;
-    private messageUrl = LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH;
-    private authorizationUrl = LINEAPI.API_LINE_AUTH_PATH;
-    private templeteUrl = LINEAPI.API_LINEBOT_PUSH_TEMPLETE_PATH;
     
     private clientConfig: ClientConfig;
     private middlewareConfig: MiddlewareConfig;
@@ -162,39 +158,11 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     /**
-     * @description 內部呼叫發送機制
-     * @param message 
-     * @param chats 
-     * @param callback 
-     */
-    private pushMessage(message: Message, chats: IChatroom[], callback?: () => void) {
-        let client = new Client(this.clientConfig);
-        if (chats.length == 0)  {
-            if (callback) callback();
-            return;
-        }
-
-        var chat = chats[0];
-        DHLog.ld('push ' + chat.chatId);
-        DHLog.ld('msg ' + JSON.stringify(message));
-
-        client.pushMessage(chat.chatId, message).then((value) => {
-            DHLog.ld('push message success ' + JSON.stringify(value));
-            chats.shift();
-            this.pushMessage(message, chats, callback);
-        }).catch((err) => {
-            DHLog.ld('push message error ' + err);
-            chats.shift();
-            this.pushMessage(message, chats, callback);
-        });
-    }
-
-    /**
      * @description 取得line web login 授權
      * @param router 
      */
     protected getAuthorization(router: Router) {
-        router.get(this.authorizationUrl, (req, res, next) => {
+        router.get(LINEAPI.API_LINE_AUTH_PATH, (req, res, next) => {
             DHLog.ld('step 1 Get Authorization start');
             var error = req.query.error;
             var error_description = req.query.error_description;
@@ -291,78 +259,11 @@ export class LineWebhookAPI extends BaseAPI {
     }
 
     /**
-     * @description 發送line message 
-     * @param router 
-     */
-    protected posthMessage(router: Router) {
-        router.post(this.messageUrl, (req, res, next) => {
-            if (!this.checkHeaderAndSend(req, res)) return;
-            if (!this.checkBodyAndSend(req, res)) return;
-
-            let body = req.body;
-            let lineUserId = body.lineUserId;
-            let msg = body.msg;
-            
-            this.chatroomHelper.find(lineUserId, (code, chats) => {
-                var message: TextMessage = {
-                    type: 'text',
-                    text: msg
-                }
-
-                this.pushMessage(message, chats, () => {
-                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
-                });
-            });
-        });
-    }
-
-    protected postTemplete(router: Router) {
-        router.post(this.templeteUrl, (req, res, next) => {
-            if (!this.checkHeaderAndSend(req, res)) return;
-            if (!this.checkBodyAndSend(req, res)) return;
-
-            let body = req.body;
-            let lineUserId = body.lineUserId;
-            let title = body.title;
-            let image = BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
-            
-            this.chatroomHelper.find(lineUserId, (code, chats) => {
-                var message: TemplateMessage = {
-                    type: 'template',
-                    altText: title,
-                    template: {
-                        type: 'buttons',
-                        thumbnailImageUrl: image,
-                        title: title,
-                        text: '請選擇以下的選項',
-                        actions: [
-                            {
-                              type: 'postback',
-                              label: '是',
-                              data: 'action=ok&itemid=123'
-                            },
-                            {
-                              type: 'postback',
-                              label: '否',
-                              data: 'action=no&itemid=123'
-                            },
-                        ]
-                    }
-                  }
-
-                this.pushMessage(message, chats, () => {
-                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
-                });
-            });
-        });
-    }
-
-    /**
      * @description 發送紀錄至line
      * @param router 
      */
     protected postRecord(router: Router) {
-        router.get(this.recordUrl + '/:recordId', (req, res, next) => {
+        router.get(LINEAPI.API_LINEBOT_PUSH_RECORD_PATH + '/:recordId', (req, res, next) => {
             if (!this.checkHeaderAndSend(req, res)) return;
             
             if (!req.params.recordId) {
@@ -414,6 +315,105 @@ export class LineWebhookAPI extends BaseAPI {
                     });
                 });
             });
+        });
+    }
+
+    /**
+     * @description 發送紀錄至line
+     * @param router 
+     */
+    protected posthFlex(router: Router) {
+        router.post(LINEAPI.API_LINEBOT_PUSH_FLEX_PATH, (req, res, next) => {
+            if (!this.checkHeaderAndSend(req, res)) return;
+            if (!this.checkBodyAndSend(req, res)) return;
+
+            let body = req.body;
+            var message: FlexMessage = {
+                type: 'flex',
+                altText: body.altText,
+                contents: body.contents
+            }
+
+            this.chatroomHelper.find(body.lineUserId, (code, chats) => {
+                this.pushMessage(message, chats, () => {
+                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
+                });
+            });
+        });
+    }
+
+    /**
+     * @description 發送line templete
+     * @param router 
+     */
+    protected postTemplete(router: Router) {
+        router.post(LINEAPI.API_LINEBOT_PUSH_TEMPLETE_PATH, (req, res, next) => {
+            if (!this.checkHeaderAndSend(req, res)) return;
+            if (!this.checkBodyAndSend(req, res)) return;
+
+            let body = req.body;
+            var message: TemplateMessage = {
+                type: 'template',
+                altText: body.title,
+                template: body.template
+            }
+
+            this.chatroomHelper.find(body.lineUserId, (code, chats) => {
+                this.pushMessage(message, chats, () => {
+                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
+                });
+            });
+        });
+    }
+
+    /**
+     * @description 發送line message 
+     * @param router 
+     */
+    protected posthMessage(router: Router) {
+        router.post(LINEAPI.API_LINEBOT_PUSH_MESSAGE_PATH, (req, res, next) => {
+            if (!this.checkHeaderAndSend(req, res)) return;
+            if (!this.checkBodyAndSend(req, res)) return;
+
+            let body = req.body;
+            var message: TextMessage = {
+                type: 'text',
+                text: body.text
+            }
+            
+            this.chatroomHelper.find(body.lineUserId, (code, chats) => {
+                this.pushMessage(message, chats, () => {
+                    this.sendSuccess(res, LINE_CODE.LL_SUCCESS);
+                });
+            });
+        });
+    }
+
+    /**
+     * @description 內部呼叫發送機制
+     * @param message 
+     * @param chats 
+     * @param callback 
+     */
+    private pushMessage(message: Message, chats: IChatroom[], callback?: () => void) {
+        let client = new Client(this.clientConfig);
+        if (chats.length == 0)  {
+            if (callback) callback();
+            return;
+        }
+
+        var chat = chats[0];
+        DHLog.ld('push ' + chat.chatId);
+        DHLog.ld('msg ' + JSON.stringify(message));
+
+        client.pushMessage(chat.chatId, message).then((value) => {
+            DHLog.ld('push message success ' + JSON.stringify(value));
+            chats.shift();
+            this.pushMessage(message, chats, callback);
+        }).catch((err) => {
+            DHLog.ld('push message error ' + err);
+            chats.shift();
+            this.pushMessage(message, chats, callback);
         });
     }
 
