@@ -115,9 +115,7 @@ export class BaseRoute {
      * @param verfy 
      */
     protected checkValue(auth: string, verfy: string): Boolean {
-        if (auth == BaseRoute.FEED_AUTH_PASS) 
-            return true;
-        
+        if (auth == BaseRoute.FEED_AUTH_PASS) return true;
         var str = this.hashString(verfy);
         return auth == str;
     }
