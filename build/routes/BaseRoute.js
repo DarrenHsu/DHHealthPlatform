@@ -57,9 +57,11 @@ class BaseRoute {
      * @param res
      */
     checkHeaderAndSend(req, res) {
-        var isValidated = this.checkHeader(req);
-        this.sendAuthFaild(res);
-        return isValidated;
+        if (!this.checkHeader(req)) {
+            this.sendAuthFaild(res);
+            return false;
+        }
+        return true;
     }
     /**
      * @description 確認是否有body，並發送失敗機制

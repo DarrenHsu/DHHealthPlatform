@@ -76,9 +76,11 @@ export class BaseRoute {
      * @param res 
      */
     protected checkHeaderAndSend(req: Request, res: Response): Boolean {
-        var isValidated = this.checkHeader(req);
-        this.sendAuthFaild(res);
-        return isValidated;
+        if (!this.checkHeader(req)) {
+            this.sendAuthFaild(res);
+            return false;
+        }
+        return true;
     }
 
     /**
