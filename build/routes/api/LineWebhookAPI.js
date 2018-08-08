@@ -228,28 +228,23 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         router.get(LINEAPI_1.LINEAPI.API_LINEBOT_PUSH_RECORD_PATH + '/:recordId', (req, res, next) => {
             if (!this.checkHeaderAndSend(req, res))
                 return;
-            if (!req.params.recordId) {
-                this.sendParamsFaild(res);
-                return;
-            }
+            if (!req.params.recordId)
+                return this.sendParamsFaild(res);
             let recordId = req.params.recordId;
             this.recordHelper.findOne(recordId, (code, record) => {
-                if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
-                    this.sendFaild(res, code);
-                    return;
-                }
+                if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS)
+                    return this.sendFaild(res, code);
                 this.userHelper.find(record.lineUserId, (code, users) => {
                     let user = users[0];
                     this.chatroomHelper.find(record.lineUserId, (code, chats) => {
                         let recordUri = BaseRoute_1.BaseRoute.getFullHostUrl(req) + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/' + querystring.escape(record.recordId) + '/' + querystring.escape(this.hashString(record.recordId));
                         let title = '以下為「' + user.name + '」的運動記錄';
-                        let image = BaseRoute_1.BaseRoute.getFullHostUrl(req) + "/images/sport.jpeg";
                         var message = {
                             type: 'template',
                             altText: title,
                             template: {
                                 type: 'buttons',
-                                thumbnailImageUrl: image,
+                                thumbnailImageUrl: BaseRoute_1.BaseRoute.getFullHostUrl(req) + '/images/sport.jpeg',
                                 title: title,
                                 text: '請給他一個讚哦',
                                 actions: [
@@ -267,7 +262,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
                             }
                         };
                         this.pushMessage(message, chats, () => {
-                            this.sendSuccess(res, code);
+                            this.sendSuccess(res, ResultCode_1.LINE_CODE.LL_SUCCESS);
                         });
                     });
                 });

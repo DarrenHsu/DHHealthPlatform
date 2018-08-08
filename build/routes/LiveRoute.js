@@ -9,8 +9,6 @@ const DHAPI_1 = require("../const/DHAPI");
 const GoogleAPI_1 = require("../const/GoogleAPI");
 const DHLog_1 = require("../util/DHLog");
 const DBHelper_1 = require("../mongo/helper/DBHelper");
-const RecordHelper_1 = require("../mongo/helper/RecordHelper");
-const UserHelper_1 = require("../mongo/helper/UserHelper");
 const AuthHelper_1 = require("../mongo/helper/AuthHelper");
 /**
  * @description 直播路由控制
@@ -18,8 +16,6 @@ const AuthHelper_1 = require("../mongo/helper/AuthHelper");
 class LiveRoute extends BaseRoute_1.BaseRoute {
     constructor(connection) {
         super();
-        this.recordHelper = new RecordHelper_1.RecordHelper(connection);
-        this.userHelper = new UserHelper_1.UserHelper(connection);
         this.authHelper = new AuthHelper_1.AuthHelper(connection);
         this.clientId = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_id;
         this.clientSecret = DHAPI_1.DHAPI.pkgjson.googleapis.auth.client_secret;

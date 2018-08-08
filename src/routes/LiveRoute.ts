@@ -13,8 +13,6 @@ import { GoogleAPI }        from '../const/GoogleAPI';
 import { DHLog }            from '../util/DHLog';
 
 import { DBHelper }         from '../mongo/helper/DBHelper';
-import { RecordHelper }     from '../mongo/helper/RecordHelper';
-import { UserHelper }       from '../mongo/helper/UserHelper';
 import { AuthHelper }       from '../mongo/helper/AuthHelper';
 import { IAuth }            from '../mongo/interface/IAuth';
 
@@ -23,8 +21,6 @@ import { IAuth }            from '../mongo/interface/IAuth';
  */
 export class LiveRoute extends BaseRoute {
     
-    private userHelper: UserHelper;
-    private recordHelper: RecordHelper;
     private authHelper: AuthHelper;
     
     private oauth2Client: google.OAuth2Client;
@@ -37,8 +33,6 @@ export class LiveRoute extends BaseRoute {
     constructor(connection: mongoose.Connection) {
         super();
 
-        this.recordHelper = new RecordHelper(connection);
-        this.userHelper = new UserHelper(connection);
         this.authHelper = new AuthHelper(connection);
         this.clientId = DHAPI.pkgjson.googleapis.auth.client_id;
         this.clientSecret = DHAPI.pkgjson.googleapis.auth.client_secret;
