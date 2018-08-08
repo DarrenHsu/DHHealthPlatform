@@ -309,7 +309,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             let body = req.body;
             var message = {
                 type: 'template',
-                altText: body.title,
+                altText: body.altText,
                 template: body.template
             };
             this.chatroomHelper.find(body.lineUserId, (code, chats) => {

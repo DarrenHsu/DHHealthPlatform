@@ -354,7 +354,7 @@ export class LineWebhookAPI extends BaseAPI {
             let body = req.body;
             var message: TemplateMessage = {
                 type: 'template',
-                altText: body.title,
+                altText: body.altText,
                 template: body.template
             }
 
