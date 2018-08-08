@@ -234,18 +234,14 @@ export class LineWebhookAPI extends BaseAPI {
             Axios.post(LINEAPI.API_ACCESS_TOKEN, bodyFormData, config).then((response) => {
                 DHLog.ld('response $(respons.data)');
                 var json = response.data;
-                if (!json.id_token) {
-                    return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
-                }
+                if (!json.id_token) return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
 
                 let jwt = JwtDecode(json.id_token);
                 var sub = jwt['sub'];
                 var name = jwt['name'];
                 var picture = jwt['picture'];
 
-                if (!sub || !name || !picture) {
-                    return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
-                }
+                if (!sub || !name || !picture) return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
 
                 DHLog.ld('step 3  callback and check user ' + sub);
                 this.userHelper.find(sub, (code, result) => {
