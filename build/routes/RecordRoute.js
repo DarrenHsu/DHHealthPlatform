@@ -29,10 +29,8 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     delRecord(router) {
         DHLog_1.DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI_1.DHAPI.RECORD_PATH);
         router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:action/:id/:page', (req, res, next) => {
-            if (!this.isCorrectHost(req)) {
-                res.redirect("/whatup");
-                return;
-            }
+            if (!this.isCorrectHost(req))
+                return res.redirect("/whatup");
             if (req.params.action && req.params.action == 'del') {
                 this.recordHelper.removeWith({ recordId: req.params.id }, (Code) => {
                     res.redirect('/records/' + req.params.page);
@@ -47,9 +45,8 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     getRecord(router) {
         DHLog_1.DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI_1.DHAPI.RECORD_PATH);
         router.get(DHAPI_1.DHAPI.RECORD_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
             this.userHelper.find(req.session.account, (Code, users) => {
                 this.findRecord(req.session.account, 1, (totalCount, pageCount, pageIndex, results) => {
                     this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, users[0], results);
@@ -57,13 +54,11 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
             });
         });
         router.get(DHAPI_1.DHAPI.RECORD_PATH + '/:page', (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
             var page = req.params.page;
-            if (!page || page != parseInt(page, 10)) {
+            if (!page || page != parseInt(page, 10))
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
-            }
             this.userHelper.find(req.session.account, (Code, users) => {
                 this.findRecord(req.session.account, parseInt(page), (totalCount, pageCount, pageIndex, results) => {
                     this.renderRecord(req, res, next, totalCount, pageCount, pageIndex, users[0], results);
@@ -87,14 +82,12 @@ class RecordRoute extends BaseRoute_1.BaseRoute {
     getPreviewRecord(router) {
         DHLog_1.DHLog.d('[' + RecordRoute.name + ':create] ' + DHAPI_1.DHAPI.RECORD_PREVIEW_PATH);
         router.get(DHAPI_1.DHAPI.RECORD_PREVIEW_PATH + '/:id/:auth', (req, res, next) => {
-            if (req.params.id == null || req.params.auth == null) {
+            if (req.params.id == null || req.params.auth == null)
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR);
-            }
             let recordId = querystring.unescape(req.params.id);
             let auth = querystring.unescape(req.params.auth);
-            if (!this.checkParam(auth, recordId)) {
+            if (!this.checkParam(auth, recordId))
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR);
-            }
             this.recordHelper.findOne(recordId, (code, record) => {
                 if (code != ResultCode_1.MONGODB_CODE.MC_SUCCESS) {
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + code);

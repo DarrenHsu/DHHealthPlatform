@@ -68,13 +68,11 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     getGoogleAuth(router) {
         DHLog_1.DHLog.d('[' + LiveRoute.name + ':create] ' + GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH);
         router.get(GoogleAPI_1.GoogleAPI.API_GOOGLE_AUTH_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
             this.oauth2Client.getToken(req.query.code).then((value) => {
-                if (!value) {
+                if (!value)
                     return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.GOOGLE_CODE.GC_TOKEN_ERROR);
-                }
                 this.authHelper.findOne(req.session.account, (code, auth) => {
                     if (auth) {
                         auth.googleToken = value.tokens.access_token;
@@ -109,9 +107,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     getLive(router) {
         DHLog_1.DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI_1.DHAPI.LIVE_PATH);
         router.get(DHAPI_1.DHAPI.LIVE_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
             req.session.ytPageToken = null;
             req.session.ytIndex = req.query.index ? req.query.index : 0;
             this.doAuthAndList(req, res, next);
@@ -124,9 +121,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     getListWithToken(router) {
         DHLog_1.DHLog.d('[' + LiveRoute.name + ':create] ' + DHAPI_1.DHAPI.LIVE_PATH);
         router.get(DHAPI_1.DHAPI.LIVE_PATH + '/:pageToken', (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
             req.session.ytPageToken = req.params.pageToken;
             req.session.ytIndex = req.query.index ? req.query.index : 0;
             this.doAuthAndList(req, res, next);
@@ -134,9 +130,8 @@ class LiveRoute extends BaseRoute_1.BaseRoute {
     }
     doAuthAndList(req, res, next) {
         this.authHelper.findOne(req.session.account, (code, auth) => {
-            if (!auth) {
+            if (!auth)
                 return this.redirectGoogleAuth(req, res, next);
-            }
             var now = new Date();
             if (now > auth.googleTokenExpire) {
                 this.redirectGoogleAuth(req, res, next);

@@ -1,7 +1,7 @@
 import { createHash } from 'crypto';
 import { NextFunction, Request, Response } from 'express';
 
-import { ResultCodeMsg }    from './ResultCode';
+import { CONNECTION_CODE, MONGODB_CODE, ResultCodeMsg } from './ResultCode';
 import { IAuth }            from './interface/IAuth';
 import { IResult }          from './interface/IResult';
 
@@ -68,6 +68,43 @@ export class BaseRoute {
         var auth: string = req.get('Authorization');
         var verfy: string = req.get('verfy');
         return this.checkValue(auth, verfy);
+    }
+
+    /**
+     * @description 確認header是否符合授權要求，並發送錯誤機制
+     * @param req 
+     * @param res 
+     */
+    protected checkHeaderAndSend(req: Request, res: Response): Boolean {
+        var isValidated = this.checkHeader(req);
+        this.sendAuthFaild(res);
+        return isValidated;
+    }
+
+    /**
+     * @description 確認是否有body，並發送失敗機制
+     * @param req 
+     * @param res 
+     */
+    protected checkBodyAndSend(req: Request, res: Response): Boolean {
+        if (!req.body) {
+            this.sendBodyFaild(res);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @description 確認是否有Param: ID，並發送失敗機制
+     * @param req 
+     * @param res 
+     */
+    protected checkParamWithIdAndSend(req: Request, res: Response): Boolean {
+        if (!req.params.id) {
+            this.sendParamsFaild(res);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -185,5 +222,39 @@ export class BaseRoute {
      */
     protected isCorrectHost(req: Request): boolean {
         return req.headers.host == DHAPI.PROD_HOST || req.headers.host == DHAPI.DEV_HOST;
+    }
+
+    /**
+     * @description 回傳失敗處理程序
+     * @param res 
+     * @param code 
+     */
+    protected sendFaild(res: Response, code: number) {
+        this.sendJsonResult(res, BaseRoute.createResult(null, code));
+    }
+
+    /**
+     * @description 回傳授權失敗處理程序
+     * @param res 
+     */
+    protected sendAuthFaild(res: Response) {
+        res.statusCode = 403;
+        this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
+    }
+
+    /**
+     * @description 回傳參數錯誤處理程序
+     * @param res 
+     */
+    protected sendParamsFaild(res: Response) {
+        this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
+    }
+
+    /**
+     * @description 回傳接收資料錯誤處理程序
+     * @param res 
+     */
+    protected sendBodyFaild(res: Response) {
+        this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
     }
 }

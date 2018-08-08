@@ -52,6 +52,40 @@ class BaseRoute {
         return this.checkValue(auth, verfy);
     }
     /**
+     * @description 確認header是否符合授權要求，並發送錯誤機制
+     * @param req
+     * @param res
+     */
+    checkHeaderAndSend(req, res) {
+        var isValidated = this.checkHeader(req);
+        this.sendAuthFaild(res);
+        return isValidated;
+    }
+    /**
+     * @description 確認是否有body，並發送失敗機制
+     * @param req
+     * @param res
+     */
+    checkBodyAndSend(req, res) {
+        if (!req.body) {
+            this.sendBodyFaild(res);
+            return false;
+        }
+        return true;
+    }
+    /**
+     * @description 確認是否有Param: ID，並發送失敗機制
+     * @param req
+     * @param res
+     */
+    checkParamWithIdAndSend(req, res) {
+        if (!req.params.id) {
+            this.sendParamsFaild(res);
+            return false;
+        }
+        return true;
+    }
+    /**
      * @description 確認授權要求
      * @param auth
      * @param verfy
@@ -152,6 +186,36 @@ class BaseRoute {
      */
     isCorrectHost(req) {
         return req.headers.host == DHAPI_1.DHAPI.PROD_HOST || req.headers.host == DHAPI_1.DHAPI.DEV_HOST;
+    }
+    /**
+     * @description 回傳失敗處理程序
+     * @param res
+     * @param code
+     */
+    sendFaild(res, code) {
+        this.sendJsonResult(res, BaseRoute.createResult(null, code));
+    }
+    /**
+     * @description 回傳授權失敗處理程序
+     * @param res
+     */
+    sendAuthFaild(res) {
+        res.statusCode = 403;
+        this.sendJsonResult(res, BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_AUTH_ERROR));
+    }
+    /**
+     * @description 回傳參數錯誤處理程序
+     * @param res
+     */
+    sendParamsFaild(res) {
+        this.sendJsonResult(res, BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_PARAMETER_ERROR));
+    }
+    /**
+     * @description 回傳接收資料錯誤處理程序
+     * @param res
+     */
+    sendBodyFaild(res) {
+        this.sendJsonResult(res, BaseRoute.createResult(null, ResultCode_1.CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
     }
 }
 BaseRoute.AP_TITLE = 'DHHealthPlatform';

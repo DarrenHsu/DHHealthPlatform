@@ -173,9 +173,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
             }
             var state = req.query.state;
             var code = req.query.code;
-            if (!code) {
+            if (!code)
                 return res.redirect(DHAPI_1.DHAPI.ERROR_PATH + '/' + ResultCode_1.LINE_CODE.LL_LOGIN_ERROR);
-            }
             var fullUrl = BaseRoute_1.BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI_1.LINEAPI.API_LINE_AUTH_PATH;
             var channelId = DHAPI_1.DHAPI.pkgjson.linelogin.channelId;
@@ -258,14 +257,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
      */
     posthMessage(router) {
         router.post(this.messageUrl, (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
+            if (!this.checkHeaderAndSend(req, res))
                 return;
-            }
-            if (!req.body) {
-                this.sendBodyFaild(res);
+            if (!this.checkBodyAndSend(req, res))
                 return;
-            }
             let body = req.body;
             let lineUserId = body.lineUserId;
             let msg = body.msg;
@@ -282,14 +277,10 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
     }
     postTemplete(router) {
         router.post(this.templeteUrl, (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
+            if (!this.checkHeaderAndSend(req, res))
                 return;
-            }
-            if (!req.body) {
-                this.sendBodyFaild(res);
+            if (!this.checkBodyAndSend(req, res))
                 return;
-            }
             let body = req.body;
             let lineUserId = body.lineUserId;
             let title = body.title;
@@ -329,10 +320,8 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
      */
     postRecord(router) {
         router.get(this.recordUrl + '/:recordId', (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
+            if (!this.checkHeaderAndSend(req, res))
                 return;
-            }
             if (!req.params.recordId) {
                 this.sendParamsFaild(res);
                 return;

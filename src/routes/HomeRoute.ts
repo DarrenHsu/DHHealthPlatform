@@ -40,10 +40,8 @@ export class HomeRoute extends BaseRoute {
     public getIndex(router: Router) {
         DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI.ROOT_PATH);
         router.get(DHAPI.ROOT_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
-                return;
-            }
-
+            if (!this.checkLogin(req, res, next)) return;
+            
             var today = moment().startOf('day')
             var decreaseMonth = moment(today).add(-1, 'M').format(DHDateFormat.DATE_FORMAT);
             
@@ -69,10 +67,8 @@ export class HomeRoute extends BaseRoute {
     public getHome(router: Router) {
         DHLog.d('[' + HomeRoute.name + ':create] ' + DHAPI.HOME_PATH);
         router.get(DHAPI.HOME_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
-                return;
-            }
-
+            if (!this.checkLogin(req, res, next)) return;
+            
             this.renderHome(req, res, next, []);
         });
     }

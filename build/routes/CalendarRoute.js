@@ -29,22 +29,18 @@ class CalendarRoute extends BaseRoute_1.BaseRoute {
     getCalendar(router) {
         DHLog_1.DHLog.d('[' + CalendarRoute.name + ':create] ' + DHAPI_1.DHAPI.CALENDAR_PATH);
         router.get(DHAPI_1.DHAPI.CALENDAR_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
             this.renderCalendar(req, res, next);
         });
     }
     getCalendarFeed(router) {
         DHLog_1.DHLog.d('[' + CalendarRoute.name + ':create] ' + DHAPI_1.DHAPI.CALENDAR_FEED_PATH);
         router.get(DHAPI_1.DHAPI.CALENDAR_FEED_PATH, (req, res, next) => {
-            if (!this.checkLogin(req, res, next)) {
+            if (!this.checkLogin(req, res, next))
                 return;
-            }
-            if (!req.query.start || !req.query.end) {
-                this.sendJsonResult(res, {});
-                return;
-            }
+            if (!req.query.start || !req.query.end)
+                return this.sendJsonResult(res, {});
             var start = req.query.start;
             var end = req.query.end;
             this.routeHelper.find(req.session.account, (code, rts) => {

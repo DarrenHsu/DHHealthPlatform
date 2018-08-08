@@ -40,10 +40,7 @@ export class RecordAPI extends BaseAPI {
     public uploadFile(router: Router) {
         DHLog.d('[api:create] ' + DHAPI.API_RECORD_FILE_UPLOAD_PATH);
         router.post(DHAPI.API_RECORD_FILE_UPLOAD_PATH, (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
-                return;
-            }
+            if (!this.checkHeaderAndSend(req, res)) return;
             
             if (!req.files) {
                 DHLog.d("fileupload: file not found");

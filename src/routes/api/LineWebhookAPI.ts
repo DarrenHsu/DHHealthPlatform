@@ -23,7 +23,6 @@ import { ChatroomHelper }   from '../../mongo/helper/ChatroomHelper';
 import { UserHelper }       from '../../mongo/helper/UserHelper';
 import { RecordHelper }     from '../../mongo/helper/RecordHelper';
 import { ProfileHelper }    from '../../mongo/helper/ProfileHelper';
-import { Code } from '../../../node_modules/@types/bson';
 
 /**
  * @description LINE 機器人相關 api
@@ -207,10 +206,8 @@ export class LineWebhookAPI extends BaseAPI {
 
             var state = req.query.state;
             var code = req.query.code;
-            if (!code) {
-                return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
-            }
-
+            if (!code) return res.redirect(DHAPI.ERROR_PATH + '/' + LINE_CODE.LL_LOGIN_ERROR);
+            
             var fullUrl = BaseRoute.getFullHostUrl(req);
             var authUrl = fullUrl + LINEAPI.API_LINE_AUTH_PATH;
             var channelId = DHAPI.pkgjson.linelogin.channelId;
@@ -303,15 +300,8 @@ export class LineWebhookAPI extends BaseAPI {
      */
     protected posthMessage(router: Router) {
         router.post(this.messageUrl, (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
-                return;
-            }
-            
-            if (!req.body) {
-                this.sendBodyFaild(res);
-                return;
-            }
+            if (!this.checkHeaderAndSend(req, res)) return;
+            if (!this.checkBodyAndSend(req, res)) return;
 
             let body = req.body;
             let lineUserId = body.lineUserId;
@@ -332,15 +322,8 @@ export class LineWebhookAPI extends BaseAPI {
 
     protected postTemplete(router: Router) {
         router.post(this.templeteUrl, (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
-                return;
-            }
-
-            if (!req.body) {
-                this.sendBodyFaild(res);
-                return;
-            }
+            if (!this.checkHeaderAndSend(req, res)) return;
+            if (!this.checkBodyAndSend(req, res)) return;
 
             let body = req.body;
             let lineUserId = body.lineUserId;
@@ -384,10 +367,7 @@ export class LineWebhookAPI extends BaseAPI {
      */
     protected postRecord(router: Router) {
         router.get(this.recordUrl + '/:recordId', (req, res, next) => {
-            if (!this.checkHeader(req)) {
-                this.sendAuthFaild(res);
-                return;
-            }
+            if (!this.checkHeaderAndSend(req, res)) return;
             
             if (!req.params.recordId) {
                 this.sendParamsFaild(res);
