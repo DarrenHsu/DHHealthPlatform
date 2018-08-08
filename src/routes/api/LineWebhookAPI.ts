@@ -65,6 +65,7 @@ export class LineWebhookAPI extends BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.postTemplete(router);
+        api.posthFlex(router);
         api.getAuthorization(router);
     }
 

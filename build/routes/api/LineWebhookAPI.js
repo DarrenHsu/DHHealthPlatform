@@ -43,6 +43,7 @@ class LineWebhookAPI extends BaseAPI_1.BaseAPI {
         api.postRecord(router);
         api.posthMessage(router);
         api.postTemplete(router);
+        api.posthFlex(router);
         api.getAuthorization(router);
     }
     /**
