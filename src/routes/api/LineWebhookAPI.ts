@@ -5,7 +5,7 @@ import * as JwtDecode from 'jwt-decode';
 import * as qs from 'qs';
 import Axios from 'axios';
 import { MiddlewareConfig, Client, TemplateMessage, ClientConfig, validateSignature, TextMessage, Message, FlexMessage } from '@line/bot-sdk';
-import { createHmac } from 'crypto';
+import { createHmac }       from 'crypto';
 
 import { MONGODB_CODE, LINE_CODE } from '../ResultCode';
 
