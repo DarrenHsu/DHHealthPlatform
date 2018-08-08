@@ -239,6 +239,7 @@ export class BaseRoute {
      */
     protected sendAuthFaild(res: Response) {
         res.statusCode = 403;
+        DHLog.d("send auth faild");
         this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_AUTH_ERROR));
     }
 
@@ -247,6 +248,7 @@ export class BaseRoute {
      * @param res 
      */
     protected sendParamsFaild(res: Response) {
+        DHLog.d("send param faild");
         this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_PARAMETER_ERROR));
     }
 
@@ -255,6 +257,7 @@ export class BaseRoute {
      * @param res 
      */
     protected sendBodyFaild(res: Response) {
+        DHLog.d("send body faild");
         this.sendJsonResult(res, BaseRoute.createResult(null, CONNECTION_CODE.CC_REQUEST_BODY_ERROR));
     }
 }
